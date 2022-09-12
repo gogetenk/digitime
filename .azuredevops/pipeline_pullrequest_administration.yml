@@ -1,0 +1,67 @@
+trigger:
+- none
+
+pool:
+  vmImage: ubuntu-latest
+
+## Job to calculate semantic version
+jobs:
+  - job: CalculateVersion
+    displayName: Semantic versioning
+    
+    steps:
+      # Checkout with persist credentials
+      - checkout: self
+        persistCredentials: true
+
+      # Install GitVersion
+      - task: gitversion/setup@0
+        displayName: Install GitVersion
+        inputs:
+          versionSpec: '5.x'
+
+      # Retrieve Pull Request Description
+      - task: PullRequestDescription@0
+        name: RetrievePullRequestDescription
+        displayName: Retrieve Pull Request description
+        inputs:
+          action: 'view'
+          outputVariable: 'PullRequest.DescriptionContent'
+          isOutput: true
+          stripIdentifiers: false
+
+      # Add git commit message that will be picked up by GitVersion ("+semver: patch/minor/major")
+      # Depending on the Pull Request description, where the developer has marked the type of change
+      - task: PowerShell@2
+        displayName: Add git commit message for SemVer
+        inputs:
+          targetType: inline
+          script: |
+            Write-Host "Configuring git author info.." -ForegroundColor Cyan
+            git config user.email "Azure DevOps pipeline"
+            git config user.name "Azure.Devops@pipeline.com"
+            Write-Host "Doing git checkout..." -ForegroundColor Cyan
+            git checkout -b $("$(System.PullRequest.SourceBranch)".replace('refs/heads/', ''))
+            Write-Host "Checking Pull Request description..." -ForegroundColor Cyan
+            $PRdesc = "$(RetrievePullRequestDescription.PullRequest.DescriptionContent)"
+            if ($PRdesc -match '(\[x\] \bFix\b)') {
+              Write-Host "Adding git (empty) commit message to mark this branch as a 'patch' SemVer increment." -ForegroundColor Cyan
+              git commit -a -m "+semver: patch [skip azurepipelines]" --allow-empty
+            } elseif ($PRdesc -match '(\[x\] \bFeature\b)') {
+              Write-Host "Adding git (empty) commit message to mark this branch as a 'minor' SemVer increment." -ForegroundColor Cyan
+              git commit -a -m "+semver: minor [skip azurepipelines]" --allow-empty
+            } elseif ($PRdesc -match '(\[x\] \bBig\b)') {
+              Write-Host "Adding git (empty) commit message to mark this branch as a 'major' SemVer increment." -ForegroundColor Cyan
+              git commit -a -m "+semver: major [skip azurepipelines]" --allow-empty
+            } else {
+              Write-Host "##vso[task.LogIssue type=error;]Please select the type of change in the Pull Request description, and Re-queue the validation." -ForegroundColor Cyan
+              $PRdesc
+              exit 1
+            }
+            Write-Host "Doing git push.." -ForegroundColor Cyan
+            git push --set-upstream origin $("$(System.PullRequest.SourceBranch)".replace('refs/heads/', ''))
+            Write-Host "Done." -ForegroundColor Cyan
+          
+      # Determine the semantic version
+      - task: gitversion/execute@0
+        displayName: Determine SemVer
