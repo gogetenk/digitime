@@ -1,8 +1,7 @@
 trigger:
 - none
 
-pool:
-  vmImage: ubuntu-latest
+pool: Default
 
 ## Job to calculate semantic version
 jobs:
