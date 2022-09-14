@@ -1,0 +1,15 @@
+{
+  "name": "Digitime",
+  "description": "",
+  "website": "http://digitime.app",
+  "env": {
+    "PROJECT_FILE": "src/BE/WebApi/Digitime.Server.csproj"
+  },
+  {
+    "buildpacks": [
+      {
+        "url": "https://github.com/jincod/dotnetcore-buildpack"
+      }
+    ]
+  }
+}
