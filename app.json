@@ -5,11 +5,9 @@
   "env": {
     "PROJECT_FILE": "src/BE/WebApi/Digitime.Server.csproj"
   },
-  {
-    "buildpacks": [
-      {
-        "url": "https://github.com/jincod/dotnetcore-buildpack"
-      }
-    ]
-  }
+  "buildpacks": [
+    {
+      "url": "https://github.com/jincod/dotnetcore-buildpack"
+    }
+  ]
 }
