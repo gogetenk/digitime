@@ -1,6 +1,10 @@
 ﻿@page "/authentication/{action}"
+@using Digitime.Shared.UI.Components
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+
 <RemoteAuthenticatorView Action="@Action" />
+
+<SignInComponent />
 
 @code{
     [Parameter] public string? Action { get; set; }
