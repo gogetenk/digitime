@@ -27,7 +27,7 @@ jobs:
 
   # Autosemver
   bump-version:
-    name: 'Bump Version on master'
+    name: 'Use autosemver to bump version'
     runs-on: ubuntu-latest
 
     steps:
@@ -43,7 +43,7 @@ jobs:
         with:
           tag-prefix: 'v'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.Autosemver }}
       - name: 'cat package.json'
         run: cat ./package.json
       - name: 'Output Step'
