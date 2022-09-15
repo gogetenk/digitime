@@ -22,7 +22,9 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build Digitime.sln --no-restore
-   
+    - name: Test
+      run: dotnet test Digitime.sln --no-build --verbosity normal 
+
     # Autosemver
     - name: Fetch all history for all tags and branches
       run: git fetch --prune
@@ -64,6 +66,3 @@ jobs:
         echo "CommitsSinceVersionSource: ${{ steps.gitversion.outputs.commitsSinceVersionSource }}"
         echo "CommitsSinceVersionSourcePadded: ${{ steps.gitversion.outputs.commitsSinceVersionSourcePadded }}"
         echo "CommitDate: ${{ steps.gitversion.outputs.commitDate }}"
-
-    - name: Test
-        run: dotnet test Digitime.sln --no-build --verbosity normal /p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:FileVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:InformationalVersion=${{ steps.gitversion.outputs.Sha }}
