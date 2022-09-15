@@ -27,5 +27,7 @@ jobs:
     # Branch based autosemver
     - id: semver-tag
       uses: wakatime/semver-action@v1.5.1
+      with:
+        debug: "true"
     - name: "Created tag"
       run: echo "tag ${{ steps.semver-tag.outputs.semver_tag }}"
