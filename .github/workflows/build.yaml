@@ -1,0 +1,31 @@
+
+name: .NET
+
+on:
+  push:
+    branches: [ "develop", "master" ]
+  pull_request:
+    branches: [ "develop", "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build Digitime.sln --no-restore
+    - name: Test
+      run: dotnet test Digitime.sln --no-build --verbosity normal
+    # Branch based autosemver
+    - id: semver-tag
+      uses: wakatime/semver-action@v1.5.1
+    - name: "Created tag"
+      run: echo "tag ${{ steps.semver-tag.outputs.semver_tag }}"
