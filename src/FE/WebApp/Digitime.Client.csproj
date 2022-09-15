@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\Digitime.Shared.csproj" />
+    <ProjectReference Include="..\Digitime.Shared.UI\Digitime.Shared.UI.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -23,9 +23,4 @@ jobs:
     - name: Build
       run: dotnet build Digitime.sln --no-restore
     - name: Test
-      run: dotnet test Digitime.sln --no-build --verbosity normal
-    # Branch based autosemver
-    - id: semver-tag
-      uses: wakatime/semver-action@v1.5.1
-    - name: "Created tag"
-      run: echo "tag ${{ steps.semver-tag.outputs.semver_tag }}"
+      run: dotnet test Digitime.sln --no-build --verbosity normal 
