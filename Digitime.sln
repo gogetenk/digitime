@@ -20,9 +20,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{F740CEBA-4C30-44F5-BBBC-8D0AEB9ABBE3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Digitime.Shared.UI", "src\FE\Digitime.Shared.UI\Digitime.Shared.UI.csproj", "{C70098C0-B669-4937-AA93-DEBB5A570935}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2147AFD1-C40A-47F8-A48B-C11300721CF2}"
 	ProjectSection(SolutionItems) = preProject
 		app.json = app.json
+		package.json = package.json
 	EndProjectSection
 EndProject
 Global
