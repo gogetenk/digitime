@@ -9,11 +9,11 @@ on:
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v2
-      with:
-          ref: ${{ github.ref }}
+    - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
@@ -25,20 +25,25 @@ jobs:
     - name: Test
       run: dotnet test Digitime.sln --no-build --verbosity normal 
 
-    # Autosemver
-     - name: 'cat package.json'
+  # Autosemver
+  bump-version:
+    name: 'Bump Version on master'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'Checkout source code'
+        uses: 'actions/checkout@v2'
+        with:
+          ref: ${{ github.ref }}
+      - name: 'cat package.json'
         run: cat ./package.json
       - name: 'Automated Version Bump'
         id: version-bump
         uses: 'phips28/gh-action-bump-version@master'
         with:
           tag-prefix: 'v'
-          minor-wording:  'MINOR'
-          major-wording:  'MAJOR'
-          patch-wording:  'PATCH'
-          rc-wording:     'BETA'
         env:
-         GITHUB_TOKEN: ${{ secrets.Autosemver }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'cat package.json'
         run: cat ./package.json
       - name: 'Output Step'
