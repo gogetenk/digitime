@@ -25,6 +25,7 @@ jobs:
     - name: Test
       run: dotnet test Digitime.sln --no-build --verbosity normal 
 
+
   # Autosemver
   bump-version:
     name: 'Use autosemver to bump version'
