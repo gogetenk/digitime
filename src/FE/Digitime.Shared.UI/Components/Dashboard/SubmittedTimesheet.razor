@@ -1,4 +1,10 @@
-﻿<!--
+﻿@using Microsoft.Extensions.Logging
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web;
+
+@inject ILogger<SubmittedTimesheet> logger;
+
+<!--
   This example requires Tailwind CSS v3.0+
 
   This example requires some changes to your config:
@@ -21,7 +27,6 @@
             <p class="mt-2 text-sm text-gray-700">All for you to review and validate. </p>
         </div>
     </div>
-
     <!-- This example requires Tailwind CSS v2.0+ -->
     <div class="overflow-hidden bg-white shadow-sm sm:rounded-md mb-5 mt-5">
         <ul role="list" class="divide-y divide-gray-200 bg-gray-50">
@@ -58,7 +63,7 @@
                 <div href="#" class="block hover:bg-gray-50">
                     <div class="flex items-center px-4 py-4 sm:px-6">
                         <div class="lg:mr-4 p-1 mr-4">
-                            <input type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6 accent-[#7069FA]">
+                            <input type="checkbox" @onchange="CheckChanged" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6 accent-[#7069FA]">
                         </div>
                         <div class="container px-0 mx-0">
                             <div class="flex items-center justify-between">
@@ -104,7 +109,7 @@
                 <div href="#" class="block hover:bg-gray-50">
                     <div class="flex items-center px-4 py-4 sm:px-6">
                         <div class="lg:mr-4 p-1 mr-4">
-                            <input type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6">
+                            <input type="checkbox" @onchange="CheckChanged" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6">
                         </div>
                         <div class="container px-0 mx-0">
                             <div class="flex items-center justify-between">
@@ -150,7 +155,7 @@
                 <div href="#" class="block hover:bg-gray-50">
                     <div class="flex items-center px-4 py-4 sm:px-6">
                         <div class="lg:mr-4 p-1 mr-4">
-                            <input type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6">
+                            <input type="checkbox" @onchange="CheckChanged" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6">
                         </div>
                         <div class="container px-0 mx-0">
                             <div class="flex items-center justify-between">
@@ -231,7 +236,7 @@
                 <div href="#" class="block hover:bg-gray-50">
                     <div class="flex items-center px-4 py-4 sm:px-6">
                         <div class="mr-5">
-                            <input type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6">
+                            <input type="checkbox" @onchange="CheckChanged" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6">
                         </div>
                         <div class="container px-0 mx-0">
                             <div class="flex items-center justify-between">
@@ -314,7 +319,7 @@
                 <div href="#" class="block hover:bg-gray-50">
                     <div class="flex items-center px-4 py-4 sm:px-6">
                         <div class="lg:mr-4 p-1 mr-4">
-                            <input type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6">
+                            <input type="checkbox" @onchange="CheckChanged" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6">
                         </div>
                         <div class="container px-0 mx-0">
                             <div class="flex items-center justify-between">
@@ -360,7 +365,7 @@
                 <div href="#" class="block hover:bg-gray-50">
                     <div class="flex items-center px-4 py-4 sm:px-6">
                         <div class="lg:mr-4 p-1 mr-4">
-                            <input type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6">
+                            <input type="checkbox" @onchange="CheckChanged" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6">
                         </div>
                         <div class="container px-0 mx-0">
                             <div class="flex items-center justify-between">
@@ -410,5 +415,14 @@
 
 
 @code {
+    private void CheckChanged(ChangeEventArgs eventArgs)
+    {
+        logger.LogWarning("Someone has clicked me!");
+        var t = eventArgs.Value;
+    }
 
+    public void Toto()
+    {
+        logger.LogWarning("Someone has clicked me!");
+    }
 }
