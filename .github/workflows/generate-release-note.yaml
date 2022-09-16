@@ -1,58 +1,58 @@
 ﻿
-name: Generate Release Note
+#name: Generate Release Note
 
-on:
-  push:
-    branches: [ "develop", "master" ]
+#on:
+#  push:
+#    branches: [ "develop", "master" ]
 
-jobs:
+#jobs:
   
-  # Pre-release
-  pre-release changelog:
-    exclude:
-      labels:
-        - ignore-for-release
-      authors:
-        - Automated Version Bump
-    categories:
-      - title: Breaking Changes 🛠
-        labels:
-          - Semver-Major
-          - breaking-change
-      - title: Exciting New Features 🎉
-        labels:
-          - Semver-Minor
-          - enhancement
-      - title: Bugs fixed 🐞
-        labels:
-          - Semver-Patch
-          - bugfix
-      - title: Other Changes
-        labels:
-          - "*"
+#  # Pre-release
+#  changelog:
+#    exclude:
+#      labels:
+#        - ignore-for-release
+#      authors:
+#        - Automated Version Bump
+#    categories:
+#      - title: Breaking Changes 🛠
+#        labels:
+#          - Semver-Major
+#          - breaking-change
+#      - title: Exciting New Features 🎉
+#        labels:
+#          - Semver-Minor
+#          - enhancement
+#      - title: Bugs fixed 🐞
+#        labels:
+#          - Semver-Patch
+#          - bugfix
+#      - title: Other Changes
+#        labels:
+#          - "*"
 
-  # Release
-  release changelog:
-    exclude:
-      labels:
-        - ignore-for-release
-        - pre-release
-        - pre
-      authors:
-        - Automated Version Bump
-    categories:
-      - title: Breaking Changes 🛠
-        labels:
-          - Semver-Major
-          - breaking-change
-      - title: Exciting New Features 🎉
-        labels:
-          - Semver-Minor
-          - enhancement
-      - title: Bugs fixed 🐞
-        labels:
-          - Semver-Patch
-          - bugfix
-      - title: Other Changes
-        labels:
-          - "*"
+#  # Release
+#  changelog:
+#    exclude:
+#      labels:
+#        - ignore-for-release
+#        - pre-release
+#        - pre
+#      authors:
+#        - Automated Version Bump
+#    categories:
+#      - title: Breaking Changes 🛠
+#        labels:
+#          - Semver-Major
+#          - breaking-change
+#      - title: Exciting New Features 🎉
+#        labels:
+#          - Semver-Minor
+#          - enhancement
+#      - title: Bugs fixed 🐞
+#        labels:
+#          - Semver-Patch
+#          - bugfix
+#      - title: Other Changes
+#        labels:
+#          - "*"
