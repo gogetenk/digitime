@@ -1,9 +1,9 @@
 
-name: Bump version (release)
+name: Bump version (pre-release)
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "develop" ]
 
 jobs:
   bump-version:
@@ -22,6 +22,8 @@ jobs:
         uses: 'phips28/gh-action-bump-version@master'
         with:
           tag-prefix: 'v'
+          default: prerelease # all develop commits will be tagges as pre-release
+          rc-wording: 'prerelease,pre-release'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'cat package.json'
