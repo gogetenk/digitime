@@ -1,22 +1,22 @@
-﻿changelog:
-    exclude:
-      labels:
-        - ignore-for-release
-      authors:
-        - Automated Version Bump
-    categories:
-      - title: Breaking Changes 🛠
-        labels:
-          - Semver-Major
-          - breaking-change
-      - title: Exciting New Features 🎉
-        labels:
-          - Semver-Minor
-          - enhancement
-      - title: Bugs fixed 🐞
-        labels:
-          - Semver-Patch
-          - bugfix
-      - title: Other Changes
-        labels:
-          - "*"
+﻿#changelog:
+#    exclude:
+#      labels:
+#        - ignore-for-release
+#      authors:
+#        - Automated Version Bump
+#    categories:
+#      - title: Breaking Changes 🛠
+#        labels:
+#          - Semver-Major
+#          - breaking-change
+#      - title: Exciting New Features 🎉
+#        labels:
+#          - Semver-Minor
+#          - enhancement
+#      - title: Bugs fixed 🐞
+#        labels:
+#          - Semver-Patch
+#          - bugfix
+#      - title: Other Changes
+#        labels:
+#          - "*"
