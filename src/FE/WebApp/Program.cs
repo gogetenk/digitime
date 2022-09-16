@@ -15,4 +15,11 @@ builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().Cre
 
 builder.Services.AddApiAuthorization();
 
-await builder.Build().RunAsync();
+var host = builder.Build();
+var logger = host.Services.GetRequiredService<ILoggerFactory>()
+    .CreateLogger<Program>();
+
+logger.LogInformation("App initialized.");
+
+
+await host.RunAsync();

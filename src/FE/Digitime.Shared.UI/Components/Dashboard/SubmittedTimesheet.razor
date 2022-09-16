@@ -1,4 +1,10 @@
-﻿<!--
+﻿@using Microsoft.Extensions.Logging
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web;
+
+@inject ILogger<SubmittedTimesheet> logger;
+
+<!--
   This example requires Tailwind CSS v3.0+
 
   This example requires some changes to your config:
@@ -20,89 +26,403 @@
             <h1 class="text-xl font-semibold text-gray-900">Collaborators Timesheet</h1>
             <p class="mt-2 text-sm text-gray-700">All for you to review and validate. </p>
         </div>
-        <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-            <button type="button" class="inline-flex items-center justify-center rounded-md border border-transparent bg-[#65D6AD] px-4 py-2 text-sm text-white shadow-sm hover:bg-[#0DE899] focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">Validate all</button>
-        </div>
     </div>
-    <div class="mt-8 flex flex-col">
-        <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-            <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                <div class="relative overflow-hidden shadow-sm ring-1 ring-black ring-opacity-5 md:rounded-lg">
-                    <!-- Selected row actions, only show when rows are selected. -->
-                    <div class="absolute top-0 left-12 flex h-12 items-center space-x-3 bg-gray-50 sm:left-16">
-                        <button type="button" class="inline-flex items-center rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30">Bulk edit</button>
-                        <button type="button" class="inline-flex items-center rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30">Delete all</button>
+    <!-- This example requires Tailwind CSS v2.0+ -->
+    <div class="overflow-hidden bg-white shadow-sm sm:rounded-md mb-5 mt-5">
+        <ul role="list" class="divide-y divide-gray-200 bg-gray-50">
+            <li>
+                <div href="#" class="block hover:bg-gray-50">
+                    <div class="flex items-center px-4 py-4 sm:px-6">
+                        <div class="flex min-w-0 flex-1 items-center">
+                            <div class="flex-shrink-0">
+                                <img class="h-12 w-12 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                            </div>
+                            <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
+                                <div>
+                                    <p class="truncate text-sm font-medium text-indigo-600">Ricardo Cooper</p>
+                                    <p class="mt-2 flex items-center text-sm text-gray-500">
+                                        <!-- Heroicon name: mini/envelope -->
+                                        <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z" />
+                                            <path d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z" />
+                                        </svg>
+                                        <span class="truncate">ricardo.cooper@example.com</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button type="button" class="inline-flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-2 text-sm text-gray-500 shadow-sm hover:bg-[#0DE899] focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">Validate</button>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <ul role="list" class="divide-y divide-gray-200">
+            <li>
+                <div href="#" class="block hover:bg-gray-50">
+                    <div class="flex items-center px-4 py-4 sm:px-6">
+                        <div class="lg:mr-4 p-1 mr-4">
+                            <input type="checkbox" @onchange="CheckChanged" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6 accent-[#7069FA]">
+                        </div>
+                        <div class="container px-0 mx-0">
+                            <div class="flex items-center justify-between">
+                                <p class="truncate text-sm font-medium text-indigo-600">PICASSO-ICAROS</p>
+                                <div class="ml-2 flex flex-shrink-0">
+                                    <p class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">Validated</p>
+                                </div>
+                            </div>
+                            <div class="mt-2 sm:flex sm:justify-between">
+                                <div class="sm:flex">
+                                    <p class="flex items-center text-sm text-gray-500">
+                                        <!-- Heroicon name: mini/users -->
+                                        <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path d="M7 8a3 3 0 100-6 3 3 0 000 6zM14.5 9a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM1.615 16.428a1.224 1.224 0 01-.569-1.175 6.002 6.002 0 0111.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 017 18a9.953 9.953 0 01-5.385-1.572zM14.5 16h-.106c.07-.297.088-.611.048-.933a7.47 7.47 0 00-1.588-3.755 4.502 4.502 0 015.874 2.636.818.818 0 01-.36.98A7.465 7.465 0 0114.5 16z" />
+                                        </svg>
+                                        ELIA GROUP
+                                    </p>
+                                    <p class="mt-0 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                                        <!-- Heroicon name: mini/map-pin -->
+                                        <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path fill-rule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.273 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" clip-rule="evenodd" />
+                                        </svg>
+                                        EP-000-4684-1-F-SDDS
+                                    </p>
+                                </div>
+                                <div class="flex items-center text-sm text-gray-500 sm:mt-0">
+                                    <!-- Heroicon name: mini/calendar -->
+                                    <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clip-rule="evenodd" />
+                                    </svg>
+                                    <p>
+                                        128h
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <table class="min-w-full table-fixed divide-y divide-gray-300">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th scope="col" class="relative w-12 px-6 sm:w-16 sm:px-8">
-                                    <input type="checkbox" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6">
-                                </th>
-                                <th scope="col" class="min-w-[12rem] py-3.5 pr-3 text-left text-sm font-semibold text-gray-900">Name</th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Title</th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Role</th>
-                                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                                    <span class="sr-only">Edit</span>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200 bg-white">
-                            <!-- Selected: "bg-gray-50" -->
-                            <tr>
-                                <td class="relative w-12 px-6 sm:w-16 sm:px-8">
-                                    <!-- Selected row marker, only show when row is selected. -->
-                                    <div class="absolute inset-y-0 left-0 w-0.5 bg-indigo-600"></div>
-                                    <input type="checkbox" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6">
-                                </td>
-                                <!-- Selected: "text-indigo-600", Not Selected: "text-gray-900" -->
-                                <td class="whitespace-nowrap py-4 pr-3 text-sm font-medium text-gray-900">Lindsay Walton</td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Front-end Developer</td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">lindsay.walton@example.com</td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Member</td>
-                                <td class="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                    <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit<span class="sr-only">, Lindsay Walton</span></a>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="relative w-12 px-6 sm:w-16 sm:px-8">
-                                    <!-- Selected row marker, only show when row is selected. -->
-                                    <input type="checkbox" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6">
-                                </td>
-                                <!-- Selected: "text-indigo-600", Not Selected: "text-gray-900" -->
-                                <td class="whitespace-nowrap py-4 pr-3 text-sm font-medium text-gray-900">Lindsay Walton</td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Front-end Developer</td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">lindsay.walton@example.com</td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Member</td>
-                                <td class="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                    <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit<span class="sr-only">, Lindsay Walton</span></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="relative w-12 px-6 sm:w-16 sm:px-8">
-                                    <!-- Selected row marker, only show when row is selected. -->
-                                    <input type="checkbox" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6">
-                                </td>
-                                <!-- Selected: "text-indigo-600", Not Selected: "text-gray-900" -->
-                                <td class="whitespace-nowrap py-4 pr-3 text-sm font-medium text-gray-900">Lindsay Walton</td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Front-end Developer</td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">lindsay.walton@example.com</td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Member</td>
-                                <td class="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                    <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit<span class="sr-only">, Lindsay Walton</span></a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
-            </div>
-        </div>
+            </li>
+
+            <li>
+                <div href="#" class="block hover:bg-gray-50">
+                    <div class="flex items-center px-4 py-4 sm:px-6">
+                        <div class="lg:mr-4 p-1 mr-4">
+                            <input type="checkbox" @onchange="CheckChanged" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6">
+                        </div>
+                        <div class="container px-0 mx-0">
+                            <div class="flex items-center justify-between">
+                                <p class="truncate text-sm font-medium text-indigo-600">NXPRO EVOL</p>
+                                <div class="ml-2 flex flex-shrink-0">
+                                    <p class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">Validated</p>
+                                </div>
+                            </div>
+                            <div class="mt-2 sm:flex sm:justify-between">
+                                <div class="sm:flex">
+                                    <p class="flex items-center text-sm text-gray-500">
+                                        <!-- Heroicon name: mini/users -->
+                                        <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path d="M7 8a3 3 0 100-6 3 3 0 000 6zM14.5 9a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM1.615 16.428a1.224 1.224 0 01-.569-1.175 6.002 6.002 0 0111.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 017 18a9.953 9.953 0 01-5.385-1.572zM14.5 16h-.106c.07-.297.088-.611.048-.933a7.47 7.47 0 00-1.588-3.755 4.502 4.502 0 015.874 2.636.818.818 0 01-.36.98A7.465 7.465 0 0114.5 16z" />
+                                        </svg>
+                                        ELIA GROUP
+                                    </p>
+                                    <p class="mt-0 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                                        <!-- Heroicon name: mini/map-pin -->
+                                        <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path fill-rule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.273 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" clip-rule="evenodd" />
+                                        </svg>
+                                        EP-000-4684-1-F-SDDS
+                                    </p>
+                                </div>
+                                <div class="flex items-center text-sm text-gray-500 sm:mt-0">
+                                    <!-- Heroicon name: mini/calendar -->
+                                    <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clip-rule="evenodd" />
+                                    </svg>
+                                    <p>
+                                        128h
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </li>
+
+            <li>
+                <div href="#" class="block hover:bg-gray-50">
+                    <div class="flex items-center px-4 py-4 sm:px-6">
+                        <div class="lg:mr-4 p-1 mr-4">
+                            <input type="checkbox" @onchange="CheckChanged" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6">
+                        </div>
+                        <div class="container px-0 mx-0">
+                            <div class="flex items-center justify-between">
+                                <p class="truncate text-sm font-medium text-indigo-600">Trine Maintenance</p>
+                                <div class="ml-2 flex flex-shrink-0">
+                                    <p class="inline-flex rounded-full bg-yellow-100 px-2 text-xs font-semibold leading-5 text-yellow-800">Delay</p>
+                                </div>
+                            </div>
+                            <div class="mt-2 sm:flex sm:justify-between">
+                                <div class="sm:flex">
+                                    <p class="flex items-center text-sm text-gray-500">
+                                        <!-- Heroicon name: mini/users -->
+                                        <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path d="M7 8a3 3 0 100-6 3 3 0 000 6zM14.5 9a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM1.615 16.428a1.224 1.224 0 01-.569-1.175 6.002 6.002 0 0111.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 017 18a9.953 9.953 0 01-5.385-1.572zM14.5 16h-.106c.07-.297.088-.611.048-.933a7.47 7.47 0 00-1.588-3.755 4.502 4.502 0 015.874 2.636.818.818 0 01-.36.98A7.465 7.465 0 0114.5 16z" />
+                                        </svg>
+                                        Trine
+                                    </p>
+                                    <p class="mt-0 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                                        <!-- Heroicon name: mini/map-pin -->
+                                        <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path fill-rule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.273 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" clip-rule="evenodd" />
+                                        </svg>
+                                        EP-000-4684-1-F-SDDS
+                                    </p>
+                                </div>
+                                <div class="flex items-center text-sm text-gray-500 sm:mt-0">
+                                    <!-- Heroicon name: mini/calendar -->
+                                    <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clip-rule="evenodd" />
+                                    </svg>
+                                    <p>
+                                        128h
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </li>
+        </ul>
+
     </div>
+
+       <!-- This example requires Tailwind CSS v2.0+ -->
+    <div class="overflow-hidden bg-white shadow-sm sm:rounded-md mb-5 mt-5">
+        <ul role="list" class="divide-y divide-gray-200 bg-gray-50">
+            <li>
+                <div href="#" class="block hover:bg-gray-50">
+                    <div class="flex items-center px-4 py-4 sm:px-6">
+                        <div class="flex min-w-0 flex-1 items-center">
+                            <div class="flex-shrink-0">
+                                <img class="h-12 w-12 rounded-full" src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                            </div>
+                            <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
+                                <div>
+                                    <p class="truncate text-sm font-medium text-indigo-600">Kristen Ramos</p>
+                                    <p class="mt-2 flex items-center text-sm text-gray-500">
+                                        <!-- Heroicon name: mini/envelope -->
+                                        <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z" />
+                                            <path d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z" />
+                                        </svg>
+                                        <span class="truncate">ricardo.cooper@example.com</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button type="button" class="inline-flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-2 text-sm text-gray-500 shadow-sm hover:bg-[#0DE899] focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">Validate</button>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <ul role="list" class="divide-y divide-gray-200">
+            <li>
+                <div href="#" class="block hover:bg-gray-50">
+                    <div class="flex items-center px-4 py-4 sm:px-6">
+                        <div class="mr-5">
+                            <input type="checkbox" @onchange="CheckChanged" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6">
+                        </div>
+                        <div class="container px-0 mx-0">
+                            <div class="flex items-center justify-between">
+                                <p class="truncate text-sm font-medium text-indigo-600">PICASSO-ICAROS</p>
+                                <div class="ml-2 flex flex-shrink-0">
+                                    <p class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">Validated</p>
+                                </div>
+                            </div>
+                            <div class="mt-2 sm:flex sm:justify-between">
+                                <div class="sm:flex">
+                                    <p class="flex items-center text-sm text-gray-500">
+                                        <!-- Heroicon name: mini/users -->
+                                        <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path d="M7 8a3 3 0 100-6 3 3 0 000 6zM14.5 9a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM1.615 16.428a1.224 1.224 0 01-.569-1.175 6.002 6.002 0 0111.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 017 18a9.953 9.953 0 01-5.385-1.572zM14.5 16h-.106c.07-.297.088-.611.048-.933a7.47 7.47 0 00-1.588-3.755 4.502 4.502 0 015.874 2.636.818.818 0 01-.36.98A7.465 7.465 0 0114.5 16z" />
+                                        </svg>
+                                        ELIA GROUP
+                                    </p>
+                                    <p class="flex items-center text-sm text-gray-500 lg:mt-0 sm:ml-6">
+                                        <!-- Heroicon name: mini/map-pin -->
+                                        <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path fill-rule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.273 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" clip-rule="evenodd" />
+                                        </svg>
+                                        EP-000-4684-1-F-SDDS
+                                    </p>
+                                </div>
+                                <div class="flex items-center text-sm text-gray-500">
+                                    <!-- Heroicon name: mini/calendar -->
+                                    <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clip-rule="evenodd" />
+                                    </svg>
+                                    <p>
+                                        128h
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </li>
+
+        </ul>
+
+    </div>
+
+
+    <!-- This example requires Tailwind CSS v2.0+ -->
+    <div class="overflow-hidden bg-white shadow-sm sm:rounded-md mb-5 mt-5">
+        <ul role="list" class="divide-y divide-gray-200 bg-gray-50">
+            <li>
+                <div href="#" class="block hover:bg-gray-50">
+                    <div class="flex items-center px-4 py-4 sm:px-6">
+                        <div class="flex min-w-0 flex-1 items-center">
+                            <div class="flex-shrink-0">
+                                <img class="h-12 w-12 rounded-full" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                            </div>
+                            <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
+                                <div>
+                                    <p class="truncate text-sm font-medium text-indigo-600">Kristen Ramos</p>
+                                    <p class="mt-2 flex items-center text-sm text-gray-500">
+                                        <!-- Heroicon name: mini/envelope -->
+                                        <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z" />
+                                            <path d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z" />
+                                        </svg>
+                                        <span class="truncate">ricardo.cooper@example.com</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button type="button" class="inline-flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-2 text-sm text-gray-500 shadow-sm hover:bg-[#0DE899] focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">Validate</button>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <ul role="list" class="divide-y divide-gray-200">
+            <li>
+                <div href="#" class="block hover:bg-gray-50">
+                    <div class="flex items-center px-4 py-4 sm:px-6">
+                        <div class="lg:mr-4 p-1 mr-4">
+                            <input type="checkbox" @onchange="CheckChanged" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6">
+                        </div>
+                        <div class="container px-0 mx-0">
+                            <div class="flex items-center justify-between">
+                                <p class="truncate text-sm font-medium text-indigo-600">PICASSO-ICAROS</p>
+                                <div class="ml-2 flex flex-shrink-0">
+                                    <p class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">Validated</p>
+                                </div>
+                            </div>
+                            <div class="mt-2 sm:flex sm:justify-between">
+                                <div class="sm:flex">
+                                    <p class="flex items-center text-sm text-gray-500">
+                                        <!-- Heroicon name: mini/users -->
+                                        <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path d="M7 8a3 3 0 100-6 3 3 0 000 6zM14.5 9a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM1.615 16.428a1.224 1.224 0 01-.569-1.175 6.002 6.002 0 0111.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 017 18a9.953 9.953 0 01-5.385-1.572zM14.5 16h-.106c.07-.297.088-.611.048-.933a7.47 7.47 0 00-1.588-3.755 4.502 4.502 0 015.874 2.636.818.818 0 01-.36.98A7.465 7.465 0 0114.5 16z" />
+                                        </svg>
+                                        ELIA GROUP
+                                    </p>
+                                    <p class="mt-0 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                                        <!-- Heroicon name: mini/map-pin -->
+                                        <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path fill-rule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.273 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" clip-rule="evenodd" />
+                                        </svg>
+                                        EP-000-4684-1-F-SDDS
+                                    </p>
+                                </div>
+                                <div class="flex items-center text-sm text-gray-500 sm:mt-0">
+                                    <!-- Heroicon name: mini/calendar -->
+                                    <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clip-rule="evenodd" />
+                                    </svg>
+                                    <p>
+                                        128h
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </li>
+
+            <li>
+                <div href="#" class="block hover:bg-gray-50">
+                    <div class="flex items-center px-4 py-4 sm:px-6">
+                        <div class="lg:mr-4 p-1 mr-4">
+                            <input type="checkbox" @onchange="CheckChanged" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6">
+                        </div>
+                        <div class="container px-0 mx-0">
+                            <div class="flex items-center justify-between">
+                                <p class="truncate text-sm font-medium text-indigo-600">PICASSO-ICAROS</p>
+                                <div class="ml-2 flex flex-shrink-0">
+                                    <p class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">Validated</p>
+                                </div>
+                            </div>
+                            <div class="mt-2 sm:flex sm:justify-between">
+                                <div class="sm:flex">
+                                    <p class="flex items-center text-sm text-gray-500">
+                                        <!-- Heroicon name: mini/users -->
+                                        <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path d="M7 8a3 3 0 100-6 3 3 0 000 6zM14.5 9a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM1.615 16.428a1.224 1.224 0 01-.569-1.175 6.002 6.002 0 0111.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 017 18a9.953 9.953 0 01-5.385-1.572zM14.5 16h-.106c.07-.297.088-.611.048-.933a7.47 7.47 0 00-1.588-3.755 4.502 4.502 0 015.874 2.636.818.818 0 01-.36.98A7.465 7.465 0 0114.5 16z" />
+                                        </svg>
+                                        ELIA GROUP
+                                    </p>
+                                    <p class="mt-0 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                                        <!-- Heroicon name: mini/map-pin -->
+                                        <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path fill-rule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.273 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" clip-rule="evenodd" />
+                                        </svg>
+                                        EP-000-4684-1-F-SDDS
+                                    </p>
+                                </div>
+                                <div class="flex items-center text-sm text-gray-500 sm:mt-0">
+                                    <!-- Heroicon name: mini/calendar -->
+                                    <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clip-rule="evenodd" />
+                                    </svg>
+                                    <p>
+                                        128h
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </li>
+
+        </ul>
+
+    </div>
+
 </div>
 
-@code {
 
+@code {
+    private void CheckChanged(ChangeEventArgs eventArgs)
+    {
+        logger.LogWarning("Someone has clicked me!");
+        var t = eventArgs.Value;
+    }
+
+    public void Toto()
+    {
+        logger.LogWarning("Someone has clicked me!");
+    }
 }
