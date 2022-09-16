@@ -37,6 +37,7 @@ jobs:
       labels:
         - ignore-for-release
         - pre-release
+        - pre
       authors:
         - Automated Version Bump
     categories:
