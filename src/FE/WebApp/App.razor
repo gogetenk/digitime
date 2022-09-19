@@ -1,6 +1,11 @@
 ﻿@using Digitime.Shared.UI.Pages.Login;
+@inject NavigationManager NavigationManager
 
 <CascadingAuthenticationState>
+    @if (NavigationManager.Uri.Contains("app.html"))
+    {
+        <RedirectToLogin />
+    }
     <Router AppAssembly="@typeof(App).Assembly"
             AdditionalAssemblies="new[] { typeof(Digitime.Shared.UI.Pages.Index).Assembly }">
         <Found Context="routeData">
