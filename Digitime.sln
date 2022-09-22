@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		package.json = package.json
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Digitime.Sever.UnitTests", "tests\Digitime.Sever.UnitTests\Digitime.Sever.UnitTests.csproj", "{40B33546-D0C0-4F1F-9D96-D5A2DC7427AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{C70098C0-B669-4937-AA93-DEBB5A570935}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C70098C0-B669-4937-AA93-DEBB5A570935}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C70098C0-B669-4937-AA93-DEBB5A570935}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40B33546-D0C0-4F1F-9D96-D5A2DC7427AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40B33546-D0C0-4F1F-9D96-D5A2DC7427AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40B33546-D0C0-4F1F-9D96-D5A2DC7427AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40B33546-D0C0-4F1F-9D96-D5A2DC7427AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +66,7 @@ Global
 		{58B45EB7-6021-44F0-8A9E-FD8EA5A82B05} = {7245AF62-F081-49B0-9705-9F7D38AABC36}
 		{73F22696-A487-471D-8179-4DEAAD99A11E} = {7245AF62-F081-49B0-9705-9F7D38AABC36}
 		{C70098C0-B669-4937-AA93-DEBB5A570935} = {73F22696-A487-471D-8179-4DEAAD99A11E}
+		{40B33546-D0C0-4F1F-9D96-D5A2DC7427AB} = {9AEB5696-D5A4-4460-BBB8-33DE15B035AA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF5E4B7D-EBCA-46AD-A846-9FBA2BDFFF4C}
