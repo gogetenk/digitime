@@ -1,6 +1,6 @@
 {
   "name": "Digitime",
-  "description": "",
+  "description": "TimeSheet digitalization platform",
   "website": "http://digitime.app",
   "env": {
     "PROJECT_FILE": "src/BE/WebApi/Digitime.Server.csproj"
