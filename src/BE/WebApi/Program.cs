@@ -3,6 +3,7 @@ using Digitime.Server.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,7 +35,14 @@ if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
     app.UseWebAssemblyDebugging();
-    app.UseSwagger();
+    app.UseSwagger(options =>
+    {
+        options.PreSerializeFilters.Add((swagger, httpReq) =>
+        {
+            var scheme = "https";
+            swagger.Servers = new List<OpenApiServer>() { new OpenApiServer() { Url = $"{scheme}://{httpReq.Host}" } };
+        });
+    });
     app.UseSwaggerUI();
 }
 else
@@ -59,13 +67,5 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
-
-app.Use(async (ctx, next) =>
-{
-    ctx.Request.Scheme = "https";
-    ctx.Request.Host = new HostString("web.digitime.app");
-
-    await next();
-});
 
 app.Run();
