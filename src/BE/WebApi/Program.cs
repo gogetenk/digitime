@@ -23,7 +23,6 @@ builder.Services.AddAuthentication()
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
-builder.Services.AddRazorPages();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -60,5 +59,13 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
+
+app.Use(async (ctx, next) =>
+{
+    ctx.Request.Scheme = "https";
+    ctx.Request.Host = new HostString("web.digitime.app");
+
+    await next();
+});
 
 app.Run();
