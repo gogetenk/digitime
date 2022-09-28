@@ -28,6 +28,11 @@ builder.Services.AddRazorPages();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(p => p.AddDefaultPolicy(builder =>
+{
+    builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+}));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -35,14 +40,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
     app.UseWebAssemblyDebugging();
-    app.UseSwagger(options =>
-    {
-        options.PreSerializeFilters.Add((swagger, httpReq) =>
-        {
-            var scheme = "https";
-            swagger.Servers = new List<OpenApiServer>() { new OpenApiServer() { Url = $"{scheme}://{httpReq.Host}" } };
-        });
-    });
+    app.UseSwagger();
     app.UseSwaggerUI();
 }
 else
@@ -58,6 +56,8 @@ app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseCors();
 
 app.UseIdentityServer();
 app.UseAuthentication();
