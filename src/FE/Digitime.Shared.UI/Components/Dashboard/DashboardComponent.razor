@@ -5,10 +5,13 @@
 @using Microsoft.AspNetCore.Authorization
 @using System.Security.Principal
 @using System.Security.Claims
+@using System.Net.Http.Json
 
 @inject NavigationManager Navigation
 @inject SignOutSessionStateManager SignOutManager
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
+@inject HttpClient Http
+
 @attribute [Authorize]
 
 @code {
@@ -18,6 +21,15 @@
     {
         var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
         _currentUser = authstate.User;
+
+        try
+        {
+            var results = await Http.GetFromJsonAsync<List<string>>("api/dashboard");
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
    }
 }
 
