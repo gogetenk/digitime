@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Digitime.Server.Controllers;
 
-[Authorize]
+//[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class DashboardController : ControllerBase
