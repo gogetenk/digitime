@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Digitime.Server.Controllers;
 
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class DashboardController : ControllerBase
