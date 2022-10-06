@@ -1,5 +1,6 @@
 ﻿@using Digitime.Shared.UI.Components.Common
 @using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using Microsoft.AspNetCore.Authorization
@@ -26,15 +27,20 @@
 
         try
         {
-            var token = _http.DefaultRequestHeaders?.Authorization?.Parameter.ToString();
-            _logger.LogWarning($"Token : {token}");
+            //var token = _http.DefaultRequestHeaders?.Authorization?.Parameter?.ToString();
+            //_logger.LogWarning($"Token : {token}");
             var results = await _http.GetFromJsonAsync<List<string>>("api/dashboard");
         }
         catch (AccessTokenNotAvailableException exception)
         {
             exception.Redirect();
         }
-   }
+    }
+
+    private void NavigateToProjects()
+    {
+        //Navigation.NavigateTo("projects");
+    }
 }
 
 
@@ -74,8 +80,8 @@
                     <div class="hidden lg:ml-10 lg:block">
                         <div class="flex space-x-4">
                             <!-- Current: "bg-indigo-700 text-white", Default: "text-white hover:bg-indigo-500 hover:bg-opacity-75" -->
-                            <a href="#" class="text-black rounded-md py-2 px-3 text-sm font-medium" aria-current="page">Dashboard</a>
-                            <a href="#" class="text-gray-500 hover:bg-white-500 hover:bg-opacity-75 rounded-md py-2 px-3 text-sm font-normal">Projects</a>
+                            <a class="text-black rounded-md py-2 px-3 text-sm font-medium" aria-current="page">Dashboard</a>
+                            <NavLink href="projects" class="text-gray-500 hover:bg-white-500 hover:bg-opacity-75 rounded-md py-2 px-3 text-sm font-normal">Projects</NavLink>
                             <a href="#" class="text-gray-500 hover:bg-white-500 hover:bg-opacity-75 rounded-md py-2 px-3 text-sm font-normal">Workspaces</a>
                         </div>
                     </div>

@@ -1,5 +1,5 @@
-﻿@using Digitime.Shared.UI.Pages.Login;
-@inject NavigationManager NavManager
+﻿@using Digitime.Shared.UI.Components.Common
+@using Digitime.Shared.UI.Pages.Login;
 
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(App).Assembly"
@@ -7,7 +7,7 @@
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <Authorizing>
-                    <p>Determining session state, please wait...</p>
+                    <LoadingSpinnerComponent Text="Determining session state, please wait..." />
                 </Authorizing>
                 <NotAuthorized>
                     <RedirectToLogin />
