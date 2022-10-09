@@ -1,4 +1,24 @@
-﻿<!-- This example requires Tailwind CSS v2.0+ -->
+﻿@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using System.Net.Http.Json
+@inject HttpClient _http
+
+
+@code {
+    private List<string> _timesheets = new List<string>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        try
+        {
+            _timesheets = await _http.GetFromJsonAsync<List<string>>("api/dashboard/indicators");
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+}
+
 <div>
     <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
         <div class="overflow-hidden rounded-lg bg-white px-4 py-4 shadow-md sm:p-6">
@@ -17,7 +37,3 @@
         </div>
     </dl>
 </div>
-
-@code {
-
-}

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Digitime.Server.Controllers;
 
-//[Authorize]
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class DashboardController : ControllerBase
@@ -24,6 +24,30 @@ public class DashboardController : ControllerBase
             "Toto",
             "Titi",
             "Tata"
+        };
+    }
+
+    [HttpGet("indicators")]
+    public IEnumerable<string> GetIndicators()
+    {
+        _logger.LogInformation(nameof(GetIndicators));
+        return new List<string>()
+        {
+            "71,897",
+            "58.16%",
+            "24.57%"
+        };
+    }
+
+    [HttpGet("timesheets")]
+    public IEnumerable<string> GetTimesheets()
+    {
+        _logger.LogInformation(nameof(GetIndicators));
+        return new List<string>()
+        {
+            "Project1",
+            "Project2",
+            "Project3"
         };
     }
 }
