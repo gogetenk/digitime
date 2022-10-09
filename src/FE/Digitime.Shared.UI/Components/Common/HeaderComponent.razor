@@ -1,5 +1,181 @@
-﻿<h3>HeaderComponent</h3>
+﻿@using Digitime.Shared.UI.Components.Common
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Principal
+@using System.Security.Claims
+@using System.Net.Http.Json
+@using Microsoft.Extensions.Logging;
+
+@inject SignOutSessionStateManager SignOutManager
+@inject AuthenticationStateProvider GetAuthenticationStateAsync
+@inject NavigationManager Navigation
+
+@attribute [Authorize]
 
 @code {
+    private ClaimsPrincipal _currentUser;
+    private string _profilePic;
+    private bool _isDropDownOpened = false;
+    private string _currentProfileDropDownClasses = "hidden opacity-0";
 
+    private static string _OpenedProfileDropDownClasses = "transition ease-out duration-100 transform opacity-100 scale-100";
+    private static string _ClosedProfileDropDownClasses = "hidden transition ease-in duration-75 transform opacity-0 scale-95";
+
+    protected async override Task OnInitializedAsync()
+    {
+        var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+        _currentUser = authstate.User;
+        _profilePic = _currentUser?.FindFirst(x => x?.Type == "picture")?.Value;
+    }
+
+    protected void OpenProfileDropdown(MouseEventArgs args)
+    {
+        if (_isDropDownOpened)
+        {
+            CloseDropDown();
+        }
+        else
+        {
+            OpenDropDown();
+        }
+    }
+
+    private void CloseDropDown()
+    {
+        _currentProfileDropDownClasses = _ClosedProfileDropDownClasses;
+        _isDropDownOpened = false;
+    }
+
+    private void OpenDropDown()
+    {
+        _currentProfileDropDownClasses = _OpenedProfileDropDownClasses;
+        _isDropDownOpened = true;
+    }
+
+    protected async Task BeginSignOut(MouseEventArgs args)
+    {
+        await SignOutManager.SetSignOutState();
+        Navigation.NavigateTo("authentication/logout");
+    }
 }
+
+<nav class="border-b border-opacity-25 bg-[#F0F4F8] lg:border-none">
+    <div class="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
+        <div class="relative flex h-24 items-center justify-between">
+            <div class="flex items-center px-2 lg:px-0">
+                <div class="flex-shrink-0">
+                    <img class="block h-8" src="img/logo2.svg" alt="Digitime">
+                </div>
+                <div class="hidden lg:ml-10 lg:block">
+                    <div class="flex space-x-4">
+                        <!-- Current: "bg-indigo-700 text-white", Default: "text-white hover:bg-indigo-500 hover:bg-opacity-75" -->
+                        <a class="text-black rounded-md py-2 px-3 text-sm font-medium" aria-current="page">Dashboard</a>
+                        <NavLink href="projects" class="text-gray-500 hover:bg-white-500 hover:bg-opacity-75 rounded-md py-2 px-3 text-sm font-normal">Projects</NavLink>
+                        <a href="#" class="text-gray-500 hover:bg-white-500 hover:bg-opacity-75 rounded-md py-2 px-3 text-sm font-normal">Workspaces</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex lg:hidden">
+                <!-- Mobile menu button -->
+                <button type="button" class="inline-flex items-center justify-center rounded-md p-2 text-[#7069FA] hover:bg-indigo-500 hover:bg-opacity-75 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600" aria-controls="mobile-menu" aria-expanded="false">
+                    <span class="sr-only">Open main menu</span>
+                    <!--
+                      Heroicon name: outline/bars-3
+
+                      Menu open: "hidden", Menu closed: "block"
+                    -->
+                    <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                    </svg>
+                    <!--
+                      Heroicon name: outline/x-mark
+
+                      Menu open: "block", Menu closed: "hidden"
+                    -->
+                    <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="hidden lg:ml-4 lg:block">
+                <div class="flex items-center">
+                    <button type="button" class="flex-shrink-0 rounded-full p-1 text-gray-500 hover:text-indigo-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600">
+                        <span class="sr-only">View notifications</span>
+                        <!-- Heroicon name: outline/bell -->
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+                        </svg>
+                    </button>
+
+                    <!-- Profile dropdown -->
+                    <div class="relative ml-3 flex-shrink-0">
+                        <div>
+                            <button type="button" @onclick="OpenProfileDropdown" @onfocusout="CloseDropDown" class="flex rounded-full bg-gray-600 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+                                <span class="sr-only">Open user menu</span>
+                                <img class="h-8 w-8 rounded-full" src="@_profilePic" alt="">
+                            </button>
+                        </div>
+
+                        <!--
+                          Dropdown menu, show/hide based on menu state.
+
+                          Entering: "transition ease-out duration-100"
+                            From: "transform opacity-0 scale-95"
+                            To: "transform opacity-100 scale-100"
+                          Leaving: "transition ease-in duration-75"
+                            From: "transform opacity-100 scale-100"
+                            To: "transform opacity-0 scale-95"
+                        -->
+                        <div class="@_currentProfileDropDownClasses absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+                            <!-- Active: "bg-gray-100", Not Active: "" -->
+                            <NavLink href="profile" class="block py-2 px-4 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</NavLink>
+                            <NavLink href="settings" class="block py-2 px-4 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</NavLink>
+                            <NavLink @onclick="BeginSignOut" class="block py-2 px-4 text-sm text-gray-700 hover:text-indigo-500" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</NavLink>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile menu, show/hide based on menu state. TODO: REMOVE THE HIDDEN -->
+    <div class="lg:hidden hidden bg-white" id="mobile-menu">
+        <div class="space-y-1 px-2 pt-2 pb-3">
+            <!-- Current: "bg-indigo-700 text-white", Default: "text-white hover:bg-indigo-500 hover:bg-opacity-75" -->
+            <a href="#" class="text-black block rounded-md py-2 px-3 text-base font-medium" aria-current="page">Dashboard</a>
+
+            <a href="#" class="text-gray-500 hover:bg-white-500 hover:bg-opacity-75 block rounded-md py-2 px-3 text-base font-medium">Projects</a>
+
+            <a href="#" class="text-gray-500 hover:bg-white-500 hover:bg-opacity-75 block rounded-md py-2 px-3 text-base font-medium">Workspaces</a>
+        </div>
+        <div class="border-t border-gray-700 pt-4 pb-3">
+            <div class="flex items-center px-5">
+                <div class="flex-shrink-0">
+                    <img class="h-10 w-10 rounded-full" src="@_profilePic" alt="">
+                </div>
+                <div class="ml-3">
+                    <div class="text-base font-medium text-black">Yannis Tocreau</div>
+                    <div class="text-sm font-medium text-gray-300">tom@example.com</div>
+                </div>
+                <button type="button" class="ml-auto flex-shrink-0 rounded-full p-1 text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600">
+                    <span class="sr-only">View notifications</span>
+                    <!-- Heroicon name: outline/bell -->
+                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+                    </svg>
+                </button>
+            </div>
+            <div class="mt-3 space-y-1 px-2">
+                <a href="#" class="block rounded-md py-2 px-3 text-base font-medium text-gray-500 hover:bg-indigo-500 hover:bg-opacity-75">Your Profile</a>
+
+                <a href="#" class="block rounded-md py-2 px-3 text-base font-medium text-gray-500 hover:bg-indigo-500 hover:bg-opacity-75">Settings</a>
+
+                <a href="#" class="block rounded-md py-2 px-3 text-base font-medium text-gray-500 hover:bg-indigo-500 hover:bg-opacity-75">Sign out</a>
+            </div>
+        </div>
+    </div>
+</nav>
