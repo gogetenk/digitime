@@ -10,7 +10,7 @@
 @using Microsoft.Extensions.Logging;
 
 @inject SignOutSessionStateManager SignOutManager
-@inject AuthenticationStateProvider GetAuthenticationStateAsync
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject HttpClient _http
 @inject ILogger<DashboardComponent> _logger;
 
@@ -21,7 +21,7 @@
 
     protected async override Task OnInitializedAsync()
     {
-        var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+        var authstate = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         _currentUser = authstate.User;
 
         try
