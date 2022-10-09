@@ -28,7 +28,7 @@ public class DashboardController : ControllerBase
     }
 
     [HttpGet("indicators")]
-    public IEnumerable<string> GetIndicators()
+    public async Task<IEnumerable<string>> GetIndicators()
     {
         _logger.LogInformation(nameof(GetIndicators));
         return new List<string>()
