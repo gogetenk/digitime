@@ -1,19 +1,5 @@
-﻿<!--
-  This example requires Tailwind CSS v2.0+
+﻿@page "/create-project"
 
-  This example requires some changes to your config:
-
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
--->
 <div class="mx-auto max-w-md sm:max-w-3xl mt-40">
     <div>
         <div class="text-center">
@@ -26,9 +12,9 @@
         <form class="mt-6 sm:flex sm:items-center" action="#">
             <label for="emails" class="sr-only">Email addresses</label>
             <div class="relative rounded-md shadow-sm sm:min-w-0 sm:flex-1">
-                <input type="text" name="emails" id="emails" class="block w-full h-10 p-2 rounded-md border-gray-300 pr-32 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Enter an email">
-                <div class="absolute inset-y-0 right-0 flex items-center">
-                    <span class="h-4 w-px bg-gray-200" aria-hidden="true"></span>
+                <input type="text" name="emails" id="emails" class="block w-full h-10 p-4 rounded-md border border-gray-300 pr-32 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Enter an email">
+                <div class="absolute inset-y-0 right-0 flex items-center p-2.5">
+                    <span class="h-6 w-px bg-gray-200" aria-hidden="true"></span>
                     <label for="role" class="sr-only">Role</label>
                     <select id="role" name="role" class="h-full rounded-md border-transparent bg-transparent py-0 pl-4 pr-7 text-gray-500 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                         <option>Can edit</option>
@@ -36,8 +22,10 @@
                     </select>
                 </div>
             </div>
-            <div class="mt-3 sm:mt-0 sm:ml-4 sm:flex-shrink-0">
-                <button type="submit" class="block w-full rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-center text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Send invite</button>
+            <div class="sm:mt-0 sm:ml-4 sm:flex-shrink-0">
+                <button type="submit" class="block w-full h-12 rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-center text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    Send invite
+                </button>
             </div>
         </form>
     </div>
