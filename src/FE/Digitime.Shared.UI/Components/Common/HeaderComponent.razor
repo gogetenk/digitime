@@ -20,9 +20,12 @@
     private string _profilePic;
     private bool _isDropDownOpened = false;
     private string _currentProfileDropDownClasses = "hidden opacity-0";
+    private string _dashboardItemTitle = "Dashboard";
 
     private static string _OpenedProfileDropDownClasses = "transition ease-out duration-100 transform opacity-100 scale-100";
     private static string _ClosedProfileDropDownClasses = "hidden transition ease-in duration-75 transform opacity-0 scale-95";
+    private static string _SelectedPageLinkClasses = "bg-indigo-700 text-white";
+    private static string _UnSelectedPageLinkClasses = "text-white hover:bg-indigo-500 hover:bg-opacity-75";
 
     protected async override Task OnInitializedAsync()
     {
@@ -55,6 +58,7 @@
         _isDropDownOpened = true;
     }
 
+
     protected async Task BeginSignOut(MouseEventArgs args)
     {
         await SignOutManager.SetSignOutState();
@@ -71,10 +75,9 @@
                 </div>
                 <div class="hidden lg:ml-10 lg:block">
                     <div class="flex space-x-4">
-                        <!-- Current: "bg-indigo-700 text-white", Default: "text-white hover:bg-indigo-500 hover:bg-opacity-75" -->
-                        <NavLink href="/" class="text-black rounded-md py-2 px-3 text-sm font-medium" aria-current="page">Dashboard</NavLink>
-                        <NavLink href="projects" class="text-gray-500 hover:bg-white-500 hover:bg-opacity-75 rounded-md py-2 px-3 text-sm font-normal">Projects</NavLink>
-                        <a href="#" class="text-gray-500 hover:bg-white-500 hover:bg-opacity-75 rounded-md py-2 px-3 text-sm font-normal">Workspaces</a>
+                        <NavLink href="/" ActiveClass="headerActiveLink" Match="NavLinkMatch.All" class="text-gray-500 hover:bg-white-500 hover:bg-opacity-75 rounded-md py-2 px-3 text-sm font-normal" aria-current="page">Dashboard</NavLink>
+                        <NavLink href="projects" ActiveClass="headerActiveLink" class="text-gray-500 hover:bg-white-500 hover:bg-opacity-75 rounded-md py-2 px-3 text-sm font-normal">Projects</NavLink>
+                        <NavLink href="workspaces" ActiveClass="headerActiveLink" class="text-gray-500 hover:bg-white-500 hover:bg-opacity-75 rounded-md py-2 px-3 text-sm font-normal">Workspaces</NavLink>
                     </div>
                 </div>
             </div>
@@ -114,7 +117,7 @@
                     <!-- Profile dropdown -->
                     <div class="relative ml-3 flex-shrink-0">
                         <div>
-                            <button type="button" @onclick="OpenProfileDropdown"  @onfocusout="async () => { await Task.Delay(100); CloseDropDown();}" class="flex rounded-full bg-gray-600 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+                            <button type="button" @onclick="OpenProfileDropdown" @onfocusout="async () => { await Task.Delay(100); CloseDropDown();}" class="flex rounded-full bg-gray-600 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                                 <span class="sr-only">Open user menu</span>
                                 <img class="h-8 w-8 rounded-full" src="@_profilePic" alt="">
                             </button>
