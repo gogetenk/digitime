@@ -1,0 +1,62 @@
+﻿@using Microsoft.AspNetCore.Components.Web
+<div class="pb-2 sm:pb-5 transition @_currentVisibilityClass">
+    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        <div class="rounded-lg bg-white p-2 shadow-md sm:p-3">
+            <div class="flex flex-wrap items-center justify-between">
+                <div class="flex w-0 flex-1 items-center">
+                    <span class="flex rounded-lg bg-@ColorClass p-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18.123" height="19.581" viewBox="0 0 18.123 19.581">
+                            <path id="Tracé_2429" data-name="Tracé 2429" d="@Icon" transform="translate(-2.938 -2.25)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" />
+                        </svg>
+
+                    </span>
+                    <p class="ml-3 truncate font-medium text-@ColorClass">
+                        <span class="">@Text</span>
+                    </p>
+                </div>
+                <div class="order-2 w-full flex-shrink-0 sm:order-2 sm:w-auto">
+                    <a href="@ButtonLink" class="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-2 text-sm font-medium text-indigo-600 hover:bg-indigo-50">@ButtonText</a>
+                </div>
+                <div class="order-3 flex-shrink-0 sm:ml-2">
+                    <button type="button" @onclick="OnDismiss" class="-mr-1 flex rounded-md p-2 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-white">
+                        <span class="sr-only">Dismiss</span>
+                        <!-- Heroicon name: outline/x-mark -->
+                        <svg class="h-6 w-6 text-gray" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Text { get; set; }
+
+    [Parameter]
+    public string Icon { get; set; }
+
+    [Parameter]
+    public string ButtonText { get; set; }
+
+    [Parameter]
+    public string ButtonLink { get; set; }
+
+    [Parameter]
+    public string ColorClass { get; set; }
+
+    private string _currentVisibilityClass = "";
+    private bool _isVisible = true;
+
+    protected void OnDismiss(MouseEventArgs args)
+    {
+        _isVisible = !_isVisible;
+
+        if (_isVisible)
+            _currentVisibilityClass = "";
+        else
+            _currentVisibilityClass = "hidden";
+    }
+}
