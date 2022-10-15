@@ -9,7 +9,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 var backendBaseAddress = builder.Configuration.GetValue<string>("BackendBaseUri");
 builder.Services.AddHttpClient(
-        "DigitimeApi", 
+        "DigitimeApi",
         client => client.BaseAddress = new Uri(backendBaseAddress)
     )
     .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();

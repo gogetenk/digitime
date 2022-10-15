@@ -1,8 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Authorization
-@page "/profile"
-@attribute [Authorize]
 
-<h3>Profile</h3>
+@attribute [Authorize]
+@page "/settings/integrations"
+@layout SettingsLayout
+
+<h3>Integrations</h3>
 
 @code {
 
