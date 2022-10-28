@@ -1,9 +1,11 @@
 ﻿@using System.Net.Http.Json
+@using Digitime.Shared.UI.Components.Settings
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using Microsoft.Extensions.Logging;
 @using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Web
 
 @inject SignOutSessionStateManager SignOutManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -14,10 +16,13 @@
 @page "/settings/profile"
 @layout SettingsLayout
 
-@code{
+@code {
     private ClaimsPrincipal _currentUser;
     private string _profilePic;
-
+    public enum RoleType {
+        Worker,
+        Reviewer
+    }
     protected async override Task OnInitializedAsync()
     {
         var authstate = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -32,12 +37,17 @@
             exception.Redirect();
         }
     }
+
+    public void OnRoleSelected(MouseEventArgs args, RoleType role)
+    {
+        
+    }
 }
 
 <div class="space-y-6 sm:px-6 lg:col-span-9 lg:px-0">
-            <div class="divide-y divide-gray-200 lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">
-                <form class="divide-y divide-gray-200 lg:col-span-9" action="#" method="POST">
-                    <div class="shadow-sm sm:overflow-hidden sm:rounded-md">
+    <div class="divide-y divide-gray-200 lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">
+        <form class="divide-y divide-gray-200 lg:col-span-9" action="#" method="POST">
+            <div class="shadow-sm sm:overflow-hidden sm:rounded-md">
                 <div class="bg-white py-6 px-4 sm:p-6">
                     <!-- Profile section -->
                     <div class="py-6 px-4 sm:p-6 lg:pb-8">
@@ -59,7 +69,7 @@
                                         <input type="text" value="@_currentUser?.FindFirst(x => x?.Type == "family_name")?.Value" name="last-name" id="last-name" autocomplete="family-name" class="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm">
                                     </div>
                                 </div>
-                              
+
 
                                 <div class="col-span-12">
                                     <label for="E-Mail address" class="block text-sm font-medium text-gray-700">E-Mail address</label>
@@ -120,38 +130,20 @@
                         </div>
                     </div>
 
-                     <div class="divide-y divide-gray-200 pt-6 px-4">
+                    <div class="divide-y divide-gray-200 pt-6 px-4">
                         <div>
                             <h2 class="text-lg font-medium leading-6 text-gray-900">Role</h2>
                             <p class="mt-1 text-sm text-gray-500">You will have a completely different experience depending on your role.</p>
                         </div>
-                    <fieldset class="mt-2">
-                        <legend class="sr-only">Role setting</legend>
-                        <div class="-space-y-px rounded-md bg-white">
-                            <!-- Checked: "bg-indigo-50 border-indigo-200 z-10", Not Checked: "border-gray-200" -->
-                            <label class="rounded-tl-md rounded-tr-md relative border p-4 flex cursor-pointer focus:outline-none">
-                                <input type="radio" name="privacy-setting" value="Public access" class="mt-0.5 h-4 w-4 shrink-0 cursor-pointer text-indigo-600 border-gray-300 focus:ring-indigo-500" aria-labelledby="privacy-setting-0-label" aria-describedby="privacy-setting-0-description">
-                                <span class="ml-3 flex flex-col">
-                                    <!-- Checked: "text-indigo-900", Not Checked: "text-gray-900" -->
-                                    <span id="privacy-setting-0-label" class="block text-sm font-medium">Worker</span>
-                                    <!-- Checked: "text-indigo-700", Not Checked: "text-gray-500" -->
-                                    <span id="privacy-setting-0-description" class="block text-sm">You are the one actually doing to work and filling up a timesheet for your management.</span>
-                                </span>
-                            </label>
-
-                            <!-- Checked: "bg-indigo-50 border-indigo-200 z-10", Not Checked: "border-gray-200" -->
-                                <label class="relative border rounded-bl-md rounded-br-md p-4 flex cursor-pointer focus:outline-none">
-                                <input type="radio" name="privacy-setting" value="Private to Project Members" class="mt-0.5 h-4 w-4 shrink-0 cursor-pointer text-indigo-600 border-gray-300 focus:ring-indigo-500" aria-labelledby="privacy-setting-1-label" aria-describedby="privacy-setting-1-description">
-                                <span class="ml-3 flex flex-col">
-                                    <!-- Checked: "text-indigo-900", Not Checked: "text-gray-900" -->
-                                    <span id="privacy-setting-1-label" class="block text-sm font-medium">Reviewer</span>
-                                    <!-- Checked: "text-indigo-700", Not Checked: "text-gray-500" -->
-                                    <span id="privacy-setting-1-description" class="block text-sm">You are reviewing worktime and validate timesheets.</span>
-                                </span>
-                            </label>
-                        </div>
-                    </fieldset>
+                        <fieldset class="mt-2">
+                            <legend class="sr-only">Role setting</legend>
+                            <div class="-space-y-px rounded-md bg-white">
+                                <RolePickerSettingComponent Title="Worker" Caption="You are the one actually doing to work and filling up a timesheet for your management." IsActive="false" />
+                                <RolePickerSettingComponent Title="Reviewer" Caption="You are reviewing worktime and validate timesheets." IsActive="false" onclick="() => OnRoleSelected(null, RoleType.Reviewer)" />
+                            </div>
+                        </fieldset>
                     </div>
+
                     <!-- Privacy section -->
                     <div class="divide-y divide-gray-200 pt-6 mt-6">
                         <div class="px-4 sm:px-6">
@@ -213,7 +205,7 @@
                     </div>
                 </div>
             </div>
-                </form>
+        </form>
 
-            </div>
-            </div>
+    </div>
+</div>
