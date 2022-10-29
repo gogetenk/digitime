@@ -2,7 +2,7 @@
 
 <div class="relative grid grid-cols-1 gap-x-14 lg:gap-x-36 md:grid-cols-2">
 
-    
+
 
     <button type="button" class="absolute -top-1 -left-1.5 flex items-center justify-center p-1.5 text-gray-400 hover:text-gray-500">
         <span class="sr-only">Previous month</span>
@@ -42,19 +42,23 @@
               Bottom right day, include: "rounded-br-lg"
             -->
             @*<button type="button" class="relative rounded-tl-lg bg-gray-50 py-1.5 text-gray-400 hover:bg-gray-100 focus:z-10">
-                <!--
-                  Always include: "mx-auto flex h-7 w-7 items-center justify-center rounded-full"
-                  Is today, include: "bg-indigo-600 font-semibold text-white"
-                -->
-                <time datetime="2021-12-27" class="mx-auto flex h-7 w-7 items-center justify-center rounded-full">27</time>
+            <!--
+            Always include: "mx-auto flex h-7 w-7 items-center justify-center rounded-full"
+            Is today, include: "bg-indigo-600 font-semibold text-white"
+            -->
+            <time datetime="2021-12-27" class="mx-auto flex h-7 w-7 items-center justify-center rounded-full">27</time>
             </button>
             <button type="button" class="relative bg-gray-50 py-1.5 text-gray-400 hover:bg-gray-100 focus:z-10">
-                <time datetime="2021-12-28" class="mx-auto flex h-7 w-7 items-center justify-center rounded-full">28</time>
+            <time datetime="2021-12-28" class="mx-auto flex h-7 w-7 items-center justify-center rounded-full">28</time>
             </button>*@
             @foreach (var day in CurrentMonthCalendarDays)
             {
-                <button type="button" class="@(day is null ? "bg-gray-50 text-gray-400" : "bg-white text-gray-900") py-1.5  hover:bg-gray-100 focus:z-10">
-                    <time datetime="@day?.Date.ToShortDateString()" class="mx-auto flex h-7 w-7 items-center justify-center rounded-full">@day?.Date.Day</time>
+                <button type="button"
+                    class="@(day is null ? "bg-gray-50 text-gray-400" : day.IsPublicHoliday ? "bg-yellow text-yellow-900" : "bg-white text-gray-900")
+                           py-1.5  hover:bg-gray-100 focus:z-10">
+                    <time datetime="@day?.Date.ToShortDateString()" class="mx-auto flex h-7 w-7 items-center justify-center rounded-full">
+                        @day?.Date.Day
+                    </time>
                 </button>
             }
         </div>
@@ -74,8 +78,12 @@
         <div class="isolate mt-2 lg:h-96 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm ring-1 ring-gray-200">
             @foreach (var day in NextMonthCalendarDays)
             {
-                <button type="button" class="@(day is null ? "bg-gray-50 text-gray-400" : "bg-white text-gray-900") py-1.5  hover:bg-gray-100 focus:z-10">
-                    <time datetime="@day?.Date.ToShortDateString()" class="mx-auto flex h-7 w-7 items-center justify-center rounded-full">@day?.Date.Day</time>
+                <button type="button"
+                    class="@(day is null ? "bg-gray-50 text-gray-400" : day.IsPublicHoliday ? "bg-yellow text-yellow-900" : "bg-white text-gray-900")
+                           py-1.5  hover:bg-gray-100 focus:z-10">
+                    <time datetime="@day?.Date.ToShortDateString()" class="mx-auto flex h-7 w-7 items-center justify-center rounded-full">
+                        @day?.Date.Day
+                    </time>
                 </button>
             }
         </div>

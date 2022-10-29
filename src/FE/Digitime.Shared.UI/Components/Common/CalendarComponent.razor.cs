@@ -110,14 +110,12 @@ public partial class CalendarComponent : ComponentBase
     public async Task<List<DateTime>> GetPublicHolidaysForSpecifiedMonthAndCountry(DateTime dateTime, string country)
     {
         var publicHolidays = new List<DateTime>();
-        var firstDayOfMonth = new DateTime(dateTime.Year, dateTime.Month, 1);
-        var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
         var requestUri = $"https://date.nager.at/api/v3/PublicHolidays/{dateTime.Year}/{country}";
         var response = await HttpClient.GetAsync(requestUri);
         if (response.IsSuccessStatusCode)
         {
             var responseContent = await response.Content.ReadAsStringAsync();
-            var publicHolidaysResponse = JsonSerializer.Deserialize<List<PublicHoliday>>(responseContent);
+            var publicHolidaysResponse = JsonSerializer.Deserialize<List<PublicHoliday>>(responseContent, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
             if (publicHolidaysResponse != null)
             {
                 foreach (var publicHoliday in publicHolidaysResponse)
@@ -142,9 +140,4 @@ public class PublicHoliday
     public string LocalName { get; set; }
     public string Name { get; set; }
     public string CountryCode { get; set; }
-    public string Fixed { get; set; }
-    public string Global { get; set; }
-    public string Counties { get; set; }
-    public string LaunchYear { get; set; }
-    public string Type { get; set; }
 }
