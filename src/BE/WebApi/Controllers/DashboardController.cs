@@ -1,18 +1,29 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Digitime.Server.Domain.Models;
+using Digitime.Server.Queries;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Digitime.Server.Controllers;
 
-[Authorize]
+//[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class DashboardController : ControllerBase
 {
     private readonly ILogger<DashboardController> _logger;
+    private readonly IMediator _mediator;
 
-    public DashboardController(ILogger<DashboardController> logger)
+    public DashboardController(ILogger<DashboardController> logger, IMediator mediator)
     {
         _logger = logger;
+        _mediator = mediator;
+    }
+    
+    [HttpGet("*/calendar")]
+    public async Task<Calendar> GetCalendar([FromQuery]GetCalendarQuery query)
+    {
+        return await _mediator.Send(query);
     }
 
     [HttpGet]

@@ -44,9 +44,7 @@ public partial class CalendarComponent : ComponentBase
                 weekIndex++;
             }
 
-
             calendarDays[weekIndex, weekdayIndex] = CreateFilledCalendarDay(day);
-
             weekdayIndex++;
         }
 

@@ -1,18 +1,23 @@
+using MediatR;
+using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Digitime.Server.Domain.Ports;
+using Digitime.Server.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    }).AddJwtBearer(options =>
-    {
-        options.Authority = builder.Configuration["Auth0:Domain"];
-        options.Audience = builder.Configuration["Auth0:Audience"];
-    });
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.Authority = builder.Configuration["Auth0:Domain"];
+    options.Audience = builder.Configuration["Auth0:Audience"];
+});
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddNewtonsoftJson();
 builder.Services.AddRazorPages();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -25,6 +30,10 @@ builder.Services.AddCors(options =>
                     .AllowAnyMethod()
                     .AllowAnyHeader());
 });
+
+// Services
+RegisterServices(builder);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -64,3 +73,9 @@ app.MapControllers();
 app.MapFallbackToFile("index.html");
 
 app.Run();
+
+static void RegisterServices(WebApplicationBuilder builder)
+{
+    builder.Services.AddHttpClient();
+    builder.Services.AddScoped<IObtainPublicHolidays, PublicHolidaysRepository>();
+}
