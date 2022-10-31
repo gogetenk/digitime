@@ -1,7 +1,6 @@
 ﻿using Digitime.Server.Domain.Models;
 using Digitime.Server.Queries;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Digitime.Server.Controllers;
@@ -19,9 +18,10 @@ public class DashboardController : ControllerBase
         _logger = logger;
         _mediator = mediator;
     }
-    
-    [HttpGet("*/calendar")]
-    public async Task<Calendar> GetCalendar([FromQuery]GetCalendarQuery query)
+
+    [HttpGet("calendar")]
+    [ProducesResponseType(typeof(Shared.Dto.Calendar), StatusCodes.Status200OK)]
+    public async Task<Calendar> GetCalendar([FromQuery] GetCalendarQuery query)
     {
         return await _mediator.Send(query);
     }

@@ -1,4 +1,7 @@
-﻿using Digitime.Server.Domain.Models;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Digitime.Server.Domain.Models;
 using Digitime.Server.Domain.Ports;
 using MediatR;
 
@@ -12,7 +15,6 @@ public class GetCalendarQuery : IRequest<Calendar>
 
     public GetCalendarQuery()
     {
-
     }
 
     public GetCalendarQuery(string country, int month, int year)
@@ -35,6 +37,7 @@ public class GetCalendarQuery : IRequest<Calendar>
         {
             var requestedDate = new DateTime(request.Year, request.Month, 1);
             var publicHolidays = await _obtainPublicHolidays.GetPublicHolidaysForSpecifiedMonthAndCountry(requestedDate, request.Country);
+            
             return new Calendar(Guid.NewGuid(), requestedDate, publicHolidays);
         }
     }

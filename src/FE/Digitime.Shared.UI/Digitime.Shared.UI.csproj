@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BE\Digitime.Server.ClientSdk\Digitime.Server.ClientSdk.csproj" />
     <ProjectReference Include="..\..\Shared\Digitime.Shared.csproj" />
   </ItemGroup>
 

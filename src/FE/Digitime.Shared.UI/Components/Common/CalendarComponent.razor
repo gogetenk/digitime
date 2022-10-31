@@ -54,14 +54,14 @@
                 <button type="button" class="relative bg-gray-50 py-1.5 text-gray-400 hover:bg-gray-100 focus:z-10">
                 <time datetime="2021-12-28" class="mx-auto flex h-7 w-7 items-center justify-center rounded-full">28</time>
                 </button>*@
-                @foreach (var day in _currentMonthCalendarDays)
+                @foreach (var day in _currentMonthCalendarDays.CalendarDays)
                 {
                     <button type="button"
                         @onclick="() => OnDayClick(day)"
                         class="@(day is null ? "bg-gray-50 text-gray-400" : day.IsPublicHoliday ? "bg-yellow text-yellow-900" : "bg-white text-gray-400")
                            py-1.5  hover:bg-gray-100 focus:z-10">
                         <time datetime="@day?.Date.ToShortDateString()"
-                          class="@(day != null && day.WorkedProjects.Any() ? "font-bold text-black" : "" )
+                          class="@(day != null @*&& day.WorkedProjects.Any()*@ ? "font-bold text-black" : "" )
                       @(day != null && day.Date == DateTime.Now.Date ? "bg-indigo-600 text-white" : "")
                       mx-auto flex h-7 w-7 items-center justify-center rounded-full">
                             @day?.Date.Day
@@ -83,14 +83,14 @@
                 <div>S</div>
             </div>
             <div class="isolate mt-2 lg:h-96 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm ring-1 ring-gray-200">
-                @foreach (var day in _currentMonthCalendarDays)
+                @foreach (var day in _currentMonthCalendarDays.CalendarDays)
                 {
                     <button type="button"
                         @onclick="() => OnDayClick(day)"
                         class="@(day is null ? "bg-gray-50 text-gray-400" : day.IsPublicHoliday ? "bg-yellow text-yellow-900" : "bg-white text-gray-400")
                            py-1.5  hover:bg-gray-100 focus:z-10">
                         <time datetime="@day?.Date.ToShortDateString()"
-                          class="@(day != null && day.WorkedProjects.Any() ? "font-bold text-black" : "" )
+                          class="@(day != null @* && day.WorkedProjects.Any()*@ ? "font-bold text-black" : "" )
                       @(day != null && day.Date == DateTime.Now.Date ? "bg-indigo-600 text-white" : "")
                       mx-auto flex h-7 w-7 items-center justify-center rounded-full">
                             @day?.Date.Day
@@ -156,7 +156,7 @@
     {
         foreach (var entry in _currentDayTimesheetEntries)
         {
-            <ProjectRowComponent Name="@entry.Project" ProjectName="@entry.Project" WorkspaceName="ELIA GROUP" Status="Pending" Hours="@entry.Hours" Code="EP-000-687-GH-FFRTY" />
+            <ProjectRowComponent Name="@entry.ProjectTitle" ProjectName="@entry.ProjectTitle" WorkspaceName="ELIA GROUP" Status="Pending" Hours="@entry.Hours" Code="EP-000-687-GH-FFRTY" />
         }
     }
     else
