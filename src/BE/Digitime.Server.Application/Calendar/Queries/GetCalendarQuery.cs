@@ -5,7 +5,6 @@ using Digitime.Server.Application.Abstractions;
 using Digitime.Server.Domain.Models;
 using Digitime.Server.Domain.Ports;
 using MediatR;
-using Newtonsoft.Json;
 
 namespace Digitime.Server.Queries;
 
