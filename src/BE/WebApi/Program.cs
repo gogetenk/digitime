@@ -1,6 +1,10 @@
 using System.Reflection;
+using Digitime.Server.Application.Abstractions;
+using Digitime.Server.Application.Calendar.Queries;
 using Digitime.Server.Domain.Ports;
 using Digitime.Server.Infrastructure.Repositories;
+using Digitime.Server.Middlewares;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
@@ -18,9 +22,11 @@ builder.Services.AddAuthentication(options =>
     options.Audience = builder.Configuration["Auth0:Audience"];
 });
 
-builder.Services.AddControllersWithViews().AddNewtonsoftJson();
-builder.Services.AddRazorPages();
+builder.Services.AddControllersWithViews()
+    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<GetCalendarQueryValidator>())
+    .AddNewtonsoftJson();
 
+builder.Services.AddRazorPages();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -49,6 +55,12 @@ builder.Services.AddSwaggerGen(c =>
                          new string[] {}
                     }
                 });
+});
+
+builder.Services.AddEasyCaching(options =>
+{
+    //use memory cache that named default
+    options.UseInMemory("memory");
 });
 
 builder.Services.AddCors(options =>
@@ -104,6 +116,17 @@ app.Run();
 
 static void RegisterServices(WebApplicationBuilder builder)
 {
-    builder.Services.AddHttpClient();
-    builder.Services.AddScoped<IObtainPublicHolidays, PublicHolidaysRepository>();
+    builder.Services
+        .AddHttpClient()
+        .AddScoped<IObtainPublicHolidays, PublicHolidaysRepository>()
+        .AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>))
+        .AddTransient(typeof(IPipelineBehavior<,>), typeof(CachingBehavior<,>))
+        .AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
+    builder.Services
+        .Scan(scan => scan
+            .FromAssembliesOf(typeof(ICacheableRequest))
+            .AddClasses(classes => classes.AssignableTo(typeof(ICacheableRequest)), false)
+            .AsImplementedInterfaces()
+            .WithTransientLifetime());
 }

@@ -46,8 +46,8 @@ public partial class CalendarComponent : ComponentBase
         }
     }
 
-    Calendar _currentMonthCalendarDays;
-    Calendar _nextMonthCalendarDays;
+    Calendar _currentMonthCalendarDays = new();
+    Calendar _nextMonthCalendarDays = new();
     List<DateTime> _monthDates = new();
     List<DateTime> _publicHolidays = new();
     private List<TimesheetEntry> _currentDayTimesheetEntries = new();
