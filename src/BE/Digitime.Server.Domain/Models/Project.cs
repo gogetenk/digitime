@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 
 namespace Digitime.Server.Domain.Models;
-public class Project : AggregateRoot<Guid>
+public class Project : AggregateRoot<string>
 {
-    public Project(Guid id) : base(id)
+    public Project(string id) : base(id)
     {
     }
     

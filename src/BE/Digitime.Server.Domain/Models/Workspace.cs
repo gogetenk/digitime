@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Digitime.Server.Domain.Models;
 
-public class Workspace : AggregateRoot<Guid>
+public class Workspace : AggregateRoot<string>
 {
-    public Workspace(Guid id) : base(id)
+    public Workspace(string id) : base(id)
     {
     }
 

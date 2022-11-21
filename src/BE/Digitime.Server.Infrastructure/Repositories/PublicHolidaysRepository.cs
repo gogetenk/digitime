@@ -34,7 +34,6 @@ public class PublicHolidaysRepository : IObtainPublicHolidays
         else
         {
             var error = await response.Content.ReadAsStringAsync();
-            var statuscode = response.StatusCode;
             throw new Exception(error);
         }
     }

@@ -33,7 +33,7 @@ public class GetCalendarQuery : IRequest<Calendar>, ICacheableRequest
         {
             _obtainPublicHolidays = obtainPublicHolidays;
         }
-
+        
         public async Task<Calendar> Handle(GetCalendarQuery request, CancellationToken cancellationToken)
         {
             var requestedDate = new DateTime(request.Year, request.Month, 1);

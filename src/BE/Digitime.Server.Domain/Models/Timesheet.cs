@@ -1,128 +1,83 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Digitime.Server.Domain.Models;
 
-public class Timesheet : AggregateRoot<Guid>
+public class Timesheet : AggregateRoot<string>
 {
-    public Guid ProjectId { get; private set; }
-    public TimeSpan Period { get; private set; }
-    public List<TimesheetEntry> TimesheetEntries { get; private set; } = new ();
-    public int Hours { get; private set; }
+    private List<TimesheetEntry> _timesheetEntries = new();
+    public IReadOnlyList<TimesheetEntry> TimesheetEntries => _timesheetEntries.AsReadOnly();
+    public TimeSpan Period => EndDate - BeginDate;
+    public string ProjectId { get; private set; }
+    public DateTime BeginDate { get; private set; }
+    public DateTime EndDate { get; private set; }
+    public int Hours => _timesheetEntries.Sum(x => x.Hours);
     public TimesheetStatusEnum Status { get; private set; }
-    public Guid ReviewerId { get; private set; }
-    public string ReviewerComment { get; private set; }
-    public DateTime? ReviewDate { get; private set; }
-    public Guid ApproverId { get; private set; }
-    public string ApproverComment { get; private set; }
+    public string CreatorId { get; private set; }
+    public string ApproverId { get; private set; }
     public DateTime? ApproveDate { get; private set; }
-    public Guid RejecterId { get; private set; }
-    public string RejecterComment { get; private set; }
-    public DateTime? RejectDate { get; private set; }
-    public Guid CancelerId { get; private set; }
-    public string CancelerComment { get; private set; }
-    public DateTime? CancelDate { get; private set; }
-    public Guid CreatorId { get; private set; }
     public DateTime? CreateDate { get; private set; }
-    public Guid UpdaterId { get; private set; }
     public DateTime? UpdateDate { get; private set; }
 
-    public Timesheet(Guid id) : base(id)
+    public Timesheet(string id) : base(id)
     {
+    }
+
+    public Timesheet(string id, DateTime beginDate) : base(id)
+    {
+        BeginDate = beginDate;
+        EndDate = beginDate.AddMonths(1).AddDays(-1);
+        CreateDate = DateTime.UtcNow;
+        UpdateDate = DateTime.UtcNow;
     }
 
     public enum TimesheetStatusEnum
     {
         Draft = 0,
         Submitted = 1,
-        Reviewed = 2,
-        Approved = 3,
-        Rejected = 4,
-        Cancelled = 5
+        Approved = 2,
     }
-
-    public void AddTimesheetEntry(TimesheetEntry timesheetEntry)
+    public void AddTimesheetEntry(DateTime date, int hours, string projectId, string projectTitle)
     {
-        TimesheetEntries.Add(timesheetEntry);
+        var timesheetEntry = new TimesheetEntry(date, hours, projectId, projectTitle);
+        if (_timesheetEntries.Contains(timesheetEntry))
+            throw new InvalidOperationException("Timesheet entry already exists");
+
+
+        _timesheetEntries.Add(timesheetEntry);
+        UpdateDate = DateTime.UtcNow;
     }
 
     public void RemoveTimesheetEntry(TimesheetEntry timesheetEntry)
     {
-        TimesheetEntries.Remove(timesheetEntry);
-    }
-
-    public void Submit(Guid userId)
-    {
-        Status = TimesheetStatusEnum.Submitted;
-        UpdaterId = userId;
+        _timesheetEntries.Remove(timesheetEntry);
         UpdateDate = DateTime.UtcNow;
-
-        // Send email to reviewer
-        
     }
 
-    public void Review(Guid userId, string comment)
+    public void Approve(string userId, string comment)
     {
-        Status = TimesheetStatusEnum.Reviewed;
-        ReviewerId = userId;
-        ReviewerComment = comment;
-        ReviewDate = DateTime.UtcNow;
-        UpdaterId = userId;
-        UpdateDate = DateTime.UtcNow;
+        if (Status == TimesheetStatusEnum.Approved)
+            throw new Exception("Timesheet is already approved");
 
-        // Send email to approver
-    }
-
-    public void Approve(Guid userId, string comment)
-    {
         Status = TimesheetStatusEnum.Approved;
         ApproverId = userId;
-        ApproverComment = comment;
         ApproveDate = DateTime.UtcNow;
-        UpdaterId = userId;
         UpdateDate = DateTime.UtcNow;
 
         // Send email to submitter
     }
 
-    public void Reject(Guid userId, string comment)
+    public void Create(string userId)
     {
-        Status = TimesheetStatusEnum.Rejected;
-        RejecterId = userId;
-        RejecterComment = comment;
-        RejectDate = DateTime.UtcNow;
-        UpdaterId = userId;
-        UpdateDate = DateTime.UtcNow;
-
-        // Send email to submitter
-    }
-
-    public void Cancel(Guid userId, string comment)
-    {
-        Status = TimesheetStatusEnum.Cancelled;
-        CancelerId = userId;
-        CancelerComment = comment;
-        CancelDate = DateTime.UtcNow;
-        UpdaterId = userId;
-        UpdateDate = DateTime.UtcNow;
-
-        // Send email to submitter
-    }
-
-    public void Update(Guid userId)
-    {
-        UpdaterId = userId;
-        UpdateDate = DateTime.UtcNow;
-    }
-
-    public void Create(Guid userId)
-    {
+        Status = TimesheetStatusEnum.Submitted;
         CreatorId = userId;
         CreateDate = DateTime.UtcNow;
     }
 
     public void UpdateTimesheetEntries(List<TimesheetEntry> timesheetEntries)
     {
-        TimesheetEntries = timesheetEntries;
+        _timesheetEntries = timesheetEntries;
+        UpdateDate = DateTime.UtcNow;
     }
 }

@@ -14,8 +14,7 @@ public class CachingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
 
     public CachingBehavior(
         IEasyCachingProviderFactory cachingFactory,
-        ILogger<CachingBehavior<TRequest, TResponse>> logger,
-        ICacheableRequest cacheRequest)
+        ILogger<CachingBehavior<TRequest, TResponse>> logger)
     {
         _logger = logger;
         _cachingProvider = cachingFactory.GetCachingProvider("memory");

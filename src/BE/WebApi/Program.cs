@@ -1,12 +1,14 @@
 using System.Reflection;
-using Digitime.Server.Application.Abstractions;
 using Digitime.Server.Application.Calendar.Queries;
 using Digitime.Server.Domain.Ports;
+using Digitime.Server.Infrastructure.MongoDb;
 using Digitime.Server.Infrastructure.Repositories;
 using Digitime.Server.Middlewares;
+using Digitime.Server.Settings;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +23,9 @@ builder.Services.AddAuthentication(options =>
     options.Authority = builder.Configuration["Auth0:Domain"];
     options.Audience = builder.Configuration["Auth0:Audience"];
 });
+
+builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbSettings"));
+builder.Services.AddSingleton<IMongoDbSettings>(serviceProvider => serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value);
 
 builder.Services.AddControllersWithViews()
     .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<GetCalendarQueryValidator>())
@@ -46,11 +51,7 @@ builder.Services.AddSwaggerGen(c =>
                     {
                           new OpenApiSecurityScheme
                           {
-                              Reference = new OpenApiReference
-                              {
-                                  Type = ReferenceType.SecurityScheme,
-                                  Id = "Bearer"
-                              }
+                              Reference = new OpenApiReference{Type = ReferenceType.SecurityScheme,Id = "Bearer"}
                           },
                          new string[] {}
                     }
@@ -118,15 +119,10 @@ static void RegisterServices(WebApplicationBuilder builder)
 {
     builder.Services
         .AddHttpClient()
+        .AddAutoMapper(Assembly.GetExecutingAssembly(), typeof(Digitime.Server.Queries.GetCalendarQuery).Assembly)
         .AddScoped<IObtainPublicHolidays, PublicHolidaysRepository>()
         .AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>))
         .AddTransient(typeof(IPipelineBehavior<,>), typeof(CachingBehavior<,>))
-        .AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-
-    builder.Services
-        .Scan(scan => scan
-            .FromAssembliesOf(typeof(ICacheableRequest))
-            .AddClasses(classes => classes.AssignableTo(typeof(ICacheableRequest)), false)
-            .AsImplementedInterfaces()
-            .WithTransientLifetime());
+        .AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
+        .AddSingleton(typeof(IRepository<>), typeof(MongoRepository<>));
 }

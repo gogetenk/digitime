@@ -50,7 +50,7 @@ public partial class CalendarComponent : ComponentBase
     Calendar _nextMonthCalendarDays = new();
     List<DateTime> _monthDates = new();
     List<DateTime> _publicHolidays = new();
-    private List<TimesheetEntry> _currentDayTimesheetEntries = new();
+    private List<TimesheetEntryDto> _currentDayTimesheetEntries = new();
 
     //CalendarDay CreateFilledCalendarDay(DateTime dateTime)
     //{
@@ -78,7 +78,7 @@ public partial class CalendarComponent : ComponentBase
 
     private void OnDayClick(CalendarDay calendarDay)
     {
-        _currentDayTimesheetEntries = new List<TimesheetEntry>();
+        _currentDayTimesheetEntries = new List<TimesheetEntryDto>();
         //foreach (var workedProject in calendarDay.WorkedProjects)
         //{
         //    _currentDayTimesheetEntries.Add(new TimeSheetEntry()
