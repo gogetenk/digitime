@@ -115,14 +115,17 @@ app.MapFallbackToFile("index.html");
 
 app.Run();
 
-static void RegisterServices(WebApplicationBuilder builder)
+public partial class Program // Needed for IntegrationTests
 {
-    builder.Services
-        .AddHttpClient()
-        .AddAutoMapper(Assembly.GetExecutingAssembly(), typeof(Digitime.Server.Queries.GetCalendarQuery).Assembly)
-        .AddScoped<IObtainPublicHolidays, PublicHolidaysRepository>()
-        .AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>))
-        .AddTransient(typeof(IPipelineBehavior<,>), typeof(CachingBehavior<,>))
-        .AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
-        .AddSingleton(typeof(IRepository<>), typeof(MongoRepository<>));
+    static void RegisterServices(WebApplicationBuilder builder)
+    {
+        builder.Services
+            .AddHttpClient()
+            .AddAutoMapper(Assembly.GetExecutingAssembly(), typeof(Digitime.Server.Queries.GetCalendarQuery).Assembly)
+            .AddScoped<IObtainPublicHolidays, PublicHolidaysRepository>()
+            .AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>))
+            .AddTransient(typeof(IPipelineBehavior<,>), typeof(CachingBehavior<,>))
+            .AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
+            .AddSingleton(typeof(IRepository<>), typeof(MongoRepository<>));
+    }
 }
