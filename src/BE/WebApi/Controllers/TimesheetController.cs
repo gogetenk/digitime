@@ -1,4 +1,6 @@
-﻿using Digitime.Server.Application.Calendar.Comands;
+﻿using AutoMapper;
+using Digitime.Server.Application.Calendar.Comands;
+using Digitime.Shared.Contracts.Timesheets;
 using Digitime.Shared.Dto;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -9,19 +11,20 @@ namespace Digitime.Server.Controllers;
 [ApiController]
 public class TimesheetController : ControllerBase
 {
-    private readonly ILogger<DashboardController> _logger;
     private readonly IMediator _mediator;
+    private readonly IMapper _mapper;
 
-    public TimesheetController(ILogger<DashboardController> logger, IMediator mediator)
+    public TimesheetController(IMediator mediator, IMapper mapper)
     {
-        _logger = logger;
         _mediator = mediator;
+        _mapper = mapper;
     }
 
     [HttpPost]
     [ProducesResponseType(typeof(TimesheetEntryDto), StatusCodes.Status201Created)]
-    public async Task<ActionResult<TimesheetEntryDto>> CreateTimesheetEntry([FromBody] CreateTimesheetEntryCommand command)
+    public async Task<ActionResult<CreateTimesheetEntryReponse>> CreateTimesheetEntry([FromBody] CreateTimesheetEntryRequest request)
     {
-        return Ok(await _mediator.Send(command));
+        var resp = await _mediator.Send(_mapper.Map<CreateTimesheetEntryCommand>(request));
+        return Ok(_mapper.Map<CreateTimesheetEntryReponse>(resp));
     }
 }

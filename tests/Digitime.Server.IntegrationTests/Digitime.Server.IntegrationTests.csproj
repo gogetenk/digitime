@@ -1,10 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <PreserveCompilationContext>true</PreserveCompilationContext>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -26,10 +25,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\BE\Digitime.Server.Application\Digitime.Server.Application.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+    <ProjectReference Include="..\..\src\BE\WebApi\Digitime.Server.csproj" />
+    <ProjectReference Include="..\..\src\Shared\Digitime.Shared.csproj" />
   </ItemGroup>
 
 </Project>

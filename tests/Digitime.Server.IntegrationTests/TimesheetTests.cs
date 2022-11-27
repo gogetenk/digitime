@@ -1,17 +1,16 @@
 using System.Net;
 using System.Net.Http.Json;
 using AutoFixture;
-using Digitime.Server.Application.Calendar.Comands;
+using Digitime.Shared.Contracts.Timesheets;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 
 namespace Digitime.Server.IntegrationTests;
 
 public class TimesheetTests
 {
     private readonly WebApplicationFactory<Program> _factory;
-    private const string _BaseEndpointUri = "/timesheet";
+    private const string _BaseEndpointUri = "/api/timesheet";
 
     public TimesheetTests()
     {
@@ -23,7 +22,9 @@ public class TimesheetTests
     {
         // Arrange
         var client = _factory.CreateClient();
-        var command = new Fixture().Create<CreateTimesheetEntryCommand>();
+        var command = new Fixture().Create<CreateTimesheetEntryRequest>();
+        command.UserId = Guid.NewGuid().ToString();
+        command.TimesheetId = null;
 
         // Act
         var response = await client.PostAsJsonAsync($"{_BaseEndpointUri}", command);
