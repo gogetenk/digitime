@@ -1,5 +1,5 @@
 ﻿namespace Digitime.Shared.Dto;
-public class TimesheetEntryDto
+public record TimesheetEntryDto
 {
     public string ProjectId { get; set; }
     public string ProjectTitle { get; set; }

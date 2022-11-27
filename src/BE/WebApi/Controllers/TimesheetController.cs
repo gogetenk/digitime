@@ -1,5 +1,5 @@
 ﻿using Digitime.Server.Application.Calendar.Comands;
-using Digitime.Server.Dto;
+using Digitime.Shared.Dto;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +19,7 @@ public class TimesheetController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(TimesheetEntryDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(TimesheetEntryDto), StatusCodes.Status201Created)]
     public async Task<ActionResult<TimesheetEntryDto>> CreateTimesheetEntry([FromBody] CreateTimesheetEntryCommand command)
     {
         return Ok(await _mediator.Send(command));

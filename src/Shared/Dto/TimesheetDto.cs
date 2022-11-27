@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿namespace Digitime.Shared.Dto;
 
-namespace Digitime.Shared.Dto;
-
-public class TimesheetDto
+public record TimesheetDto
 {
     public string Id { get; set; }
     public List<TimesheetEntryDto> TimesheetEntries { get; set; } = new();
@@ -19,10 +15,6 @@ public class TimesheetDto
     public DateTime? ApproveDate { get; private set; }
     public DateTime? CreateDate { get; private set; }
     public DateTime? UpdateDate { get; private set; }
-
-    public TimesheetDto()
-    {
-    }
 
     public enum TimesheetStatusEnum
     {
