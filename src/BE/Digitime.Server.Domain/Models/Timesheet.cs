@@ -7,9 +7,13 @@ namespace Digitime.Server.Domain.Models;
 public class Timesheet : AggregateRoot<string>
 {
     private List<TimesheetEntry> _timesheetEntries = new();
+
+    public Timesheet(string id) : base(id)
+    {
+    }
+
     public IReadOnlyList<TimesheetEntry> TimesheetEntries => _timesheetEntries.AsReadOnly();
     public TimeSpan Period => EndDate - BeginDate;
-    public string ProjectId { get; private set; }
     public DateTime BeginDate { get; private set; }
     public DateTime EndDate { get; private set; }
     public int Hours => _timesheetEntries.Sum(x => x.Hours);
@@ -20,16 +24,71 @@ public class Timesheet : AggregateRoot<string>
     public DateTime? CreateDate { get; private set; }
     public DateTime? UpdateDate { get; private set; }
 
-    public Timesheet(string id) : base(id)
+    //public Timesheet(string id) : base(id)
+    //{
+    //}
+
+    //public Timesheet(string id, DateTime beginDate) : base(id)
+    //{
+    //    BeginDate = beginDate;
+    //    EndDate = beginDate.AddMonths(1).AddDays(-1);
+    //    CreateDate = DateTime.UtcNow;
+    //    UpdateDate = DateTime.UtcNow;
+    //}
+
+    public static Timesheet Create(
+        DateTime beginDate,
+        string creatorId,
+        string id = null,
+        string approverId = null,
+        DateTime? approveDate = null,
+        DateTime? createDate = null,
+        DateTime? updateDate = null,
+        List<TimesheetEntry> timesheetEntries = null)
     {
+        var timesheet = new Timesheet(id)
+        {
+            _timesheetEntries = timesheetEntries ?? new(),
+            BeginDate = beginDate,
+            EndDate = beginDate.AddMonths(1).AddDays(-1),
+            Status = TimesheetStatusEnum.Draft,
+            CreatorId = creatorId,
+            ApproverId = approverId,
+            ApproveDate = approveDate,
+            CreateDate = createDate,
+            UpdateDate = updateDate
+        };
+
+        return timesheet;
     }
 
-    public Timesheet(string id, DateTime beginDate) : base(id)
+    public static Timesheet Create(
+        DateTime beginDate,
+        string creatorId,
+        string id,
+        string approverId,
+        DateTime? approveDate,
+        List<TimesheetEntry> timesheetEntries,
+        DateTime endDate,
+        TimeSpan period,
+        int hours,
+        DateTime? createDate,
+        DateTime? updateDate)
     {
-        BeginDate = beginDate;
-        EndDate = beginDate.AddMonths(1).AddDays(-1);
-        CreateDate = DateTime.UtcNow;
-        UpdateDate = DateTime.UtcNow;
+        var timesheet = new Timesheet(id)
+        {
+            _timesheetEntries = timesheetEntries,
+            BeginDate = beginDate,
+            EndDate = endDate,
+            Status = TimesheetStatusEnum.Draft,
+            CreatorId = creatorId,
+            ApproverId = approverId,
+            ApproveDate = approveDate,
+            CreateDate = createDate,
+            UpdateDate = updateDate
+        };
+
+        return timesheet;
     }
 
     public enum TimesheetStatusEnum
@@ -40,7 +99,7 @@ public class Timesheet : AggregateRoot<string>
     }
     public void AddTimesheetEntry(DateTime date, int hours, string projectId, string projectTitle)
     {
-        var timesheetEntry = new TimesheetEntry(date, hours, projectId, projectTitle);
+        var timesheetEntry = new TimesheetEntry(projectId, projectTitle, date, hours);
         if (_timesheetEntries.Contains(timesheetEntry))
             throw new InvalidOperationException("Timesheet entry already exists");
 

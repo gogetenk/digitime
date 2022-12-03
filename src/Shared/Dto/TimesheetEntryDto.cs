@@ -1,8 +1,18 @@
-﻿namespace Digitime.Shared.Dto;
-public record TimesheetEntryDto
+﻿using Digitime.Server.Domain.Models;
+
+namespace Digitime.Shared.Dto;
+
+public record TimesheetEntryDto(string ProjectId, string ProjectTitle, DateTime Date, int Hours)
 {
-    public string ProjectId { get; set; }
-    public string ProjectTitle { get; set; }
-    public DateTime Date { get; set; }
-    public int Hours { get; set; }
+    public static implicit operator TimesheetEntryDto(TimesheetEntry domainObject) =>
+        new(domainObject.ProjectId,
+            domainObject.ProjectTitle,
+            domainObject.Date,
+            domainObject.Hours);
+
+    public static implicit operator TimesheetEntry(TimesheetEntryDto dto) =>
+        new(dto.ProjectId,
+            dto.ProjectTitle,
+            dto.Date,
+            dto.Hours);
 }

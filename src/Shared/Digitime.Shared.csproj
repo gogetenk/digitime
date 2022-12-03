@@ -11,6 +11,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BE\Digitime.Server.Domain\Digitime.Server.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <SupportedPlatform Include="browser" />
   </ItemGroup>
 </Project>

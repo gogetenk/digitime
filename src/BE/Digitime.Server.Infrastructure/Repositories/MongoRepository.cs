@@ -1,9 +1,10 @@
 ﻿using System.Linq.Expressions;
 using Digitime.Server.Infrastructure.Entities;
+using Digitime.Server.Infrastructure.MongoDb;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace Digitime.Server.Infrastructure.MongoDb;
+namespace Digitime.Server.Infrastructure.Repositories;
 
 public class MongoRepository<TDocument> : IRepository<TDocument> where TDocument : EntityBase
 {

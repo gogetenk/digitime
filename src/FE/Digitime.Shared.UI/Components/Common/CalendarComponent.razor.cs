@@ -5,7 +5,7 @@ using Microsoft;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using Calendar = Digitime.Shared.Dto.Calendar;
+using CalendarDto = Digitime.Shared.Dto.CalendarDto;
 
 namespace Digitime.Shared.UI.Components.Common;
 
@@ -36,7 +36,7 @@ public partial class CalendarComponent : ComponentBase
         if (response.IsSuccessStatusCode)
         {
             var responseContent = await response.Content.ReadAsStringAsync();
-            _currentMonthCalendarDays = JsonConvert.DeserializeObject<Calendar>(responseContent);
+            _currentMonthCalendarDays = JsonConvert.DeserializeObject<CalendarDto>(responseContent);
         }
         else
         {
@@ -46,8 +46,8 @@ public partial class CalendarComponent : ComponentBase
         }
     }
 
-    Calendar _currentMonthCalendarDays = new();
-    Calendar _nextMonthCalendarDays = new();
+    CalendarDto _currentMonthCalendarDays = new();
+    CalendarDto _nextMonthCalendarDays = new();
     List<DateTime> _monthDates = new();
     List<DateTime> _publicHolidays = new();
     private List<TimesheetEntryDto> _currentDayTimesheetEntries = new();
@@ -76,7 +76,7 @@ public partial class CalendarComponent : ComponentBase
 
 
 
-    private void OnDayClick(CalendarDay calendarDay)
+    private void OnDayClick(CalendarDayDto calendarDay)
     {
         _currentDayTimesheetEntries = new List<TimesheetEntryDto>();
         //foreach (var workedProject in calendarDay.WorkedProjects)

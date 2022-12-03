@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Digitime.Server.Application.Calendar.Comands;
+﻿using Digitime.Server.Application.Calendar.Comands;
 using Digitime.Shared.Contracts.Timesheets;
 using Digitime.Shared.Dto;
 using MediatR;
@@ -11,20 +10,25 @@ namespace Digitime.Server.Controllers;
 [ApiController]
 public class TimesheetController : ControllerBase
 {
-    private readonly IMediator _mediator;
-    private readonly IMapper _mapper;
+    private readonly ISender _sender;
 
-    public TimesheetController(IMediator mediator, IMapper mapper)
+    public TimesheetController(IMediator mediator)
     {
-        _mediator = mediator;
-        _mapper = mapper;
+        _sender = mediator;
     }
 
-    [HttpPost]
+    /// <summary>
+    /// Creates a new timesheet entry on the specified timesheet. If the timesheet doesn't exist, it will be created.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns>The created timesheet entry</returns>
+    [HttpPost("entry")]
     [ProducesResponseType(typeof(TimesheetEntryDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(500)]
     public async Task<ActionResult<CreateTimesheetEntryReponse>> CreateTimesheetEntry([FromBody] CreateTimesheetEntryRequest request)
     {
-        var resp = await _mediator.Send(_mapper.Map<CreateTimesheetEntryCommand>(request));
-        return Ok(_mapper.Map<CreateTimesheetEntryReponse>(resp));
+        var resp = await _sender.Send((CreateTimesheetEntryCommand)request);
+        return Ok((CreateTimesheetEntryReponse)resp);
     }
 }

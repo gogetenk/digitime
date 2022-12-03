@@ -1,9 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using Digitime.Server.Domain.Models;
 using Digitime.Server.Infrastructure.Entities;
 using Digitime.Server.Infrastructure.MongoDb;
+using Digitime.Shared.Contracts.Timesheets;
 using MediatR;
 
 namespace Digitime.Server.Application.Calendar.Comands;
@@ -21,27 +21,25 @@ public class CreateTimesheetEntryCommand : IRequest<TimesheetEntry>
     public class CreateTimesheetEntryCommandHandler : IRequestHandler<CreateTimesheetEntryCommand, TimesheetEntry>
     {
         private readonly IRepository<TimesheetEntity> _timesheetRepository;
-        private readonly IMapper _mapper;
 
-        public CreateTimesheetEntryCommandHandler(IRepository<TimesheetEntity> timesheetRepository, IMapper mapper)
+        public CreateTimesheetEntryCommandHandler(IRepository<TimesheetEntity> timesheetRepository)
         {
             _timesheetRepository = timesheetRepository;
-            _mapper = mapper;
         }
 
         public async Task<TimesheetEntry> Handle(CreateTimesheetEntryCommand request, CancellationToken cancellationToken)
         {
-            Timesheet? timesheet = null;
+            Timesheet timesheet = null;
 
             // Request existing timesheet if it exists
             if (request.TimesheetId is not null)
-                timesheet = _mapper.Map<Timesheet>(await _timesheetRepository.FindByIdAsync(request.TimesheetId.ToString()));
+                timesheet = await _timesheetRepository.FindByIdAsync(request.TimesheetId.ToString());
 
             // If timesheet does not exist, create new timesheet for the current month
             if (timesheet is null)
             {
-                timesheet = new Timesheet(request.UserId, request.TimesheetEntry.Date);
-                await _timesheetRepository.InsertOneAsync(_mapper.Map<TimesheetEntity>(timesheet));
+                timesheet = Timesheet.Create(creatorId: request.UserId, beginDate: request.TimesheetEntry.Date);
+                await _timesheetRepository.InsertOneAsync(timesheet);
             }
 
             // Add timesheet entry to timesheet
@@ -51,10 +49,18 @@ public class CreateTimesheetEntryCommand : IRequest<TimesheetEntry>
                                         request.TimesheetEntry.ProjectTitle);
 
             // update timesheet
-            await _timesheetRepository.ReplaceOneAsync(_mapper.Map<TimesheetEntity>(timesheet));
+            await _timesheetRepository.ReplaceOneAsync(timesheet);
 
             // Return newly created timesheet entry
             return request.TimesheetEntry;
         }
     }
+
+    public static implicit operator CreateTimesheetEntryCommand(CreateTimesheetEntryRequest request) =>
+        new()
+        {
+            TimesheetEntry = request.TimesheetEntry,
+            TimesheetId = request.TimesheetId,
+            UserId = request.UserId
+        };
 }

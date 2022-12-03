@@ -1,20 +1,22 @@
-﻿namespace Digitime.Shared.Dto;
+﻿using Digitime.Server.Domain.Models;
+using static Digitime.Shared.Dto.TimesheetDto;
 
-public record TimesheetDto
+namespace Digitime.Shared.Dto;
+
+public record TimesheetDto(
+    string Id, 
+    List<TimesheetEntryDto> TimesheetEntries, 
+    DateTime BeginDate, 
+    DateTime EndDate, 
+    TimeSpan Period, 
+    int Hours,
+    TimesheetStatusEnum Status, 
+    string CreatorId, 
+    string ApproverId, 
+    DateTime? ApproveDate,
+    DateTime? CreateDate, 
+    DateTime? UpdateDate)
 {
-    public string Id { get; set; }
-    public List<TimesheetEntryDto> TimesheetEntries { get; set; } = new();
-    public string ProjectId { get; private set; }
-    public DateTime BeginDate { get; private set; }
-    public DateTime EndDate { get; private set; }
-    public TimeSpan Period { get; set; }
-    public int Hours => TimesheetEntries.Sum(x => x.Hours);
-    public TimesheetStatusEnum Status { get; private set; }
-    public string CreatorId { get; private set; }
-    public string ApproverId { get; private set; }
-    public DateTime? ApproveDate { get; private set; }
-    public DateTime? CreateDate { get; private set; }
-    public DateTime? UpdateDate { get; private set; }
 
     public enum TimesheetStatusEnum
     {
@@ -22,4 +24,18 @@ public record TimesheetDto
         Submitted = 1,
         Approved = 2
     }
+     
+    public static implicit operator TimesheetDto(Timesheet timesheet) 
+        => new TimesheetDto(timesheet.Id, 
+            timesheet.TimesheetEntries.Select(x => (TimesheetEntryDto)x).ToList(),
+            timesheet.BeginDate, 
+            timesheet.EndDate, 
+            timesheet.Period, 
+            timesheet.Hours, 
+            (TimesheetStatusEnum)timesheet.Status, 
+            timesheet.CreatorId, 
+            timesheet.ApproverId, 
+            timesheet.ApproveDate, 
+            timesheet.CreateDate, 
+            timesheet.UpdateDate);
 }

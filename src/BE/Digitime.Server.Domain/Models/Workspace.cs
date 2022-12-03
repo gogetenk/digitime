@@ -10,6 +10,7 @@ public class Workspace : AggregateRoot<string>
     }
 
     public string Title { get; private set; }
+    public string Description { get; private set; }
     public List<Member> Members { get; private set; } = new();
     public List<Project> Projects { get; private set; } = new();
 

@@ -12,38 +12,38 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>> where TId : notnull
         Id = id;
     }
 
-    public override bool Equals(object? obj)
+public override bool Equals(object? obj)
+{
+    if (obj is null)
     {
-        if (obj is null)
-        {
-            return false;
-        }
-
-        if (obj is Entity<TId> other)
-        {
-            return Id.Equals(other.Id);
-        }
-
         return false;
     }
 
-    public override int GetHashCode()
+    if (obj is Entity<TId> other)
     {
-        return Id.GetHashCode();
+        return Id.Equals(other.Id);
     }
 
-    public bool Equals(Entity<TId> other)
-    {
-        return Equals((object)other);
-    }
+    return false;
+}
 
-    public static bool operator ==(Entity<TId> left, Entity<TId> right)
-    {
-        return Equals(left, right);
-    }
+public override int GetHashCode()
+{
+    return Id.GetHashCode();
+}
 
-    public static bool operator !=(Entity<TId> left, Entity<TId> right)
-    {
-        return !Equals(left, right);
-    }
+public bool Equals(Entity<TId> other)
+{
+    return Equals((object)other);
+}
+
+public static bool operator ==(Entity<TId> left, Entity<TId> right)
+{
+    return Equals(left, right);
+}
+
+public static bool operator !=(Entity<TId> left, Entity<TId> right)
+{
+    return !Equals(left, right);
+}
 }

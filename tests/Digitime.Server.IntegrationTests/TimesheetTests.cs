@@ -22,10 +22,8 @@ public class TimesheetTests
     {
         // Arrange
         var client = _factory.CreateClient();
-        var command = new Fixture().Create<CreateTimesheetEntryRequest>();
-        command.UserId = Guid.NewGuid().ToString();
-        command.TimesheetId = null;
-
+        var command = new Fixture().Create<CreateTimesheetEntryRequest>() with { UserId = Guid.NewGuid().ToString(), TimesheetId = null };
+            
         // Act
         var response = await client.PostAsJsonAsync($"{_BaseEndpointUri}", command);
 

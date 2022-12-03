@@ -1,7 +1,9 @@
-﻿using Digitime.Shared.Dto;
+﻿using Digitime.Server.Domain.Models;
+using Digitime.Shared.Dto;
 
 namespace Digitime.Shared.Contracts.Timesheets;
-public record CreateTimesheetEntryReponse
+public record CreateTimesheetEntryReponse(TimesheetEntryDto TimesheetEntry)
 {
-    public TimesheetEntryDto TimesheetEntry { get; set; }
+    public static implicit operator CreateTimesheetEntryReponse(TimesheetEntry timesheetEntry) =>
+        new((TimesheetEntryDto)timesheetEntry);
 }

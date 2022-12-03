@@ -11,19 +11,19 @@ namespace Digitime.Server.Controllers;
 public class DashboardController : ControllerBase
 {
     private readonly ILogger<DashboardController> _logger;
-    private readonly IMediator _mediator;
+    private readonly ISender _sender;
 
     public DashboardController(ILogger<DashboardController> logger, IMediator mediator)
     {
         _logger = logger;
-        _mediator = mediator;
+        _sender = mediator;
     }
 
     [HttpGet("calendar")]
-    [ProducesResponseType(typeof(Shared.Dto.Calendar), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Shared.Dto.CalendarDto), StatusCodes.Status200OK)]
     public async Task<Calendar> GetCalendar([FromQuery] GetCalendarQuery query)
     {
-        return await _mediator.Send(query);
+        return await _sender.Send(query);
     }
 
     [HttpGet]

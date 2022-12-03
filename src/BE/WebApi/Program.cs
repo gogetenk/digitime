@@ -92,13 +92,11 @@ else
     app.UseHsts();
 }
 
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
-
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseCors(x => x
               .AllowAnyMethod()
               .AllowAnyHeader()
@@ -107,7 +105,6 @@ app.UseCors(x => x
 
 app.UseAuthentication();
 app.UseAuthorization();
-
 
 app.MapRazorPages();
 app.MapControllers();

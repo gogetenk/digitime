@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace Digitime.Shared.Dto;
 
-public class Calendar
+public class CalendarDto
 {
-    public CalendarDay[,] CalendarDays { get; set; } = new CalendarDay[6, 7];
+    public CalendarDayDto[,] CalendarDays { get; set; } = new CalendarDayDto[6, 7];
 }
+ 
