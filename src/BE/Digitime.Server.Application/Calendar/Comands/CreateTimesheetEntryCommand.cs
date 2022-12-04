@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Digitime.Server.Domain.Models;
+using Digitime.Server.Domain.Timesheet;
 using Digitime.Server.Infrastructure.Entities;
 using Digitime.Server.Infrastructure.MongoDb;
 using Digitime.Shared.Contracts.Timesheets;

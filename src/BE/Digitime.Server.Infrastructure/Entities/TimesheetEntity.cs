@@ -1,4 +1,4 @@
-﻿using Digitime.Server.Domain.Models;
+﻿using Digitime.Server.Domain.Timesheet;
 using Digitime.Server.Infrastructure.Helpers;
 using Digitime.Server.Infrastructure.MongoDb;
 using MongoDB.Bson;

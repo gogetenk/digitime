@@ -1,4 +1,4 @@
-﻿using Digitime.Server.Domain.Models;
+﻿using Digitime.Server.Domain.Timesheet;
 using static Digitime.Shared.Dto.TimesheetDto;
 
 namespace Digitime.Shared.Dto;

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Digitime.Server.Domain.Models;
 public abstract class Entity<TId> : IEquatable<Entity<TId>> where TId : notnull
@@ -12,38 +10,38 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>> where TId : notnull
         Id = id;
     }
 
-public override bool Equals(object? obj)
-{
-    if (obj is null)
+    public override bool Equals(object? obj)
     {
+        if (obj is null)
+        {
+            return false;
+        }
+
+        if (obj is Entity<TId> other)
+        {
+            return Id.Equals(other.Id);
+        }
+
         return false;
     }
 
-    if (obj is Entity<TId> other)
+    public override int GetHashCode()
     {
-        return Id.Equals(other.Id);
+        return Id.GetHashCode();
     }
 
-    return false;
-}
+    public bool Equals(Entity<TId> other)
+    {
+        return Equals((object)other);
+    }
 
-public override int GetHashCode()
-{
-    return Id.GetHashCode();
-}
+    public static bool operator ==(Entity<TId> left, Entity<TId> right)
+    {
+        return Equals(left, right);
+    }
 
-public bool Equals(Entity<TId> other)
-{
-    return Equals((object)other);
-}
-
-public static bool operator ==(Entity<TId> left, Entity<TId> right)
-{
-    return Equals(left, right);
-}
-
-public static bool operator !=(Entity<TId> left, Entity<TId> right)
-{
-    return !Equals(left, right);
-}
+    public static bool operator !=(Entity<TId> left, Entity<TId> right)
+    {
+        return !Equals(left, right);
+    }
 }
