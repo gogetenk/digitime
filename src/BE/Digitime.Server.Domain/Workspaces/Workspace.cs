@@ -25,9 +25,7 @@ public class Workspace : AggregateRoot<string>
     }
 
     public static Workspace Create(string id, string name, string description, Subscription subscription)
-    {
-        return new Workspace(id, name, description, subscription);
-    }
+        => new (id, name, description, subscription);
 
     public void Update(string name, string description, Subscription subscription)
     {

@@ -20,5 +20,5 @@ public class User : AggregateRoot<string>
     }
 
     public static User Create(string id, string firstname, string lastname, string email, string profilePicture, string externalId)
-        => new User(id, firstname, lastname, email, profilePicture, externalId);
+        => new (id, firstname, lastname, email, profilePicture, externalId);
 }

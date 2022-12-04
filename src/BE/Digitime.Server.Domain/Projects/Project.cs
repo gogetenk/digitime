@@ -24,7 +24,7 @@ public class Project : AggregateRoot<string>
     }
 
     public static Project Create(string id, string title, string code, string description)
-        => new Project(id, title, code, description);
+        => new (id, title, code, description);
 
     public void AddMember(Member member)
     {

@@ -25,7 +25,7 @@ public class Timesheet : AggregateRoot<string>
     }
 
     public static Timesheet Create(string id, Worker worker)
-        => new Timesheet(id, worker);
+        => new (id, worker);
 
     public void AddEntry(TimesheetEntry entry)
     {
