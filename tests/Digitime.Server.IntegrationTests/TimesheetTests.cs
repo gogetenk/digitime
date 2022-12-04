@@ -10,7 +10,7 @@ namespace Digitime.Server.IntegrationTests;
 public class TimesheetTests
 {
     private readonly WebApplicationFactory<Program> _factory;
-    private const string _BaseEndpointUri = "/api/timesheet";
+    private const string _BaseEndpointUri = "/api/timesheets";
 
     public TimesheetTests()
     {

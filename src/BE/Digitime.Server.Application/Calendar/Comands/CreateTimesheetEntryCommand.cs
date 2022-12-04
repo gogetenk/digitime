@@ -45,8 +45,7 @@ public class CreateTimesheetEntryCommand : IRequest<TimesheetEntry>
             // Add timesheet entry to timesheet
             timesheet.AddTimesheetEntry(request.TimesheetEntry.Date,
                                         request.TimesheetEntry.Hours,
-                                        request.TimesheetEntry.ProjectId,
-                                        request.TimesheetEntry.ProjectTitle);
+                                        request.TimesheetEntry.Project);
 
             // update timesheet
             await _timesheetRepository.ReplaceOneAsync(timesheet);

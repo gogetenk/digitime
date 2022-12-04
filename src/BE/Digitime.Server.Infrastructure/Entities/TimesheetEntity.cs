@@ -28,28 +28,33 @@ public class TimesheetEntity : EntityBase
             BeginDate = timesheet.BeginDate,
             EndDate = timesheet.EndDate,
             Period = timesheet.Period,
-            Hours = timesheet.Hours,
+            Hours = timesheet.TotalHours,
             Status = (TimesheetStatusEnum)timesheet.Status,
             CreatorId = timesheet.CreatorId,
-            ApproverId = timesheet.ApproverId,
-            ApproveDate = timesheet.ApproveDate,
+            ApproverId = timesheet.ReviewerId,
+            ApproveDate = timesheet.ReviewDate,
             CreateDate = timesheet.CreateDate,
             UpdateDate = timesheet.UpdateDate
         };
 
     public static implicit operator Timesheet(TimesheetEntity timesheet)
-        => Timesheet.Create(
+    {
+        if (timesheet is null)
+            return null;
+        
+        return Timesheet.Create(
                             timesheet.BeginDate,
                             timesheet.CreatorId,
                             timesheet.Id.ToString() ?? null,
                             timesheet.ApproverId,
                             timesheet.ApproveDate,
-                            timesheet.TimesheetEntries.Select(x => (TimesheetEntry)x).ToList(),
+                            timesheet.TimesheetEntries?.Select(x => (TimesheetEntry)x).ToList(),
                             timesheet.EndDate,
                             timesheet.Period,
                             timesheet.Hours,
                             timesheet.CreateDate,
                             timesheet.UpdateDate);
+    }
 }
 
 public enum TimesheetStatusEnum

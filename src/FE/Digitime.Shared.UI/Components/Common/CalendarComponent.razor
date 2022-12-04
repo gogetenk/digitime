@@ -156,7 +156,7 @@
     {
         foreach (var entry in _currentDayTimesheetEntries)
         {
-            <ProjectRowComponent Name="@entry.ProjectTitle" ProjectName="@entry.ProjectTitle" WorkspaceName="ELIA GROUP" Status="Pending" Hours="@entry.Hours" Code="EP-000-687-GH-FFRTY" />
+            <ProjectRowComponent Name="@entry.Project.Title" ProjectName="@entry.Project.Title" WorkspaceName="ELIA GROUP" Status="Pending" Hours="@entry.Hours" Code="EP-000-687-GH-FFRTY" />
         }
     }
     else

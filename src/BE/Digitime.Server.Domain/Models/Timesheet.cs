@@ -16,11 +16,11 @@ public class Timesheet : AggregateRoot<string>
     public TimeSpan Period => EndDate - BeginDate;
     public DateTime BeginDate { get; private set; }
     public DateTime EndDate { get; private set; }
-    public int Hours => _timesheetEntries.Sum(x => x.Hours);
+    public int TotalHours => _timesheetEntries.Sum(x => x.Hours);
     public TimesheetStatusEnum Status { get; private set; }
     public string CreatorId { get; private set; }
-    public string ApproverId { get; private set; }
-    public DateTime? ApproveDate { get; private set; }
+    public string ReviewerId { get; private set; }
+    public DateTime? ReviewDate { get; private set; }
     public DateTime? CreateDate { get; private set; }
     public DateTime? UpdateDate { get; private set; }
 
@@ -53,8 +53,8 @@ public class Timesheet : AggregateRoot<string>
             EndDate = beginDate.AddMonths(1).AddDays(-1),
             Status = TimesheetStatusEnum.Draft,
             CreatorId = creatorId,
-            ApproverId = approverId,
-            ApproveDate = approveDate,
+            ReviewerId = approverId,
+            ReviewDate = approveDate,
             CreateDate = createDate,
             UpdateDate = updateDate
         };
@@ -82,8 +82,8 @@ public class Timesheet : AggregateRoot<string>
             EndDate = endDate,
             Status = TimesheetStatusEnum.Draft,
             CreatorId = creatorId,
-            ApproverId = approverId,
-            ApproveDate = approveDate,
+            ReviewerId = approverId,
+            ReviewDate = approveDate,
             CreateDate = createDate,
             UpdateDate = updateDate
         };
@@ -97,9 +97,9 @@ public class Timesheet : AggregateRoot<string>
         Submitted = 1,
         Approved = 2,
     }
-    public void AddTimesheetEntry(DateTime date, int hours, string projectId, string projectTitle)
+    public void AddTimesheetEntry(DateTime date, int hours, TimesheetEntryProject project)
     {
-        var timesheetEntry = new TimesheetEntry(projectId, projectTitle, date, hours);
+        var timesheetEntry = new TimesheetEntry(date, hours, project);
         if (_timesheetEntries.Contains(timesheetEntry))
             throw new InvalidOperationException("Timesheet entry already exists");
 
@@ -120,8 +120,8 @@ public class Timesheet : AggregateRoot<string>
             throw new Exception("Timesheet is already approved");
 
         Status = TimesheetStatusEnum.Approved;
-        ApproverId = userId;
-        ApproveDate = DateTime.UtcNow;
+        ReviewerId = userId;
+        ReviewDate = DateTime.UtcNow;
         UpdateDate = DateTime.UtcNow;
 
         // Send email to submitter

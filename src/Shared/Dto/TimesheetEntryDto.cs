@@ -2,17 +2,15 @@
 
 namespace Digitime.Shared.Dto;
 
-public record TimesheetEntryDto(string ProjectId, string ProjectTitle, DateTime Date, int Hours)
+public record TimesheetEntryDto(DateTime Date, int Hours, TimesheetEntryProjectDto Project)
 {
     public static implicit operator TimesheetEntryDto(TimesheetEntry domainObject) =>
-        new(domainObject.ProjectId,
-            domainObject.ProjectTitle,
-            domainObject.Date,
-            domainObject.Hours);
+        new(domainObject.Date,
+            domainObject.Hours,
+            domainObject.Project);
 
     public static implicit operator TimesheetEntry(TimesheetEntryDto dto) =>
-        new(dto.ProjectId,
-            dto.ProjectTitle,
-            dto.Date,
-            dto.Hours);
+        new(dto.Date,
+            dto.Hours,
+            dto.Project);
 }

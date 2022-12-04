@@ -2,30 +2,30 @@
 using System.Collections.Generic;
 
 namespace Digitime.Server.Domain.Models;
-public class TimesheetEntry : ValueObject
-{
-    public string ProjectId { get; private set; }
-    public string ProjectTitle { get; private set; }
-    public DateTime Date { get; private set; }
-    public int Hours { get; private set; }
 
-    
-    public TimesheetEntry(string projectId, string projectTitle, DateTime date, int hours)
+public record TimesheetEntry // ValueObject
+{
+    public TimesheetEntryProject Project { get; init; }
+    public DateTime Date { get; init; }
+    public int Hours { get; init; }
+
+    public TimesheetEntry(DateTime date, int hours, TimesheetEntryProject project)
     {
         Date = date;
         Hours = hours;
-        ProjectId = projectId;
-        ProjectTitle = projectTitle;
+        Project = project;
     }
 
-    public static TimesheetEntry Create(string projectId, string projectTitle, DateTime date, int hours)
-        => new(projectId, projectTitle, date, hours);
+    public static TimesheetEntry Create(DateTime date, int hours, TimesheetEntryProject project)
+        => new(date, hours, project);
 
-    protected override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return ProjectId;
-        yield return ProjectTitle;
-        yield return Date;
-        yield return Hours;
-    }
+    //protected override IEnumerable<object> GetEqualityComponents()
+    //{
+    //    yield return ProjectId;
+    //    yield return ProjectTitle;
+    //    yield return Date;
+    //    yield return Hours;
+    //}
 }
+
+

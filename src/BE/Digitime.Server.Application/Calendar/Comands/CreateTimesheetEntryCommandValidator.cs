@@ -17,12 +17,12 @@ public class CreateTimesheetEntryCommandValidator : AbstractValidator<CreateTime
 
         RuleFor(x => x.TimesheetEntry)
             .NotNull().WithMessage("TimesheetEntry is required");
-        RuleFor(x => x.TimesheetEntry.ProjectTitle)
-            .NotEmpty().WithMessage("ProjectTitle is required")
-            .MaximumLength(100).WithMessage("ProjectTitle must be 100 characters or less");
-        RuleFor(x => x.TimesheetEntry.ProjectId)
-            .NotEmpty().WithMessage("ProjectId is required")
-            .Must(BeAnObjectId).WithMessage("ProjectId must be a valid Id");
+        RuleFor(x => x.TimesheetEntry.Project.Title)
+            .NotEmpty().WithMessage("Project Title is required")
+            .MaximumLength(100).WithMessage("Project Title must be 100 characters or less");
+        RuleFor(x => x.TimesheetEntry.Project.Id)
+            .NotEmpty().WithMessage("Project Id is required")
+            .Must(BeAnObjectId).WithMessage("Project Id must be a valid Id");
         RuleFor(x => x.TimesheetEntry.Hours)
             .NotEmpty().WithMessage("Hours is required")
             .InclusiveBetween(1, 24).WithMessage("Hours must be between 1 and 24");
