@@ -5,6 +5,7 @@ using Digitime.Server.Domain.Models;
 using Digitime.Server.Domain.Projects.ValueObjects;
 
 namespace Digitime.Server.Domain.Projects;
+
 public class Project : AggregateRoot<string>
 {
     private readonly List<Member> _members = new();
