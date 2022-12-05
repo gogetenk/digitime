@@ -1,5 +1,6 @@
-﻿using Digitime.Server.Domain.Timesheet;
-using Digitime.Server.Infrastructure.Helpers;
+﻿using Digitime.Server.Domain.Timesheets;
+using Digitime.Server.Domain.Timesheets.Entities;
+using Digitime.Server.Domain.Timesheets.ValueObjects;
 using Digitime.Server.Infrastructure.MongoDb;
 using MongoDB.Bson;
 
@@ -8,58 +9,45 @@ namespace Digitime.Server.Infrastructure.Entities;
 [BsonCollection("timesheets")]
 public class TimesheetEntity : EntityBase
 {
-    public List<TimesheetEntryEntity> TimesheetEntries { get; init; } = new();
-    public DateTime BeginDate { get; init; }
-    public DateTime EndDate { get; init; }
-    public TimeSpan Period { get; init; }
-    public int Hours { get; init; }
-    public TimesheetStatusEnum Status { get; init; }
-    public string CreatorId { get; init; }
-    public string ApproverId { get; init; }
-    public DateTime? ApproveDate { get; init; }
-    public DateTime? CreateDate { get; init; }
-    public DateTime? UpdateDate { get; init; }
+    public List<TimesheetEntryEntity> TimesheetEntries { get; set; }
+    public Worker Worker { get; set; }
+    public DateTime CreateDate { get; set; }
+    public DateTime UpdateDate { get; set; }
 
-    public static implicit operator TimesheetEntity(Timesheet timesheet)
-        => new TimesheetEntity
+    public static implicit operator TimesheetEntity(Timesheet timesheet) =>
+        new()
         {
-            Id = timesheet.Id?.ToObjectId() ?? ObjectId.Empty,
+            Id = ObjectId.Parse(timesheet.Id),
             TimesheetEntries = timesheet.TimesheetEntries.Select(x => (TimesheetEntryEntity)x).ToList(),
-            BeginDate = timesheet.BeginDate,
-            EndDate = timesheet.EndDate,
-            Period = timesheet.Period,
-            Hours = timesheet.TotalHours,
-            Status = (TimesheetStatusEnum)timesheet.Status,
-            CreatorId = timesheet.CreatorId,
-            ApproverId = timesheet.ReviewerId,
-            ApproveDate = timesheet.ReviewDate,
+            Worker = timesheet.Worker,
             CreateDate = timesheet.CreateDate,
             UpdateDate = timesheet.UpdateDate
         };
 
-    public static implicit operator Timesheet(TimesheetEntity timesheet)
-    {
-        if (timesheet is null)
-            return null;
-        
-        return Timesheet.Create(
-                            timesheet.BeginDate,
-                            timesheet.CreatorId,
-                            timesheet.Id.ToString() ?? null,
-                            timesheet.ApproverId,
-                            timesheet.ApproveDate,
-                            timesheet.TimesheetEntries?.Select(x => (TimesheetEntry)x).ToList(),
-                            timesheet.EndDate,
-                            timesheet.Period,
-                            timesheet.Hours,
-                            timesheet.CreateDate,
-                            timesheet.UpdateDate);
-    }
+    public static implicit operator Timesheet(TimesheetEntity timesheetEntity) =>
+        timesheetEntity is not null ?
+            Timesheet.Create(
+                timesheetEntity.Id.ToString(),
+                timesheetEntity.Worker,
+                timesheetEntity.UpdateDate,
+                timesheetEntity.CreateDate,
+                timesheetEntity.TimesheetEntries.Select(x => (TimesheetEntry)x).ToList())
+        : null;
 }
 
 public enum TimesheetStatusEnum
 {
-    Draft = 0,
-    Submitted = 1,
-    Approved = 2
+    Draft,
+    Submitted,
+    Approved,
+    Rejected
+}
+
+public record WorkerEntity(string UserId, string FirstName, string LastName, string Email, string ProfilePicture)
+{
+    public static implicit operator Worker(WorkerEntity workerEntity) =>
+        new(workerEntity.UserId, workerEntity.FirstName, workerEntity.LastName, workerEntity.Email, workerEntity.ProfilePicture);
+
+    public static implicit operator WorkerEntity(Worker worker) =>
+        new(worker.UserId, worker.FirstName, worker.LastName, worker.Email, worker.ProfilePicture);
 }

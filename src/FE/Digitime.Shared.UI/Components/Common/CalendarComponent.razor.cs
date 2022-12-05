@@ -1,5 +1,7 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
+using Digitime.Server.Domain.Timesheets;
+using Digitime.Server.Domain.Timesheets.Entities;
 using Digitime.Shared.Dto;
 using Microsoft;
 using Microsoft.AspNetCore.Components;
@@ -50,7 +52,7 @@ public partial class CalendarComponent : ComponentBase
     CalendarDto _nextMonthCalendarDays = new();
     List<DateTime> _monthDates = new();
     List<DateTime> _publicHolidays = new();
-    private List<TimesheetEntryDto> _currentDayTimesheetEntries = new();
+    private List<TimesheetEntry> _currentDayTimesheetEntries = new();
 
     //CalendarDay CreateFilledCalendarDay(DateTime dateTime)
     //{
@@ -78,7 +80,7 @@ public partial class CalendarComponent : ComponentBase
 
     private void OnDayClick(CalendarDayDto calendarDay)
     {
-        _currentDayTimesheetEntries = new List<TimesheetEntryDto>();
+        _currentDayTimesheetEntries = new List<TimesheetEntry>();
         //foreach (var workedProject in calendarDay.WorkedProjects)
         //{
         //    _currentDayTimesheetEntries.Add(new TimeSheetEntry()

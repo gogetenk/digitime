@@ -13,7 +13,7 @@ public class ProjectTests
         // Arrange
         var fixture = new Fixture();
         var project = fixture.Create<Project>();
-        var member = fixture.Create<Member>();
+        var member = fixture.Create<ProjectMember>();
 
         // Act
         project.AddMember(member);

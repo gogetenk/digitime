@@ -1,3 +1,5 @@
-﻿namespace Digitime.Shared.Dto;
+﻿using Digitime.Server.Domain.Timesheets.Entities;
 
-public record CalendarDayDto(DayOfWeek DayOfWeek, DateTime Date, bool IsPublicHoliday, bool IsWeekend, List<TimesheetEntryDto> TimesheetEntries);
+namespace Digitime.Shared.Dto;
+
+public record CalendarDayDto(DayOfWeek DayOfWeek, DateTime Date, bool IsPublicHoliday, bool IsWeekend, List<TimesheetEntry> TimesheetEntries);

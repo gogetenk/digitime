@@ -2,8 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Digitime.Server.Application.Abstractions;
-using Digitime.Server.Domain.Models;
 using Digitime.Server.Domain.Ports;
+using Digitime.Server.Domain.Timesheets.Entities;
 using MediatR;
 
 namespace Digitime.Server.Queries;
@@ -33,7 +33,7 @@ public class GetCalendarQuery : IRequest<Calendar>, ICacheableRequest
         {
             _obtainPublicHolidays = obtainPublicHolidays;
         }
-        
+
         public async Task<Calendar> Handle(GetCalendarQuery request, CancellationToken cancellationToken)
         {
             var requestedDate = new DateTime(request.Year, request.Month, 1);

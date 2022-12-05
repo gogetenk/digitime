@@ -10,22 +10,25 @@ public class Timesheet : AggregateRoot<string>
 {
     private readonly List<TimesheetEntry> _timesheetEntries = new();
 
+    public Worker Worker { get; private set; }
+    public DateTime UpdateDate { get; private set; }
+    public DateTime CreateDate { get; private set; }
     public DateTime BeginDate => new DateTime(CreateDate.Date.Year, CreateDate.Date.Month, CreateDate.Date.Day);
     public DateTime EndDate => BeginDate.AddMonths(1).AddDays(-1);
-    public Worker Worker { get; private set; }
     public float TotalHours => _timesheetEntries.Sum(x => x.Hours);
     public IReadOnlyList<TimesheetEntry> TimesheetEntries => _timesheetEntries.AsReadOnly();
-    public DateTime UpdateDate { get; set; }
-    public DateTime CreateDate { get; set; }
     public TimesheetStatus Status => GetEntriesStatus();
 
-    private Timesheet(string id, Worker worker) : base(id)
+    private Timesheet(string id, Worker worker, DateTime updateDate, DateTime createDate, List<TimesheetEntry> timesheetEntries) : base(id)
     {
         Worker = worker;
+        UpdateDate = updateDate;
+        CreateDate = createDate;
+        _timesheetEntries = timesheetEntries;
     }
 
-    public static Timesheet Create(string id, Worker worker)
-        => new (id, worker);
+    public static Timesheet Create(string id, Worker worker, DateTime updateDate, DateTime createDate, List<TimesheetEntry> timesheetEntries)
+        => new (id, worker, updateDate, createDate, timesheetEntries);
 
     public void AddEntry(TimesheetEntry entry)
     {

@@ -1,10 +1,8 @@
-﻿using Digitime.Server.Domain.Models;
-using Digitime.Shared.Dto;
+﻿using Digitime.Server.Domain.Timesheets;
 
 namespace Digitime.Shared.Contracts.Timesheets;
 
-public record GetTimesheetForUserAndDateResponse(List<TimesheetDto> Timesheets)
+public record GetTimesheetForUserAndDateResponse(List<Timesheet> Timesheets)
 {
-  
-}
 
+}

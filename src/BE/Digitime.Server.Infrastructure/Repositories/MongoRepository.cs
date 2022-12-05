@@ -58,14 +58,11 @@ public class MongoRepository<TDocument> : IRepository<TDocument> where TDocument
         return _collection.Find(filter).SingleOrDefault();
     }
 
-    public virtual Task<TDocument> FindByIdAsync(string id)
+    public async virtual Task<TDocument> FindByIdAsync(string id)
     {
-        return Task.Run(() =>
-        {
-            var objectId = new ObjectId(id);
-            var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, objectId);
-            return _collection.Find(filter).SingleOrDefaultAsync();
-        });
+        var objectId = new ObjectId(id);
+        var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, objectId);
+        return await _collection.Find(filter).SingleOrDefaultAsync();
     }
 
 

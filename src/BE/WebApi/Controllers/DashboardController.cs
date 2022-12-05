@@ -1,4 +1,5 @@
 ﻿using Digitime.Server.Domain.Models;
+using Digitime.Server.Domain.Timesheets.Entities;
 using Digitime.Server.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

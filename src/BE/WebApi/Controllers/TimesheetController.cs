@@ -1,5 +1,6 @@
 ﻿using Digitime.Server.Application.Calendar.Comands;
 using Digitime.Server.Application.Calendar.Queries;
+using Digitime.Server.Domain.Timesheets;
 using Digitime.Shared.Contracts.Timesheets;
 using Digitime.Shared.Dto;
 using MediatR;
@@ -24,7 +25,7 @@ public class TimesheetController : ControllerBase
     /// <param name="request"></param>
     /// <returns>The created timesheet entry</returns>
     [HttpPost("entry")]
-    [ProducesResponseType(typeof(TimesheetEntryDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(CreateTimesheetEntryReponse), StatusCodes.Status201Created)]
     [ProducesResponseType(400)]
     [ProducesResponseType(500)]
     public async Task<ActionResult<CreateTimesheetEntryReponse>> CreateTimesheetEntry([FromBody] CreateTimesheetEntryRequest request)
@@ -39,7 +40,7 @@ public class TimesheetController : ControllerBase
     /// <param name="request"></param>
     /// <returns>The timesheet</returns>
     [HttpGet("{userId}/{date}")]
-    [ProducesResponseType(typeof(TimesheetEntryDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Timesheet), StatusCodes.Status200OK)]
     [ProducesResponseType(400)]
     [ProducesResponseType(500)]
     public async Task<ActionResult<CreateTimesheetEntryReponse>> GetTimesheet([FromRoute] string userId, [FromRoute] DateTime date)

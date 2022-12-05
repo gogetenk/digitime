@@ -7,6 +7,4 @@ public abstract class EntityBase
     [BsonId]
     [BsonRepresentation(BsonType.String)]
     public ObjectId Id { get; set; }
-
-    public DateTime CreatedAt { get; }
 }

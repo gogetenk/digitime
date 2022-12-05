@@ -82,7 +82,7 @@ public class TimesheetTests
         var entry = fixture.Create<TimesheetEntry>();
         timesheet.AddEntry(entry);
         var updatedEntry = fixture.Build<TimesheetEntry>()
-            .With(x => x.Date, entry.Date)
+            .With(x => x.Id, entry.Id)
             .Create();
 
         // Act

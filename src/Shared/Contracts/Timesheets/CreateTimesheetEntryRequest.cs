@@ -1,5 +1,3 @@
-﻿using Digitime.Shared.Dto;
+﻿namespace Digitime.Shared.Contracts.Timesheets;
 
-namespace Digitime.Shared.Contracts.Timesheets;
-
-public record CreateTimesheetEntryRequest(TimesheetEntryDto TimesheetEntry, string UserId, string? TimesheetId);
+public record CreateTimesheetEntryRequest(string TimesheetId, string ProjectId, float Hours, DateTime Date, string UserId);
