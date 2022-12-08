@@ -25,7 +25,7 @@ public class TimesheetTests
         var command = new CreateTimesheetEntryRequest 
         { 
             UserId = "638e0687ebcdd6848cbbf52f", 
-            TimesheetId = "638a2da7571baf13b45fd5f4", 
+            TimesheetId = "6392737298425fc69e63839a", 
             ProjectId = "6389b9592dd24486a037096a",
             Date = DateTime.UtcNow,
             Hours = 8

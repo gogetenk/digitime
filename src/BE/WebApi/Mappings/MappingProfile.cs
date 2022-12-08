@@ -1,6 +1,7 @@
 ﻿using Digitime.Server.Domain.Users;
 using Digitime.Server.Infrastructure.Entities;
 using Mapster;
+using MongoDB.Bson;
 
 namespace Digitime.Server.Mappings;
 
@@ -27,5 +28,26 @@ public class MappingProfile : IRegister
             .Map(dest => dest.Members, src => src.Members)
             .MapToConstructor(true)
             .TwoWays();
+
+        config.NewConfig<TimesheetEntity, Domain.Timesheets.Timesheet>()
+            .Map(dest => dest.Id, src => src.Id)
+            .Map(dest => dest.Worker, src => src.Worker)
+            .Map(dest => dest.UpdateDate, src => src.UpdateDate)
+            .Map(dest => dest.CreateDate, src => src.CreateDate)
+            .Map(dest => dest.TimesheetEntries, src => src.TimesheetEntries)
+            .MapToConstructor(true)
+            .TwoWays();
+
+        config.NewConfig<TimesheetEntryEntity, Domain.Timesheets.Entities.TimesheetEntry>()
+            .Map(dest => dest.Id, src => src.Id)
+            .Map(dest => dest.Date, src => src.Date)
+            .Map(dest => dest.Hours, src => src.Hours)
+            .Map(dest => dest.Project, src => src.Project)
+            .Map(dest => dest.Status, src => src.Status)
+            .MapToConstructor(true)
+            .TwoWays();
+
+        //config.NewConfig<ObjectId, string>()
+        //    .Map(dest => ObjectId.Parse(dest), src => src.ToString());
     }
 }

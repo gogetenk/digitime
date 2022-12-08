@@ -11,7 +11,7 @@ public class TimesheetEntry : Entity<string>
     public Project Project { get; private set; }
     public TimesheetStatus Status { get; private set; }
 
-    private TimesheetEntry(string id, DateTime date, float hours, Project project, TimesheetStatus status) : base(id)
+    public TimesheetEntry(string id, DateTime date, float hours, Project project, TimesheetStatus status) : base(id)
     {
         Date = date;
         Hours = hours;

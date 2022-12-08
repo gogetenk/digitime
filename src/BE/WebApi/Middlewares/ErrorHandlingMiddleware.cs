@@ -33,7 +33,7 @@ public class ErrorHandlingMiddleware
         {
             Title = "An error occurred while processing your request.",
             Status = (int)code,
-            Detail = exception.Message + " \n" + exception.InnerException?.Message,
+            Detail = exception.Message + " \n " + exception.InnerException?.Message,
             Instance = context.Request.Path
         };
 

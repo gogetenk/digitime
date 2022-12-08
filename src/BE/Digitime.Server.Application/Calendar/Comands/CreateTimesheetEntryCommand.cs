@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Digitime.Server.Domain.Timesheets;
@@ -49,11 +48,12 @@ public record CreateTimesheetEntryCommand(string TimesheetId, string ProjectId, 
                 throw new InvalidOperationException($"Project {request.ProjectId} not found, aborting timesheet entry creation.");
 
             // Add timesheet entry to timesheet
-            var entry = TimesheetEntry.Create(null, request.Date, request.Hours, project.Adapt<Domain.Timesheets.ValueObjects.Project>(), TimesheetStatus.Draft);
+            var entry = TimesheetEntry.Create(null, request.Date, request.Hours, project.Adapt<Project>(), TimesheetStatus.Draft);
             timesheet.AddEntry(entry);
 
             // update timesheet
-            await _timesheetRepository.ReplaceOneAsync(timesheet.Adapt<TimesheetEntity>());
+            TimesheetEntity document = timesheet.Adapt<TimesheetEntity>();
+            await _timesheetRepository.ReplaceOneAsync(document);
 
             // Return newly created timesheet entry
             return entry;
@@ -61,7 +61,6 @@ public record CreateTimesheetEntryCommand(string TimesheetId, string ProjectId, 
 
         private async Task<Timesheet> CreateTimesheet(CreateTimesheetEntryCommand request)
         {
-            var t = await _userRepository.FindOneAsync(x => x.Id == request.UserId);
             var workerUser = _mapper.Map<Domain.Users.User>(await _userRepository.FindByIdAsync(request.UserId));
             if (workerUser is null)
                 throw new InvalidOperationException($"User with id {request.UserId} not found");

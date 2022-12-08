@@ -49,8 +49,7 @@ public class MongoRepository<TDocument> : IRepository<TDocument> where TDocument
     public async virtual Task<TDocument> FindByIdAsync(string id)
     {
         var objectId = ObjectId.Parse(id);
-        var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, id);
-        return await _collection.Find(filter).SingleOrDefaultAsync();
+        return await _collection.Find(x => x.Id == id).SingleOrDefaultAsync();
     }
 
     public virtual async Task InsertOneAsync(TDocument document)
@@ -77,8 +76,7 @@ public class MongoRepository<TDocument> : IRepository<TDocument> where TDocument
     public async Task DeleteByIdAsync(string id)
     {
         var objectId = new ObjectId(id);
-        var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, id);
-        await _collection.FindOneAndDeleteAsync(filter);
+        await _collection.FindOneAndDeleteAsync(x => x.Id == id);
     }
 
     public void DeleteMany(Expression<Func<TDocument, bool>> filterExpression)

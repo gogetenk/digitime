@@ -27,7 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		package.json = package.json
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Digitime.Shared.UI.UnitTests", "tests\Digitime.Shared.UI.UnitTests\Digitime.Shared.UI.UnitTests.csproj", "{4DEBA20A-9D9D-4E44-B711-854A56D78DE1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Digitime.Shared.UITests", "tests\Digitime.Shared.UI.UnitTests\Digitime.Shared.UITests.csproj", "{4DEBA20A-9D9D-4E44-B711-854A56D78DE1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Digitime.Server.Domain", "src\BE\Digitime.Server.Domain\Digitime.Server.Domain.csproj", "{5BE2A0A9-2790-465B-86EA-0724DB1279EC}"
 EndProject
@@ -41,7 +41,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{3DD217
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Digitime.Server.IntegrationTests", "tests\Digitime.Server.IntegrationTests\Digitime.Server.IntegrationTests.csproj", "{A2DD6CAC-7C1F-42C6-BE2D-E269A1F5EC61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Digitime.Server.Domain.UnitTests", "tests\Digitime.Server.Domain.UnitTests\Digitime.Server.Domain.UnitTests.csproj", "{DF3E8E1D-2F7D-440B-8118-EC9BCFC5B028}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Digitime.Server.Domain.UnitTests", "tests\Digitime.Server.Domain.UnitTests\Digitime.Server.Domain.UnitTests.csproj", "{DF3E8E1D-2F7D-440B-8118-EC9BCFC5B028}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
