@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Digitime.Server.Domain.Models;
 using Digitime.Server.Domain.Timesheets.ValueObjects;
 
@@ -10,21 +9,19 @@ public class TimesheetEntry : Entity<string>
     public DateTime Date { get; private set; }
     public float Hours { get; private set; }
     public Project Project { get; private set; }
-    public List<Reviewer> Reviewers { get; private set; }
     public TimesheetStatus Status { get; private set; }
 
-    private TimesheetEntry(string id, DateTime date, float hours, Project project, List<Reviewer> reviewers, TimesheetStatus status) : base(id)
+    private TimesheetEntry(string id, DateTime date, float hours, Project project, TimesheetStatus status) : base(id)
     {
         Date = date;
         Hours = hours;
         Project = project;
-        Reviewers = reviewers;
         Status = status;
     }
 
-    public static TimesheetEntry Create(string id, DateTime date, float hours, Project project, List<Reviewer> reviewers, TimesheetStatus status)
+    public static TimesheetEntry Create(string id, DateTime date, float hours, Project project, TimesheetStatus status)
     {
-        return new TimesheetEntry(id, date, hours, project, reviewers, status);
+        return new TimesheetEntry(id, date, hours, project, status);
     }
 
     public void Submit()
@@ -34,7 +31,7 @@ public class TimesheetEntry : Entity<string>
 
         Status = TimesheetStatus.Submitted;
     }
-    
+
     public void Approve()
     {
         if (Status is not TimesheetStatus.Submitted)

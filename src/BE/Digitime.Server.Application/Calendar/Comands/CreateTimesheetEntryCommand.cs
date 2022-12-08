@@ -48,11 +48,8 @@ public record CreateTimesheetEntryCommand(string TimesheetId, string ProjectId, 
             if (project is null)
                 throw new InvalidOperationException($"Project {request.ProjectId} not found, aborting timesheet entry creation.");
 
-            // All the reviewers of a project can review the timesheet entries
-            var reviewers = project.Members.Where(x => x.MemberRole == Domain.Projects.ValueObjects.MemberRoleEnum.Reviewer).Select(x => x.Adapt<Reviewer>()).ToList();
-
             // Add timesheet entry to timesheet
-            var entry = TimesheetEntry.Create(null, request.Date, request.Hours, project.Adapt<Domain.Timesheets.ValueObjects.Project>(), reviewers, TimesheetStatus.Draft);
+            var entry = TimesheetEntry.Create(null, request.Date, request.Hours, project.Adapt<Domain.Timesheets.ValueObjects.Project>(), TimesheetStatus.Draft);
             timesheet.AddEntry(entry);
 
             // update timesheet

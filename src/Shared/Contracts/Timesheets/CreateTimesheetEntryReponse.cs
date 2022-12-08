@@ -3,7 +3,7 @@ using Digitime.Server.Domain.Timesheets.ValueObjects;
 
 namespace Digitime.Shared.Contracts.Timesheets;
 
-public record CreateTimesheetEntryReponse(string Id, DateTime Date, float Hours, Project Project, List<Reviewer> Reviewers, TimesheetStatus Status)
+public record CreateTimesheetEntryReponse(string Id, DateTime Date, float Hours, Project Project, TimesheetStatus Status)
 {
     public static implicit operator CreateTimesheetEntryReponse(TimesheetEntry timesheetEntry)
         => new CreateTimesheetEntryReponse(
@@ -11,6 +11,5 @@ public record CreateTimesheetEntryReponse(string Id, DateTime Date, float Hours,
             timesheetEntry.Date,
             timesheetEntry.Hours,
             timesheetEntry.Project,
-            timesheetEntry.Reviewers,
             timesheetEntry.Status);
 }
