@@ -1,3 +1,15 @@
 ﻿namespace Digitime.Server.Domain.Timesheets.ValueObjects;
 
-public record Project(string Id, string Title, string Code);
+public class Project
+{
+    public string Id { get; }
+    public string Title { get; }
+    public string Code { get; }
+
+    public Project(string id, string title, string code)
+    {
+        Id = id;
+        Title = title;
+        Code = code;
+    }
+}

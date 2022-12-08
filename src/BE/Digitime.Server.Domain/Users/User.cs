@@ -4,13 +4,14 @@ namespace Digitime.Server.Domain.Users;
 
 public class User : AggregateRoot<string>
 {
-    public string Firstname { get; private set; }
-    public string Lastname { get; private set; }
-    public string Email { get; private set; }
-    public string ProfilePicture { get; private set; }
-    public string ExternalId { get; private set; }
+    public string Firstname { get; init; }
+    public string Lastname { get; init; }
+    public string Email { get; init; }
+    public string ProfilePicture { get; init; }
+    public string ExternalId { get; init; }
 
-    private User(string id, string firstname, string lastname, string email, string profilePicture, string externalId) : base(id)
+    public User(string id, string firstname, string lastname, string email, string profilePicture, string externalId)
+        : base(id)
     {
         Firstname = firstname;
         Lastname = lastname;
@@ -18,7 +19,4 @@ public class User : AggregateRoot<string>
         ProfilePicture = profilePicture;
         ExternalId = externalId;
     }
-
-    public static User Create(string id, string firstname, string lastname, string email, string profilePicture, string externalId)
-        => new (id, firstname, lastname, email, profilePicture, externalId);
 }

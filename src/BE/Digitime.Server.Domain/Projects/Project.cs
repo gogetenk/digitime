@@ -13,18 +13,16 @@ public class Project : AggregateRoot<string>
     public string Title { get; private set; }
     public string Code { get; private set; }
     public string Description { get; private set; }
-    public string WorkspaceId { get; set; }
-    public IReadOnlyList<ProjectMember> Members { get; private set; }
+    public string WorkspaceId { get; private set; }
+    public IReadOnlyList<ProjectMember> Members => _members.AsReadOnly();
 
-    private Project(string id, string title, string code, string description) : base(id)
+    public Project(string id, string title, string code, string description, string workspaceId) : base(id)
     {
         Title = title;
         Code = code;
         Description = description;
+        WorkspaceId = workspaceId;
     }
-
-    public static Project Create(string id, string title, string code, string description)
-        => new (id, title, code, description);
 
     public void AddMember(ProjectMember member)
     {

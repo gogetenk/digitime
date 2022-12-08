@@ -1,6 +1,9 @@
 using System.Reflection;
+using System.Runtime.CompilerServices;
+using Digitime.Server;
 using Digitime.Server.Application.Calendar.Queries;
 using Digitime.Server.Domain.Ports;
+using Digitime.Server.Infrastructure;
 using Digitime.Server.Infrastructure.MongoDb;
 using Digitime.Server.Infrastructure.Repositories;
 using Digitime.Server.Middlewares;
@@ -25,7 +28,6 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbSettings"));
-builder.Services.AddSingleton<IMongoDbSettings>(serviceProvider => serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value);
 
 builder.Services.AddControllersWithViews()
     .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<GetCalendarQueryValidator>())
@@ -73,7 +75,9 @@ builder.Services.AddCors(options =>
 });
 
 // Services
-RegisterServices(builder);
+builder.Services.AddApi();
+builder.Services.AddInfrastructure();
+
 
 var app = builder.Build();
 
@@ -113,16 +117,4 @@ app.MapFallbackToFile("index.html");
 app.Run();
 
 public partial class Program // Needed for IntegrationTests
-{
-    static void RegisterServices(WebApplicationBuilder builder)
-    {
-        builder.Services
-            .AddHttpClient()
-            .AddAutoMapper(Assembly.GetExecutingAssembly(), typeof(Digitime.Server.Queries.GetCalendarQuery).Assembly)
-            .AddScoped<IObtainPublicHolidays, PublicHolidaysRepository>()
-            .AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>))
-            .AddTransient(typeof(IPipelineBehavior<,>), typeof(CachingBehavior<,>))
-            .AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
-            .AddSingleton(typeof(IRepository<>), typeof(MongoRepository<>));
-    }
-}
+{ }

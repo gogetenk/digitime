@@ -5,6 +5,7 @@ using Digitime.Server.Application.Abstractions;
 using Digitime.Server.Domain.Timesheets;
 using Digitime.Server.Infrastructure.Entities;
 using Digitime.Server.Infrastructure.MongoDb;
+using Mapster;
 using MediatR;
 
 namespace Digitime.Server.Application.Calendar.Queries;
@@ -21,9 +22,9 @@ public record GetTimesheetForUserAndMonthQuery(string UserId, DateTime Date) : I
 
         public async Task<Timesheet> Handle(GetTimesheetForUserAndMonthQuery request, CancellationToken cancellationToken)
         {
-            Timesheet timesheet = await _timesheetRepository.FindOneAsync(x => x.Worker.UserId == request.UserId && x.CreateDate == request.Date);
+            var timesheet = await _timesheetRepository.FindOneAsync(x => x.Worker.UserId == request.UserId && x.CreateDate == request.Date);
             //TimesheetDto dto = timesheet;
-            return timesheet;
+            return timesheet.Adapt<Timesheet>();
         }
     }
 

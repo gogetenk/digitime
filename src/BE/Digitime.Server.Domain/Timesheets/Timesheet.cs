@@ -19,16 +19,16 @@ public class Timesheet : AggregateRoot<string>
     public IReadOnlyList<TimesheetEntry> TimesheetEntries => _timesheetEntries.AsReadOnly();
     public TimesheetStatus Status => GetEntriesStatus();
 
-    private Timesheet(string id, Worker worker, DateTime updateDate, DateTime createDate, List<TimesheetEntry> timesheetEntries) : base(id)
+    public Timesheet(string id, Worker worker, DateTime updateDate, DateTime createDate, List<TimesheetEntry> timesheetEntries) : base(id)
     {
         Worker = worker;
         UpdateDate = updateDate;
         CreateDate = createDate;
-        _timesheetEntries = timesheetEntries;
+        _timesheetEntries = timesheetEntries ?? new();
     }
 
-    public static Timesheet Create(string id, Worker worker, DateTime updateDate, DateTime createDate, List<TimesheetEntry> timesheetEntries)
-        => new (id, worker, updateDate, createDate, timesheetEntries);
+    //public static Timesheet Create(string id, Worker worker, DateTime updateDate, DateTime createDate, List<TimesheetEntry> timesheetEntries)
+    //    => new (id, worker, updateDate, createDate, timesheetEntries);
 
     public void AddEntry(TimesheetEntry entry)
     {

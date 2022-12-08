@@ -2,7 +2,7 @@
 using Digitime.Server.Application.Calendar.Queries;
 using Digitime.Server.Domain.Timesheets;
 using Digitime.Shared.Contracts.Timesheets;
-using Digitime.Shared.Dto;
+using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,8 +30,8 @@ public class TimesheetController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<CreateTimesheetEntryReponse>> CreateTimesheetEntry([FromBody] CreateTimesheetEntryRequest request)
     {
-        var resp = await _sender.Send((CreateTimesheetEntryCommand)request);
-        return Ok((CreateTimesheetEntryReponse)resp);
+        var resp = await _sender.Send(request.Adapt<CreateTimesheetEntryCommand>());
+        return Created("/timesheets", resp.Adapt<CreateTimesheetEntryReponse>());
     }
 
     /// <summary>
@@ -48,8 +48,7 @@ public class TimesheetController : ControllerBase
         var resp = await _sender.Send(new GetTimesheetForUserAndMonthQuery(userId, date));
         if (resp is null)
             return NotFound();
-        
+
         return Ok(resp);
     }
 }
- 

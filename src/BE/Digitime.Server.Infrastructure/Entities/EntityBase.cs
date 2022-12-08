@@ -5,6 +5,6 @@ namespace Digitime.Server.Infrastructure.Entities;
 public abstract class EntityBase
 {
     [BsonId]
-    [BsonRepresentation(BsonType.String)]
-    public ObjectId Id { get; set; }
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; set; }
 }
