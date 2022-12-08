@@ -1,11 +1,6 @@
-﻿using System.Net.Http.Json;
-using System.Text.Json;
-using Digitime.Server.Domain.Timesheets;
-using Digitime.Server.Domain.Timesheets.Entities;
+﻿using Digitime.Server.Domain.Timesheets.Entities;
 using Digitime.Shared.Dto;
-using Microsoft;
 using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using CalendarDto = Digitime.Shared.Dto.CalendarDto;
 

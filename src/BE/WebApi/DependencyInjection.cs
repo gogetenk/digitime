@@ -19,7 +19,7 @@ public static class DependencyInjection
             .AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
             .AddSingleton(config)
             .AddScoped<IMapper, ServiceMapper>();
-        
+
         return services;
     }
 }

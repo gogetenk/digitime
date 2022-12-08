@@ -1,11 +1,3 @@
-using System.Diagnostics.Metrics;
-using AutoFixture;
-using Bunit;
-using Digitime.Shared.UI.Components.Common;
-using Digitime.Shared.UI.UnitTests.Helpers;
-using Microsoft.Extensions.Configuration;
-using RichardSzalay.MockHttp;
-
 namespace Digitime.Shared.UI.UnitTests;
 
 public class CalendarComponentTests

@@ -1,7 +1,6 @@
 ﻿using Digitime.Server.Domain.Users;
 using Digitime.Server.Infrastructure.Entities;
 using Mapster;
-using MongoDB.Bson;
 
 namespace Digitime.Server.Mappings;
 

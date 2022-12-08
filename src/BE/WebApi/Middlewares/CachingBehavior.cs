@@ -43,7 +43,7 @@ public class CachingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
             _logger.LogDebug($"Can't cache the data of {cacheKey} because the value is null.");
             return response;
         }
-        
+
         var expirationTime = cacheRequest.GetCacheExpiration() ?? DateTime.UtcNow.AddHours(_defaultCacheExpirationInHours);
         await _cachingProvider.SetAsync(cacheKey, response, expirationTime.TimeOfDay);
         _logger.LogDebug($"Set data to cache with cacheKey: {cacheKey}");

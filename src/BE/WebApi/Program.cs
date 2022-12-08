@@ -1,17 +1,12 @@
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using Digitime.Server;
 using Digitime.Server.Application.Calendar.Queries;
-using Digitime.Server.Domain.Ports;
 using Digitime.Server.Infrastructure;
-using Digitime.Server.Infrastructure.MongoDb;
-using Digitime.Server.Infrastructure.Repositories;
 using Digitime.Server.Middlewares;
 using Digitime.Server.Settings;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);

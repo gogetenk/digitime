@@ -25,7 +25,7 @@ public class Workspace : AggregateRoot<string>
     }
 
     public static Workspace Create(string id, string name, string description, Subscription subscription)
-        => new (id, name, description, subscription);
+        => new(id, name, description, subscription);
 
     public void Update(string name, string description, Subscription subscription)
     {
@@ -38,7 +38,7 @@ public class Workspace : AggregateRoot<string>
     {
         if (_members.Any(x => x.UserId == member.UserId))
             throw new InvalidOperationException($"Member with user id {member.UserId} already exists");
-        
+
         _members.Add(member);
     }
 
@@ -46,7 +46,7 @@ public class Workspace : AggregateRoot<string>
     {
         if (_projects.Any(x => x.Id == project.Id))
             throw new InvalidOperationException($"Project with id {project.Id} already exists");
-        
+
         _projects.Add(project);
     }
 }

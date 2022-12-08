@@ -1,6 +1,6 @@
-﻿using Digitime.Server.Queries;
+﻿using System.Linq;
+using Digitime.Server.Queries;
 using FluentValidation;
-using System.Linq;
 
 namespace Digitime.Server.Application.Calendar.Queries;
 public class GetCalendarQueryValidator : AbstractValidator<GetCalendarQuery>
