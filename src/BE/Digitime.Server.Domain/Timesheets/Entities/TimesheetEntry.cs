@@ -47,6 +47,11 @@ public class TimesheetEntry : Entity<string>
 
         Status = TimesheetStatus.Rejected;
     }
+
+    public void UpdateStatus(TimesheetStatus status)
+    {
+        Status = status;
+    }
 }
 
 public enum TimesheetStatus

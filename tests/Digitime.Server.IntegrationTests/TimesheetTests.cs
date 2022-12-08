@@ -1,6 +1,5 @@
 using System.Net;
 using System.Net.Http.Json;
-using AutoFixture;
 using Digitime.Shared.Contracts.Timesheets;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -22,10 +21,10 @@ public class TimesheetTests
     {
         // Arrange
         var client = _factory.CreateClient();
-        var command = new CreateTimesheetEntryRequest 
-        { 
-            UserId = "638e0687ebcdd6848cbbf52f", 
-            TimesheetId = "6392737298425fc69e63839a", 
+        var command = new CreateTimesheetEntryRequest
+        {
+            UserId = "638e0687ebcdd6848cbbf52f",
+            TimesheetId = "6392737298425fc69e63839a",
             ProjectId = "6389b9592dd24486a037096a",
             Date = DateTime.UtcNow,
             Hours = 8

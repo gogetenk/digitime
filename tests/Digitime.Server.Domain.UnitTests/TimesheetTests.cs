@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoFixture;
+﻿using AutoFixture;
 using Digitime.Server.Domain.Timesheets;
 using Digitime.Server.Domain.Timesheets.Entities;
 using FluentAssertions;
@@ -81,15 +76,14 @@ public class TimesheetTests
         var timesheet = fixture.Create<Timesheet>();
         var entry = fixture.Create<TimesheetEntry>();
         timesheet.AddEntry(entry);
-        var updatedEntry = fixture.Build<TimesheetEntry>()
-            .With(x => x.Id, entry.Id)
-            .Create();
+        entry.UpdateStatus(TimesheetStatus.Approved);
 
         // Act
-        timesheet.UpdateEntry(updatedEntry);
+        timesheet.UpdateEntry(entry);
 
         // Assert
-        timesheet.TimesheetEntries.Should().Contain(updatedEntry);
+        timesheet.TimesheetEntries.Should().Contain(entry);
+        timesheet.TimesheetEntries.FirstOrDefault(x => x.Id == entry.Id).Status.Should().Be(TimesheetStatus.Approved);
     }
 
     [Fact]
@@ -113,9 +107,8 @@ public class TimesheetTests
         // Arrange
         var fixture = new Fixture();
         var timesheet = fixture.Create<Timesheet>();
-        var entry = fixture.Build<TimesheetEntry>()
-            .With(x => x.Status, TimesheetStatus.Draft)
-            .Create();
+        var entry = fixture.Create<TimesheetEntry>();
+        entry.UpdateStatus(TimesheetStatus.Draft);
         timesheet.AddEntry(entry);
 
         // Act
