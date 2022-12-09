@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Digitime.Server.Domain.Timesheets;
 using Digitime.Server.Domain.Timesheets.Entities;
 using Digitime.Server.Domain.Timesheets.ValueObjects;
+using Digitime.Server.Domain.Users;
 using Digitime.Server.Infrastructure.Entities;
 using Digitime.Server.Infrastructure.MongoDb;
 using Digitime.Shared.Contracts.Timesheets;
@@ -17,14 +18,12 @@ public record CreateTimesheetEntryCommand(string TimesheetId, string ProjectId, 
 {
     public class CreateTimesheetEntryCommandHandler : IRequestHandler<CreateTimesheetEntryCommand, CreateTimesheetEntryReponse>
     {
-        private readonly IMapper _mapper;
         private readonly IRepository<TimesheetEntity> _timesheetRepository;
         private readonly IRepository<ProjectEntity> _projectRepository;
         private readonly IRepository<UserEntity> _userRepository;
 
-        public CreateTimesheetEntryCommandHandler(IMapper mapper, IRepository<TimesheetEntity> timesheetRepository, IRepository<ProjectEntity> projectRepository, IRepository<UserEntity> userRepository)
+        public CreateTimesheetEntryCommandHandler(IRepository<TimesheetEntity> timesheetRepository, IRepository<ProjectEntity> projectRepository, IRepository<UserEntity> userRepository)
         {
-            _mapper = mapper;
             _timesheetRepository = timesheetRepository;
             _projectRepository = projectRepository;
             _userRepository = userRepository;
@@ -52,8 +51,7 @@ public record CreateTimesheetEntryCommand(string TimesheetId, string ProjectId, 
             timesheet.AddEntry(entry);
 
             // update timesheet
-            TimesheetEntity document = timesheet.Adapt<TimesheetEntity>();
-            await _timesheetRepository.ReplaceOneAsync(document);
+            await _timesheetRepository.ReplaceOneAsync(timesheet.Adapt<TimesheetEntity>());
 
             // Return newly created timesheet entry
             return entry;
@@ -61,7 +59,7 @@ public record CreateTimesheetEntryCommand(string TimesheetId, string ProjectId, 
 
         private async Task<Timesheet> CreateTimesheet(CreateTimesheetEntryCommand request)
         {
-            var workerUser = _mapper.Map<Domain.Users.User>(await _userRepository.FindByIdAsync(request.UserId));
+            var workerUser = (await _userRepository.FindByIdAsync(request.UserId)).Adapt<User>();
             if (workerUser is null)
                 throw new InvalidOperationException($"User with id {request.UserId} not found");
 

@@ -43,6 +43,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Digitime.Server.Integration
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Digitime.Server.Domain.UnitTests", "tests\Digitime.Server.Domain.UnitTests\Digitime.Server.Domain.UnitTests.csproj", "{DF3E8E1D-2F7D-440B-8118-EC9BCFC5B028}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Digitime.Server.Application.UnitTests", "tests\Digitime.Server.Application.UnitTests\Digitime.Server.Application.UnitTests.csproj", "{95A2D5BF-D162-48F9-A2D1-60DF2363D6BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,10 @@ Global
 		{DF3E8E1D-2F7D-440B-8118-EC9BCFC5B028}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF3E8E1D-2F7D-440B-8118-EC9BCFC5B028}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF3E8E1D-2F7D-440B-8118-EC9BCFC5B028}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95A2D5BF-D162-48F9-A2D1-60DF2363D6BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95A2D5BF-D162-48F9-A2D1-60DF2363D6BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95A2D5BF-D162-48F9-A2D1-60DF2363D6BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95A2D5BF-D162-48F9-A2D1-60DF2363D6BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -112,6 +118,7 @@ Global
 		{3DD217B3-F7FE-462D-ADA3-A6641E777310} = {7245AF62-F081-49B0-9705-9F7D38AABC36}
 		{A2DD6CAC-7C1F-42C6-BE2D-E269A1F5EC61} = {9AEB5696-D5A4-4460-BBB8-33DE15B035AA}
 		{DF3E8E1D-2F7D-440B-8118-EC9BCFC5B028} = {9AEB5696-D5A4-4460-BBB8-33DE15B035AA}
+		{95A2D5BF-D162-48F9-A2D1-60DF2363D6BA} = {9AEB5696-D5A4-4460-BBB8-33DE15B035AA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF5E4B7D-EBCA-46AD-A846-9FBA2BDFFF4C}
