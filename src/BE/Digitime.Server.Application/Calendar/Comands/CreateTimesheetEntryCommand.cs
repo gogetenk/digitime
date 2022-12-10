@@ -9,7 +9,6 @@ using Digitime.Server.Infrastructure.Entities;
 using Digitime.Server.Infrastructure.MongoDb;
 using Digitime.Shared.Contracts.Timesheets;
 using Mapster;
-using MapsterMapper;
 using MediatR;
 
 namespace Digitime.Server.Application.Calendar.Comands;
@@ -70,7 +69,4 @@ public record CreateTimesheetEntryCommand(string TimesheetId, string ProjectId, 
             return timesheet;
         }
     }
-
-    public static implicit operator CreateTimesheetEntryCommand(CreateTimesheetEntryRequest request) =>
-        new(request.TimesheetId, request.ProjectId, request.Hours, request.Date, request.UserId);
 }
