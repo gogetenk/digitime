@@ -37,10 +37,12 @@ public class ErrorHandlingMiddleware
             Instance = context.Request.Path
         };
 
-        if (exception is ApplicationException)
+        if (exception is ApplicationException || exception is ArgumentException || exception is InvalidOperationException)
             code = HttpStatusCode.BadRequest;
-        else if (exception is UnauthorizedAccessException)
+        else if (exception is UnauthorizedAccessException || exception.Message.Contains("Unauthorized"))
             code = HttpStatusCode.Unauthorized;
+        else if (exception is KeyNotFoundException)
+            code = HttpStatusCode.NotFound;
 
         var result = JsonConvert.SerializeObject(problemDetails);
         context.Response.ContentType = "application/problem+json";

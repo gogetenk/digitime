@@ -8,10 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Digitime.Server.Controllers;
 
-[Route("api/timesheets")]
+[Route($"api/{_Endpoint}")]
 [ApiController]
 public class TimesheetController : ControllerBase
 {
+    private const string _Endpoint = "timesheets";
     private readonly ISender _sender;
 
     public TimesheetController(ISender sender)
@@ -31,7 +32,7 @@ public class TimesheetController : ControllerBase
     public async Task<ActionResult<CreateTimesheetEntryReponse>> CreateTimesheetEntry([FromBody] CreateTimesheetEntryRequest request)
     {
         var resp = await _sender.Send(request.Adapt<CreateTimesheetEntryCommand>());
-        return Created("/timesheets", resp.Adapt<CreateTimesheetEntryReponse>());
+        return Created(_Endpoint, resp.Adapt<CreateTimesheetEntryReponse>());
     }
 
     /// <summary>

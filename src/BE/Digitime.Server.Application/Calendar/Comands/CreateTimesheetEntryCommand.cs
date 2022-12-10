@@ -43,7 +43,7 @@ public record CreateTimesheetEntryCommand(string TimesheetId, string ProjectId, 
             // Check if the project exists
             var project = (await _projectRepository.FindByIdAsync(request.ProjectId)).Adapt<Domain.Projects.Project>();
             if (project is null)
-                throw new InvalidOperationException($"Project {request.ProjectId} not found, aborting timesheet entry creation.");
+                throw new InvalidOperationException($"Project with id {request.ProjectId} not found, aborting timesheet entry creation.");
 
             // Add timesheet entry to timesheet
             var entry = TimesheetEntry.Create(null, request.Date, request.Hours, project.Adapt<Project>(), TimesheetStatus.Draft);
@@ -60,7 +60,7 @@ public record CreateTimesheetEntryCommand(string TimesheetId, string ProjectId, 
         {
             var workerUser = (await _userRepository.FindByIdAsync(request.UserId)).Adapt<User>();
             if (workerUser is null)
-                throw new InvalidOperationException($"User with id {request.UserId} not found");
+                throw new InvalidOperationException($"User with id {request.UserId} not found, aborting timesheet entry creation.");
 
             var worker = new Worker(workerUser.Id.ToString(), workerUser.Firstname, workerUser.Lastname, workerUser.Email, workerUser.ProfilePicture);
             var timesheet = new Timesheet(null, worker, DateTime.Now, DateTime.Now, null);
