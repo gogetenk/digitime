@@ -1,6 +1,4 @@
-﻿using Digitime.Server.Application.Calendar.Queries;
-using Digitime.Server.Queries;
-using Digitime.Shared.Contracts.Timesheets;
+﻿using Digitime.Server.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

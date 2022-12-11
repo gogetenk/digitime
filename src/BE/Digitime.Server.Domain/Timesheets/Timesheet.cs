@@ -32,8 +32,8 @@ public class Timesheet : AggregateRoot<string>
 
     public void AddEntry(TimesheetEntry entry)
     {
-        if (_timesheetEntries.Any(x => x.Date == entry.Date))
-            throw new InvalidOperationException($"Entry for date {entry.Date} already exists");
+        if (_timesheetEntries.Any(x => x.Date == entry.Date && x.Project.Id == entry.Project?.Id))
+            throw new InvalidOperationException($"Entry for date {entry.Date} and project {entry.Project?.Id} already exists");
 
         _timesheetEntries.Add(entry);
         UpdateDate = DateTime.UtcNow;
@@ -42,7 +42,7 @@ public class Timesheet : AggregateRoot<string>
     public void RemoveEntry(TimesheetEntry entry)
     {
         if (!_timesheetEntries.Contains(entry))
-            throw new InvalidOperationException($"Entry for date {entry.Date} does not exist");
+            throw new InvalidOperationException($"Entry does not exist");
 
         _timesheetEntries.Remove(entry);
     }
@@ -50,7 +50,7 @@ public class Timesheet : AggregateRoot<string>
     public void UpdateEntry(TimesheetEntry entry)
     {
         if (!_timesheetEntries.Contains(entry))
-            throw new InvalidOperationException($"Entry for date {entry.Date} does not exist");
+            throw new InvalidOperationException($"Entry does not exist");
 
         var index = _timesheetEntries.FindIndex(x => x.Date == entry.Date);
         _timesheetEntries[index] = entry;
