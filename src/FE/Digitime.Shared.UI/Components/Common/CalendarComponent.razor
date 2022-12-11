@@ -83,7 +83,7 @@
                 <div>S</div>
             </div>
             <div class="isolate mt-2 lg:h-96 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm ring-1 ring-gray-200">
-                @foreach (var day in _currentMonthCalendarDays?.CalendarDays)
+                @foreach (var day in _nextMonthCalendarDays?.CalendarDays)
                 {
                     <button type="button"
                         @onclick="() => OnDayClick(day)"

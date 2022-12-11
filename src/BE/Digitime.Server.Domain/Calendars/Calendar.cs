@@ -22,7 +22,8 @@ public class Calendar : AggregateRoot<string>
     {
         var calendarDays = new CalendarDay[6, 7];
         var monthDates = GetAllDaysOfSpecifiedMonth(dateTime);
-        var firstDayPositionInWeek = ((int)monthDates.FirstOrDefault().DayOfWeek) - 1;
+        DayOfWeek firstDay = monthDates.FirstOrDefault().DayOfWeek;
+        var firstDayPositionInWeek = (firstDay > 0) ? ((int)firstDay) - 1 : ((int)firstDay);
         var weekIndex = 0;
         var weekdayIndex = firstDayPositionInWeek;
 
