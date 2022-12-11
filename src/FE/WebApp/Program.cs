@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
+builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
 
 var backendBaseAddress = builder.Configuration.GetValue<string>("BackendBaseUri");
 builder.Services.AddHttpClient(
