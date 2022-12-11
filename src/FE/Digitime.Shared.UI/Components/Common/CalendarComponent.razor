@@ -61,7 +61,7 @@
                         class="@(day is null ? "bg-gray-50 text-gray-400" : day.IsPublicHoliday ? "bg-yellow text-yellow-900" : "bg-white text-gray-400")
                            py-1.5  hover:bg-gray-100 focus:z-10">
                         <time datetime="@day?.Date.ToShortDateString()"
-                          class="@(day != null @*&& day.WorkedProjects.Any()*@ ? "font-bold text-black" : "" )
+                          class="@(day != null && day.IsWorked ? "font-bold text-black" : "" )
                       @(day != null && day.Date == DateTime.Now.Date ? "bg-indigo-600 text-white" : "")
                       mx-auto flex h-7 w-7 items-center justify-center rounded-full">
                             @day?.Date.Day
@@ -90,10 +90,10 @@
                         class="@(day is null ? "bg-gray-50 text-gray-400" : day.IsPublicHoliday ? "bg-yellow text-yellow-900" : "bg-white text-gray-400")
                            py-1.5  hover:bg-gray-100 focus:z-10">
                         <time datetime="@day?.Date.ToShortDateString()"
-                          class="@(day != null @* && day.WorkedProjects.Any()*@ ? "font-bold text-black" : "" )
-                      @(day != null && day.Date == DateTime.Now.Date ? "bg-indigo-600 text-white" : "")
-                      mx-auto flex h-7 w-7 items-center justify-center rounded-full">
-                            @day?.Date.Day
+                          class="@(day != null && day.IsWorked ? "font-bold text-black" : "" )
+                                 @(day != null && day.Date == DateTime.Now.Date ? "bg-indigo-600 text-white" : "")
+                                  mx-auto flex h-7 w-7 items-center justify-center rounded-full">
+                                    @day?.Date.Day
                         </time>
                     </button>
                 }
