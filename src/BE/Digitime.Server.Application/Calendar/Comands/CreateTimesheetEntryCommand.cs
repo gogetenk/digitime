@@ -53,7 +53,7 @@ public record CreateTimesheetEntryCommand(string TimesheetId, string ProjectId, 
             await _timesheetRepository.ReplaceOneAsync(timesheet.Adapt<TimesheetEntity>());
 
             // Return newly created timesheet entry
-            return entry;
+            return entry.Adapt<CreateTimesheetEntryReponse>();
         }
 
         private async Task<Timesheet> CreateTimesheet(CreateTimesheetEntryCommand request)

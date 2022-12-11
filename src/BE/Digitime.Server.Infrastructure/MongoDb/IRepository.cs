@@ -18,6 +18,8 @@ public interface IRepository<TDocument> where TDocument : EntityBase
 
     Task<TDocument> FindByIdAsync(string id);
 
+    Task<IEnumerable<TDocument>> FilterByAsync(Expression<Func<TDocument, bool>> filterExpression);
+
     Task InsertOneAsync(TDocument document);
 
     Task InsertManyAsync(ICollection<TDocument> documents);

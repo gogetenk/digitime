@@ -28,10 +28,14 @@ public class MongoRepository<TDocument> : IRepository<TDocument> where TDocument
         return _collection.AsQueryable();
     }
 
-    public virtual IEnumerable<TDocument> FilterBy(
-        Expression<Func<TDocument, bool>> filterExpression)
+    public virtual IEnumerable<TDocument> FilterBy(Expression<Func<TDocument, bool>> filterExpression)
     {
         return _collection.Find(filterExpression).ToEnumerable();
+    }
+
+    public virtual async Task<IEnumerable<TDocument>> FilterByAsync(Expression<Func<TDocument, bool>> filterExpression)
+    {
+        return (await _collection.FindAsync(filterExpression)).ToEnumerable();
     }
 
     public virtual IEnumerable<TProjected> FilterBy<TProjected>(

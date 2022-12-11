@@ -1,5 +1,6 @@
 ﻿using Digitime.Server.Domain.Users;
 using Digitime.Server.Infrastructure.Entities;
+using Digitime.Shared.Contracts.Timesheets;
 using Mapster;
 
 namespace Digitime.Server.Mappings;
@@ -45,6 +46,14 @@ public class MappingProfile : IRegister
             .Map(dest => dest.Status, src => src.Status)
             .MapToConstructor(true)
             .TwoWays();
+
+        config.NewConfig<Domain.Timesheets.Entities.TimesheetEntry, CreateTimesheetEntryReponse>()
+            .Map(dest => dest.Id, src => src.Id)
+            .Map(dest => dest.Date, src => src.Date)
+            .Map(dest => dest.Hours, src => src.Hours)
+            .Map(dest => dest.Project, src => src.Project)
+            .Map(dest => dest.Status, src => src.Status)
+            .MapToConstructor(true);
 
         //config.NewConfig<ObjectId, string>()
         //    .Map(dest => ObjectId.Parse(dest), src => src.ToString());

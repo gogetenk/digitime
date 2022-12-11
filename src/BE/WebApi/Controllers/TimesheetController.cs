@@ -35,21 +35,21 @@ public class TimesheetController : ControllerBase
         return Created(_Endpoint, resp.Adapt<CreateTimesheetEntryReponse>());
     }
 
-    /// <summary>
-    /// Gets the timesheet for the specified user and date.
-    /// </summary>
-    /// <param name="request"></param>
-    /// <returns>The timesheet</returns>
-    [HttpGet("{userId}/{date}")]
-    [ProducesResponseType(typeof(Timesheet), StatusCodes.Status200OK)]
-    [ProducesResponseType(400)]
-    [ProducesResponseType(500)]
-    public async Task<ActionResult<CreateTimesheetEntryReponse>> GetTimesheet([FromRoute] string userId, [FromRoute] DateTime date)
-    {
-        var resp = await _sender.Send(new GetTimesheetForUserAndMonthQuery(userId, date));
-        if (resp is null)
-            return NotFound();
+    ///// <summary>
+    ///// Gets the timesheet for the specified user and date.
+    ///// </summary>
+    ///// <param name="request"></param>
+    ///// <returns>The timesheet</returns>
+    //[HttpGet("{userId}/{date}")]
+    //[ProducesResponseType(typeof(Timesheet), StatusCodes.Status200OK)]
+    //[ProducesResponseType(400)]
+    //[ProducesResponseType(500)]
+    //public async Task<ActionResult<CreateTimesheetEntryReponse>> GetTimesheet([FromRoute] string userId, [FromRoute] DateTime date)
+    //{
+    //    var resp = await _sender.Send(new GetTimesheetForUserAndMonthQuery(userId, date));
+    //    if (resp is null)
+    //        return NotFound();
 
-        return Ok(resp);
-    }
+    //    return Ok(resp);
+    //}
 }

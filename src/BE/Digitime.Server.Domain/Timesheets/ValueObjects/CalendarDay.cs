@@ -9,17 +9,19 @@ public class CalendarDay : ValueObject
     public DateTime Date { get; set; }
     public bool IsPublicHoliday { get; set; }
     public bool IsWeekend { get; set; }
+    public bool IsWorked { get; set; }
 
     public CalendarDay()
     {
     }
 
-    public CalendarDay(DayOfWeek dayOfWeek, DateTime date, bool isPublicHoliday, bool isWeekend)
+    public CalendarDay(DayOfWeek dayOfWeek, DateTime date, bool isPublicHoliday, bool isWeekend, bool isWorked)
     {
         DayOfWeek = dayOfWeek;
         Date = date;
         IsPublicHoliday = isPublicHoliday;
         IsWeekend = isWeekend;
+        IsWorked = isWorked;
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

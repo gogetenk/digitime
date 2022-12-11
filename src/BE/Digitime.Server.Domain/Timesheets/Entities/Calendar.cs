@@ -8,7 +8,10 @@ namespace Digitime.Server.Domain.Timesheets.Entities;
 
 public class Calendar : Entity<Guid>
 {
-    public CalendarDay[,] CalendarDays { get; private set; } = new CalendarDay[6, 7];
+    private readonly CalendarDay[,] _calendarDays = new CalendarDay[6, 7];
+
+    public List<CalendarDay> CalendarDays => _calendarDays.Cast<CalendarDay>().ToList();
+    //public List<CalendarDay> CalendarDays { get { var list = _calendarDays.Cast<CalendarDay>().ToList(); list.RemoveAll(x => x == null); return list; } }
 
     public Calendar(Guid id) : base(id)
     {
@@ -16,7 +19,7 @@ public class Calendar : Entity<Guid>
 
     public Calendar(Guid id, DateTime dateTime, List<DateTime> publicHolidays) : base(id)
     {
-        CalendarDays = GetCalendarDaysForMonth(dateTime, publicHolidays);
+        _calendarDays = GetCalendarDaysForMonth(dateTime, publicHolidays);
     }
 
     public CalendarDay[,] GetCalendarDaysForMonth(DateTime dateTime, List<DateTime> publicHolidays)
@@ -36,7 +39,8 @@ public class Calendar : Entity<Guid>
                 weekIndex++;
             }
 
-            calendarDays[weekIndex, weekdayIndex] = new CalendarDay(day.DayOfWeek, day, publicHolidays.Contains(day), day.DayOfWeek == DayOfWeek.Saturday || day.DayOfWeek == DayOfWeek.Sunday);
+            // TODO : Maybe that's where I should add the timesheet entries ? Instead of IsWorked = false, mettre une prop entries
+            calendarDays[weekIndex, weekdayIndex] = new CalendarDay(day.DayOfWeek, day, publicHolidays.Contains(day), day.DayOfWeek == DayOfWeek.Saturday || day.DayOfWeek == DayOfWeek.Sunday, false); 
             weekdayIndex++;
         }
 
