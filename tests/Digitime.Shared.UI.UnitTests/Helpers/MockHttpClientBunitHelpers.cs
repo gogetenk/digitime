@@ -3,9 +3,10 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using Bunit;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using RichardSzalay.MockHttp;
 
-namespace Digitime.Shared.UI.UnitTests.Helpers;
+namespace Digitime.Shared.UITests.Helpers;
 public static class MockHttpClientBunitHelpers
 {
     public static MockHttpMessageHandler AddMockHttpClient(this TestServiceProvider services)
@@ -22,7 +23,7 @@ public static class MockHttpClientBunitHelpers
         request.Respond(req =>
         {
             var response = new HttpResponseMessage(HttpStatusCode.OK);
-            response.Content = new StringContent(JsonSerializer.Serialize(content));
+            response.Content = new StringContent(JsonConvert.SerializeObject(content));
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             return response;
         });
@@ -34,7 +35,7 @@ public static class MockHttpClientBunitHelpers
         request.Respond(req =>
         {
             var response = new HttpResponseMessage(HttpStatusCode.OK);
-            response.Content = new StringContent(JsonSerializer.Serialize(contentProvider()));
+            response.Content = new StringContent(JsonConvert.SerializeObject(contentProvider()));
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             return response;
         });

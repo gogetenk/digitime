@@ -54,7 +54,7 @@
                 <button type="button" class="relative bg-gray-50 py-1.5 text-gray-400 hover:bg-gray-100 focus:z-10">
                 <time datetime="2021-12-28" class="mx-auto flex h-7 w-7 items-center justify-center rounded-full">28</time>
                 </button>*@
-                @foreach (var day in _currentMonthCalendarDays?.CalendarDays)
+                @foreach (var day in CurrentMonthCalendarDays?.CalendarDays)
                 {
                     <button type="button"
                         @onclick="() => OnDayClick(day)"
@@ -83,7 +83,7 @@
                 <div>S</div>
             </div>
             <div class="isolate mt-2 lg:h-96 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm ring-1 ring-gray-200">
-                @foreach (var day in _nextMonthCalendarDays?.CalendarDays)
+                @foreach (var day in NextMonthCalendarDays?.CalendarDays)
                 {
                     <button type="button"
                         @onclick="() => OnDayClick(day)"
@@ -149,9 +149,9 @@
 </div>
 
 <div>
-    @if (_currentDayTimesheetEntries != null && _currentDayTimesheetEntries.Any())
+    @if (CurrentDayTimesheetEntries != null && CurrentDayTimesheetEntries.Any())
     {
-        foreach (var entry in _currentDayTimesheetEntries)
+        foreach (var entry in CurrentDayTimesheetEntries)
         {
             <ProjectRowComponent Name="@entry.Project.Title" ProjectName="@entry.Project.Code" WorkspaceName="ELIA GROUP" Status="Pending" Hours="@entry.Hours" Code="EP-000-687-GH-FFRTY" />
         }
