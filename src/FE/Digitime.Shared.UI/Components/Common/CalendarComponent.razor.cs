@@ -29,11 +29,18 @@ public partial class CalendarComponent : ComponentBase
 
     private async Task GetCurrentMonthCalendar()
     {
-        var response = await _httpClient.GetAsync("api/dashboard/calendar?country=fr&month=1&year=2021");
+        var response = await _httpClient.GetAsync("api/dashboard/calendar?country=fr&month=12&year=2022&userId=638e0687ebcdd6848cbbf52f");
         if (response.IsSuccessStatusCode)
         {
             var responseContent = await response.Content.ReadAsStringAsync();
+            try
+            {
             _currentMonthCalendarDays = JsonConvert.DeserializeObject<CalendarDto>(responseContent);
+            }
+            catch(Exception exc)
+            {
+                Console.WriteLine(exc);
+            }
         }
         else
         {
@@ -47,7 +54,7 @@ public partial class CalendarComponent : ComponentBase
     CalendarDto _nextMonthCalendarDays = new();
     List<DateTime> _monthDates = new();
     List<DateTime> _publicHolidays = new();
-    private List<TimesheetEntry> _currentDayTimesheetEntries = new();
+    private List<TimesheetEntryDto> _currentDayTimesheetEntries = new();
 
     //CalendarDay CreateFilledCalendarDay(DateTime dateTime)
     //{
@@ -75,10 +82,10 @@ public partial class CalendarComponent : ComponentBase
 
     private void OnDayClick(CalendarDayDto calendarDay)
     {
-        _currentDayTimesheetEntries = new List<TimesheetEntry>();
-        //foreach (var workedProject in calendarDay.WorkedProjects)
+        _currentDayTimesheetEntries = calendarDay.TimesheetEntries;
+        //foreach (var workedProject in calendarDay.TimesheetEntries)
         //{
-        //    _currentDayTimesheetEntries.Add(new TimeSheetEntry()
+        //    _currentDayTimesheetEntries.Add(new TimesheetEntryDto()
         //    {
         //        Id = workedProject.Id,
         //        Project = workedProject.Title,
