@@ -1,23 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Digitime.Server.Domain.Calendars.ValueObjects;
 using Digitime.Server.Domain.Models;
-using Digitime.Server.Domain.Timesheets.ValueObjects;
 
-namespace Digitime.Server.Domain.Timesheets.Entities;
+namespace Digitime.Server.Domain.Calendars;
 
-public class Calendar : Entity<Guid>
+public class Calendar : AggregateRoot<string>
 {
     private readonly CalendarDay[,] _calendarDays = new CalendarDay[6, 7];
 
     public List<CalendarDay> CalendarDays => _calendarDays.Cast<CalendarDay>().ToList();
     //public List<CalendarDay> CalendarDays { get { var list = _calendarDays.Cast<CalendarDay>().ToList(); list.RemoveAll(x => x == null); return list; } }
 
-    public Calendar(Guid id) : base(id)
-    {
-    }
-
-    public Calendar(Guid id, DateTime dateTime, List<DateTime> publicHolidays) : base(id)
+    public Calendar(string id, DateTime dateTime, List<DateTime> publicHolidays) : base(id)
     {
         _calendarDays = GetCalendarDaysForMonth(dateTime, publicHolidays);
     }
@@ -40,7 +36,7 @@ public class Calendar : Entity<Guid>
             }
 
             // TODO : Maybe that's where I should add the timesheet entries ? Instead of IsWorked = false, mettre une prop entries
-            calendarDays[weekIndex, weekdayIndex] = new CalendarDay(day.DayOfWeek, day, publicHolidays.Contains(day), day.DayOfWeek == DayOfWeek.Saturday || day.DayOfWeek == DayOfWeek.Sunday, false); 
+            calendarDays[weekIndex, weekdayIndex] = new CalendarDay(day.DayOfWeek, day, publicHolidays.Contains(day), day.DayOfWeek == DayOfWeek.Saturday || day.DayOfWeek == DayOfWeek.Sunday);
             weekdayIndex++;
         }
 

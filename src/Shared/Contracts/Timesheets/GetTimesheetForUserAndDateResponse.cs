@@ -1,4 +1,6 @@
-﻿namespace Digitime.Shared.Contracts.Timesheets;
+﻿using Digitime.Shared.Dto;
+
+namespace Digitime.Shared.Contracts.Timesheets;
 
 // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
 public class CalendarDayDto
@@ -36,14 +38,6 @@ public class TimesheetDto
     public List<CalendarDayDto> CalendarDays { get; set; }
 }
 
-public class TimesheetEntryDto
-{
-    public ProjectDto Project { get; set; }
-    public int Hours { get; set; }
-    public string Status { get; set; }
-    public string ReviewDate { get; set; }
-    public bool IsAutomated { get; set; }
-}
 
 public class WorkerDto
 {

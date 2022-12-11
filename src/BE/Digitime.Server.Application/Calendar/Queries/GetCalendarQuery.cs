@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Digitime.Server.Application.Abstractions;
+using Digitime.Server.Domain.Calendars;
 using Digitime.Server.Domain.Ports;
 using Digitime.Server.Domain.Timesheets.Entities;
 using Digitime.Server.Infrastructure.Entities;
@@ -31,8 +32,8 @@ public record GetCalendarQuery(string Country, int Month, int Year, string UserI
             var requestedDate = new DateTime(request.Year, request.Month, 1);
             var publicHolidays = await _obtainPublicHolidays.GetPublicHolidaysForSpecifiedMonthAndCountry(requestedDate, request.Country);
 
-            var calendar = new Calendar(Guid.NewGuid(), requestedDate, publicHolidays);
-            
+            var calendar = new Calendar(null, requestedDate, publicHolidays);
+
             // Get all timesheets for the user and the month
             var timesheets = (await _timesheetRepository.FilterByAsync(x => x.Worker.UserId == request.UserId /*&& x.CreateDate.Month == request.Month && x.CreateDate.Year == request.Year*/)).ToList();
             if (timesheets is null || !timesheets.Any())
@@ -47,7 +48,7 @@ public record GetCalendarQuery(string Country, int Month, int Year, string UserI
                     if (calendarDay is null)
                         continue;
 
-                    calendarDay.IsWorked = true;
+                    calendarDay.TimesheetEntries.Add(timesheetEntry.Adapt<TimesheetEntry>());
                 }
             }
 

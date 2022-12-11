@@ -25,13 +25,6 @@ public class DashboardController : ControllerBase
         return Ok(await _sender.Send(query));
     }
 
-    [HttpGet("timesheets")]
-    [ProducesResponseType(typeof(GetTimesheetForUserAndDateResponse), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetTimesheets([FromQuery] GetTimesheetForUserAndMonthQuery query)
-    {
-        return Ok(await _sender.Send(query));
-    }
-
     [HttpGet]
     public IEnumerable<string> Get()
     {
