@@ -1,4 +1,4 @@
-﻿using Digitime.Server.Application.Calendar.Comands;
+﻿using Digitime.Server.Application.Calendar.Commands;
 using Digitime.Shared.Contracts.Timesheets;
 using Mapster;
 using MediatR;

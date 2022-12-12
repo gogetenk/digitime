@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using FluentValidation;
 
-namespace Digitime.Server.Application.Calendar.Comands;
+namespace Digitime.Server.Application.Calendar.Commands;
 public class CreateTimesheetEntryCommandValidator : AbstractValidator<CreateTimesheetEntryCommand>
 {
     private static Regex _objectIdRegex = new(@"^[0-9a-fA-F]{24}$");

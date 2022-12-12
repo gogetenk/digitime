@@ -1,24 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
 
-    <PropertyGroup>
-        <LangVersion>11</LangVersion>
-    </PropertyGroup>
+  <PropertyGroup>
+    <LangVersion>11</LangVersion>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Mapster" Version="7.3.0" />
-        <PackageReference Include="MediatR" Version="11.1.0" />
-        <PackageReference Include="FluentValidation" Version="11.4.0" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="EasyCaching.InMemory" Version="1.7.0" />
+    <PackageReference Include="Mapster" Version="7.3.0" />
+    <PackageReference Include="MediatR" Version="11.1.0" />
+    <PackageReference Include="FluentValidation" Version="11.4.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\..\Shared\Digitime.Shared.csproj" />
-        <ProjectReference Include="..\Digitime.Server.Domain\Digitime.Server.Domain.csproj" />
-        <ProjectReference Include="..\Digitime.Server.Infrastructure\Digitime.Server.Infrastructure.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\Digitime.Shared.csproj" />
+    <ProjectReference Include="..\Digitime.Server.Domain\Digitime.Server.Domain.csproj" />
+    <ProjectReference Include="..\Digitime.Server.Infrastructure\Digitime.Server.Infrastructure.csproj" />
+  </ItemGroup>
 </Project>

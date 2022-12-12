@@ -58,7 +58,7 @@ public record GetCalendarQuery(string Country, int Month, int Year, string UserI
 
     public string GetCacheKey()
     {
-        return $"Calendar_{Country}_{Month}_{Year}";
+        return $"Calendar_{Month}_{Year}_{UserId}";
     }
 
     public DateTime? GetCacheExpiration()

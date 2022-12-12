@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Metrics;
 using System.Threading;
 using System.Threading.Tasks;
 using Digitime.Server.Domain.Timesheets;
@@ -8,10 +9,11 @@ using Digitime.Server.Domain.Users;
 using Digitime.Server.Infrastructure.Entities;
 using Digitime.Server.Infrastructure.MongoDb;
 using Digitime.Shared.Contracts.Timesheets;
+using EasyCaching.Core;
 using Mapster;
 using MediatR;
 
-namespace Digitime.Server.Application.Calendar.Comands;
+namespace Digitime.Server.Application.Calendar.Commands;
 
 public record CreateTimesheetEntryCommand(string TimesheetId, string ProjectId, float Hours, DateTime Date, string UserId) : IRequest<CreateTimesheetEntryReponse>
 {
@@ -20,12 +22,14 @@ public record CreateTimesheetEntryCommand(string TimesheetId, string ProjectId, 
         private readonly IRepository<TimesheetEntity> _timesheetRepository;
         private readonly IRepository<ProjectEntity> _projectRepository;
         private readonly IRepository<UserEntity> _userRepository;
+        private readonly IEasyCachingProvider _cachingProvider;
 
-        public CreateTimesheetEntryCommandHandler(IRepository<TimesheetEntity> timesheetRepository, IRepository<ProjectEntity> projectRepository, IRepository<UserEntity> userRepository)
+        public CreateTimesheetEntryCommandHandler(IRepository<TimesheetEntity> timesheetRepository, IRepository<ProjectEntity> projectRepository, IRepository<UserEntity> userRepository, IEasyCachingProvider cachingProvider)
         {
             _timesheetRepository = timesheetRepository;
             _projectRepository = projectRepository;
             _userRepository = userRepository;
+            _cachingProvider = cachingProvider;
         }
 
         public async Task<CreateTimesheetEntryReponse> Handle(CreateTimesheetEntryCommand request, CancellationToken cancellationToken)
@@ -51,6 +55,9 @@ public record CreateTimesheetEntryCommand(string TimesheetId, string ProjectId, 
 
             // update timesheet
             await _timesheetRepository.ReplaceOneAsync(timesheet.Adapt<TimesheetEntity>());
+
+            // invalid the cache for the user 
+            await _cachingProvider.RemoveAsync($"Calendar_{request.Date.Month}_{request.Date.Year}_{request.UserId}");
 
             // Return newly created timesheet entry
             return entry.Adapt<CreateTimesheetEntryReponse>();

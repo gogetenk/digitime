@@ -1,6 +1,7 @@
 ﻿using Digitime.Server.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace Digitime.Server.Controllers;
 
@@ -15,6 +16,7 @@ public class DashboardController : ControllerBase
     {
         _sender = mediator;
     }
+
 
     [HttpGet("calendar")]
     [ProducesResponseType(typeof(Shared.Dto.CalendarDto), StatusCodes.Status200OK)]
