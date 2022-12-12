@@ -1,12 +1,9 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
-using System.Text.Json;
-using Bunit;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using RichardSzalay.MockHttp;
 
-namespace Digitime.Shared.UITests.Helpers;
+namespace Digitime.Client.UITests.Helpers;
 public static class MockHttpClientBunitHelpers
 {
     public static MockHttpMessageHandler AddMockHttpClient(this TestServiceProvider services)

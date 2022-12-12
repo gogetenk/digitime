@@ -1,13 +1,4 @@
-using AutoFixture;
-using Bunit;
-using Digitime.Shared.Dto;
-using Digitime.Shared.UI.Components.Common;
-using Digitime.Shared.UITests.Helpers;
-using FluentAssertions;
-using RichardSzalay.MockHttp;
-using Xunit;
-
-namespace Digitime.Shared.UITests;
+namespace Digitime.Client.UITests;
 
 public class CalendarComponentTests
 {

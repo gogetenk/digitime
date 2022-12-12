@@ -1,13 +1,10 @@
-using AutoFixture;
 using Digitime.Server.Application.Calendar.Comands;
 using Digitime.Server.Domain.Timesheets;
 using Digitime.Server.Infrastructure.Entities;
 using Digitime.Server.Infrastructure.MongoDb;
 using Digitime.Server.Mappings;
-using FluentAssertions;
 using Mapster;
 using MapsterMapper;
-using Moq;
 using static Digitime.Server.Application.Calendar.Comands.CreateTimesheetEntryCommand;
 
 namespace Digitime.Server.Application.UnitTests;
