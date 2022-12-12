@@ -72,8 +72,6 @@ public partial class CalendarComponent : ComponentBase
         }
     }
 
-
-
     private void OnDayClick(CalendarDayDto calendarDay)
     {
         CurrentDayTimesheetEntries = calendarDay.TimesheetEntries;

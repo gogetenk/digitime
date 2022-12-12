@@ -58,7 +58,7 @@
                 {
                     <button type="button"
                         @onclick="() => OnDayClick(day)"
-                        class="@(day is null ? "bg-gray-50 text-gray-400" : day.IsPublicHoliday ? "bg-yellow text-yellow-900" : "bg-white text-gray-400")
+                        class="dayButton @(day is null ? "bg-gray-50 text-gray-400" : day.IsPublicHoliday ? "bg-yellow text-yellow-900" : "bg-white text-gray-400")
                            py-1.5  hover:bg-gray-100 focus:z-10">
                         <time datetime="@day?.Date.ToShortDateString()"
                           class="@(day != null && day.IsWorked ? "font-bold text-black" : "" )
@@ -87,7 +87,7 @@
                 {
                     <button type="button"
                         @onclick="() => OnDayClick(day)"
-                        class="@(day is null ? "bg-gray-50 text-gray-400" : day.IsPublicHoliday ? "bg-yellow text-yellow-900" : "bg-white text-gray-400")
+                        class="dayButton @(day is null ? "bg-gray-50 text-gray-400" : day.IsPublicHoliday ? "bg-yellow text-yellow-900" : "bg-white text-gray-400")
                            py-1.5  hover:bg-gray-100 focus:z-10">
                         <time datetime="@day?.Date.ToShortDateString()"
                           class="@(day != null && day.IsWorked ? "font-bold text-black" : "" )
