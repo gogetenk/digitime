@@ -23,6 +23,8 @@
     {
         var authstate = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         _currentUser = authstate.User;
+        //string userId = _currentUser.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+        var _profilePic = _currentUser?.FindFirst(x => x?.Type == "sub")?.Value;
 
         try
         {

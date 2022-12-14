@@ -1,11 +1,12 @@
-﻿using Digitime.Server.Queries;
+﻿using System.Security.Claims;
+using Digitime.Server.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.OutputCaching;
 
 namespace Digitime.Server.Controllers;
 
-//[Authorize]
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class DashboardController : ControllerBase
@@ -17,11 +18,12 @@ public class DashboardController : ControllerBase
         _sender = mediator;
     }
 
-
+    //[Authorize(Roles = "timesheet:create")]
     [HttpGet("calendar")]
     [ProducesResponseType(typeof(Shared.Dto.CalendarDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCalendar([FromQuery] GetCalendarQuery query)
     {
+        query = query with { UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value };
         return Ok(await _sender.Send(query));
     }
 

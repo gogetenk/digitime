@@ -14,7 +14,7 @@ using MediatR;
 
 namespace Digitime.Server.Queries;
 
-public record GetCalendarQuery(string Country, int Month, int Year, string UserId) : IRequest<CalendarDto>, ICacheableRequest
+public record GetCalendarQuery(string Country, int Month, int Year, string? UserId) : IRequest<CalendarDto>, ICacheableRequest
 {
     public class GetCalendarQueryHandler : IRequestHandler<GetCalendarQuery, CalendarDto>
     {
@@ -37,7 +37,7 @@ public record GetCalendarQuery(string Country, int Month, int Year, string UserI
             // Get all timesheets for the user and the month
             var timesheets = (await _timesheetRepository.FilterByAsync(x => x.Worker.UserId == request.UserId /*&& x.CreateDate.Month == request.Month && x.CreateDate.Year == request.Year*/)).ToList();
             if (timesheets is null || !timesheets.Any())
-                return null;
+                return calendar.Adapt<CalendarDto>();
 
             // Iterate through all the timesheets, and assign IsWorked = true to the associated CalendarDay in Calendar object
             foreach (var timesheet in timesheets)
