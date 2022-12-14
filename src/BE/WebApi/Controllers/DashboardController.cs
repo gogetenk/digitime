@@ -18,7 +18,7 @@ public class DashboardController : ControllerBase
         _sender = mediator;
     }
 
-    //[Authorize(Roles = "timesheet:create")]
+    [Authorize(Policy = "GetTimesheet")]
     [HttpGet("calendar")]
     [ProducesResponseType(typeof(Shared.Dto.CalendarDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCalendar([FromQuery] GetCalendarQuery query)
