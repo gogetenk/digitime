@@ -7,31 +7,15 @@ using Digitime.Server.OpenApiSecurity;
 using Digitime.Server.Settings;
 using FluentValidation.AspNetCore;
 using MediatR;
-using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly(), typeof(Digitime.Server.Queries.GetCalendarQuery).Assembly);
-builder.Services.AddAuthentication()
+builder.Services
+    .AddAuthentication()
     .AddJwtBearer();
-//.AddCookie("cookie")
-//.AddOAuth("oidc", config =>
-//{
-//    config.ClientId = "xL02wLlcePvYOlm04nvRP0kk7hpYbSdl";
-//    config.ClientSecret = "dfuNih_kkvIvEx-EjQQaKw-43PIEfqjHI1DEMGrUMbCp_Jgc4CfSFq9iY91xQIRW";
-//    config.CallbackPath = new PathString("/");
-//    config.AuthorizationEndpoint = "https://digitime-dev.eu.auth0.com/authorize";
-//    config.TokenEndpoint = "https://digitime-dev.eu.auth0.com/oauth/token";
-//    config.UserInformationEndpoint = "https://digitime-dev.eu.auth0.com/userinfo";
-//    config.Events = new Microsoft.AspNetCore.Authentication.OAuth.OAuthEvents()
-//    {
-//        OnCreatingTicket = async (c) =>
-//        {
-//            var t = c.AccessToken;
-//        }
-//    };
-//});
 
 builder.Services.AddAuthorization(options =>
 {
@@ -47,84 +31,6 @@ builder.Services.AddControllersWithViews()
 
 builder.Services.AddRazorPages();
 builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen(c =>
-//{
-//    c.SwaggerDoc("v1", new OpenApiInfo { Title = "DigitimeAPI", Version = "v1" });
-//    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
-//    {
-//        Name = "Authorization",
-//        Type = SecuritySchemeType.ApiKey,
-//        Scheme = "Bearer",
-//        BearerFormat = "JWT",
-//        In = ParameterLocation.Header,
-//        Description = "JWT Authorization header using the Bearer scheme."
-//    });
-//    //c.AddSecurityDefinition("oauth", new OpenApiSecurityScheme
-//    //{
-//    //    Name = "Authorization",
-//    //    In = ParameterLocation.Header,
-//    //    Type = SecuritySchemeType.OpenIdConnect,
-//    //    Flows = new OpenApiOAuthFlows
-//    //    {
-//    //        Implicit = new OpenApiOAuthFlow
-//    //        {
-//    //            Scopes = new Dictionary<string, string>
-//    //            {
-//    //                { "openid", "Open Id" }
-//    //            },
-//    //            AuthorizationUrl = new Uri("https://digitime-dev.eu.auth0.com/authorize", UriKind.Absolute)
-//    //        },
-//    //        AuthorizationCode = new OpenApiOAuthFlow
-//    //        {
-//    //            AuthorizationUrl = new Uri("https://digitime-dev.eu.auth0.com/authorize"),
-//    //            TokenUrl = new Uri("https://digitime-dev.eu.auth0.com/oauth/token"),
-//    //            Scopes = new Dictionary<string, string>
-//    //            {
-//    //                {"api1", "Demo API - full access"}
-//    //            }
-//    //        }
-//    //    }
-//    //});
-//    //c.AddSecurityDefinition("oidc", new OpenApiSecurityScheme
-//    //{
-//    //    Type = SecuritySchemeType.OpenIdConnect,
-//    //    OpenIdConnectUrl = new Uri("https://digitime-dev.eu.auth0.com/.well-known/openid-configuration", UriKind.Absolute),
-//    //    Flows = new OpenApiOAuthFlows
-//    //    {
-//    //        ClientCredentials = new OpenApiOAuthFlow
-//    //        {
-//    //            AuthorizationUrl = new Uri("https://digitime-dev.eu.auth0.com/authorize", UriKind.Absolute),
-//    //            TokenUrl = new Uri("https://digitime-dev.eu.auth0.com/oauth/token", UriKind.Absolute),
-//    //            Scopes = new Dictionary<string, string>
-//    //            {
-//    //                { "readAccess", "Access read operations" },
-//    //                { "writeAccess", "Access write operations" }
-//    //            }
-//    //        },
-//    //        AuthorizationCode = new OpenApiOAuthFlow
-//    //        {
-//    //            AuthorizationUrl = new Uri("https://digitime-dev.eu.auth0.com/authorize"),
-//    //            TokenUrl = new Uri("https://digitime-dev.eu.auth0.com/oauth/token"),
-//    //            Scopes = new Dictionary<string, string>
-//    //            {
-//    //                {"api1", "Demo API - full access"}
-//    //            }
-//    //        }
-//    //    }
-//    //});
-
-//    //c.AddSecurityRequirement(new OpenApiSecurityRequirement
-//    //{
-//    //    {
-//    //        new OpenApiSecurityScheme
-//    //        {
-//    //            Reference = new OpenApiReference{Type = ReferenceType.SecurityScheme,Id = "jwt"}
-//    //        },
-//    //        new string[] {}
-//    //    }
-//    //});
-//    //c.OperationFilter<SecurityRequirementsOperationFilter>();
-//});
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProject", Version = "v1.0.0" });
@@ -135,7 +41,7 @@ builder.Services.AddSwaggerGen(c =>
 
     if (securityDefinitionName.ToLower() == "oauth2")
     {
-        securityScheme = new OpenApiOAuthSecurityScheme("https://digitime-dev.eu.auth0.com", "https://dev.digitime.app");
+        securityScheme = new OpenApiOAuthSecurityScheme(builder.Configuration["Authentication:Schemes:Bearer:Authority"]);
         securityRequirement = new OpenApiOAuthSecurityRequirement();
     }
 
@@ -170,25 +76,14 @@ if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
     app.UseDeveloperExceptionPage();
     app.UseWebAssemblyDebugging();
     app.UseSwagger();
-    //app.UseSwaggerUI();
-    //{
-    //c.OAuthClientId("xL02wLlcePvYOlm04nvRP0kk7hpYbSdl");
-    //c.OAuthClientSecret("dfuNih_kkvIvEx-EjQQaKw-43PIEfqjHI1DEMGrUMbCp_Jgc4CfSFq9iY91xQIRW");
-    //c.OAuthAppName("Auth0 Digitime API Dev (Test Application)");
-    //c.OAuthScopeSeparator(" ");
-    //c.OAuthAdditionalQueryStringParams(new Dictionary<string, string> { { "foo", "bar" } });
-    //c.OAuthUseBasicAuthenticationWithAccessCodeGrant();
-    //c.EnablePersistAuthorization()
-    //});
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Glossary v1");
-
-            c.OAuthClientId("xL02wLlcePvYOlm04nvRP0kk7hpYbSdl");
-            c.OAuthClientSecret("dfuNih_kkvIvEx-EjQQaKw-43PIEfqjHI1DEMGrUMbCp_Jgc4CfSFq9iY91xQIRW");
-            c.OAuthAppName("Auth0 Digitime API Dev (Test Application)");
-            c.OAuthAdditionalQueryStringParams(new Dictionary<string, string> { { "audience", "https://dev.digitime.app" } });
-            c.OAuthUsePkce();
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Digitime API v1");
+        c.OAuthClientId(builder.Configuration["Authentication:Schemes:Bearer:ClientId"]);
+        c.OAuthClientSecret(builder.Configuration["Authentication:Schemes:Bearer:ClientSecret"]);
+        c.OAuthAppName("Auth0 Digitime API Dev (Test Application)");
+        c.OAuthAdditionalQueryStringParams(new Dictionary<string, string> { { "audience", "https://dev.digitime.app" } });
+        c.OAuthUsePkce();
     });
 }
 else

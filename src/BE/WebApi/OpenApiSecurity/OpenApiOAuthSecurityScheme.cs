@@ -4,7 +4,7 @@ namespace Digitime.Server.OpenApiSecurity;
 
 public class OpenApiOAuthSecurityScheme : OpenApiSecurityScheme
 {
-    public OpenApiOAuthSecurityScheme(string domain, string audience)
+    public OpenApiOAuthSecurityScheme(string domain)
     {
         Type = SecuritySchemeType.OAuth2;
         Flows = new OpenApiOAuthFlows()
