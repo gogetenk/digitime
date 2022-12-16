@@ -24,7 +24,11 @@ public record CreateTimesheetEntryCommand(string TimesheetId, string ProjectId, 
         private readonly IRepository<UserEntity> _userRepository;
         private readonly IEasyCachingProvider _cachingProvider;
 
-        public CreateTimesheetEntryCommandHandler(IRepository<TimesheetEntity> timesheetRepository, IRepository<ProjectEntity> projectRepository, IRepository<UserEntity> userRepository, IEasyCachingProvider cachingProvider)
+        public CreateTimesheetEntryCommandHandler(
+            IRepository<TimesheetEntity> timesheetRepository, 
+            IRepository<ProjectEntity> projectRepository, 
+            IRepository<UserEntity> userRepository, 
+            IEasyCachingProvider cachingProvider)
         {
             _timesheetRepository = timesheetRepository;
             _projectRepository = projectRepository;

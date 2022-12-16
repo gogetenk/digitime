@@ -1,11 +1,12 @@
-using Digitime.Server.Application.Calendar.Comands;
+using Digitime.Server.Application.Calendar.Commands;
 using Digitime.Server.Domain.Timesheets;
 using Digitime.Server.Infrastructure.Entities;
 using Digitime.Server.Infrastructure.MongoDb;
 using Digitime.Server.Mappings;
+using EasyCaching.Core;
 using Mapster;
 using MapsterMapper;
-using static Digitime.Server.Application.Calendar.Comands.CreateTimesheetEntryCommand;
+using static Digitime.Server.Application.Calendar.Commands.CreateTimesheetEntryCommand;
 
 namespace Digitime.Server.Application.UnitTests;
 
@@ -19,7 +20,7 @@ public class CreateTimesheetEntryCommandTests
     }
 
     [Fact]
-    public async Task Handle_ExpectsTimesheetEntryCreated()
+    public async Task Handle_ExpectsTimesheetEntryCreatedAndCacheRemoved()
     {
         var mapper = GetMapper();
 
@@ -45,8 +46,9 @@ public class CreateTimesheetEntryCommandTests
         timesheetRepository
             .Setup(x => x.FindByIdAsync(timesheetId))
             .ReturnsAsync(timesheetEntity);
+        var cachingProvider = new Mock<IEasyCachingProvider>();
 
-        var sut = new CreateTimesheetEntryCommandHandler(timesheetRepository.Object, projectRepository.Object, userRepository.Object);
+        var sut = new CreateTimesheetEntryCommandHandler(timesheetRepository.Object, projectRepository.Object, userRepository.Object, cachingProvider.Object);
 
         // Act
         var result = await sut.Handle(command, CancellationToken.None);
@@ -54,6 +56,7 @@ public class CreateTimesheetEntryCommandTests
         // Assert
         result.Should().NotBeNull();
         timesheetRepository.Verify(x => x.ReplaceOneAsync(It.IsAny<TimesheetEntity>()), Times.Once);
+        cachingProvider.Verify(x => x.RemoveAsync($"Calendar_{command.Date.Month}_{command.Date.Year}_{command.UserId}", CancellationToken.None), Times.Once);
     }
 
     [Fact]
@@ -66,8 +69,9 @@ public class CreateTimesheetEntryCommandTests
         userRepository.Setup(x => x.FindByIdAsync(command.UserId)).ReturnsAsync(fixture.Create<UserEntity>());
         var projectRepository = new Mock<IRepository<ProjectEntity>>();
         var timesheetRepository = new Mock<IRepository<TimesheetEntity>>();
+        var cachingProvider = new Mock<IEasyCachingProvider>();
 
-        var sut = new CreateTimesheetEntryCommandHandler(timesheetRepository.Object, projectRepository.Object, userRepository.Object);
+        var sut = new CreateTimesheetEntryCommandHandler(timesheetRepository.Object, projectRepository.Object, userRepository.Object, cachingProvider.Object);
 
         // Act
         Func<Task> act = async () => await sut.Handle(command, CancellationToken.None);
@@ -87,8 +91,9 @@ public class CreateTimesheetEntryCommandTests
         var projectRepository = new Mock<IRepository<ProjectEntity>>();
         projectRepository.Setup(x => x.FindByIdAsync(command.ProjectId)).ReturnsAsync(fixture.Create<ProjectEntity>());
         var timesheetRepository = new Mock<IRepository<TimesheetEntity>>();
+        var cachingProvider = new Mock<IEasyCachingProvider>();
 
-        var sut = new CreateTimesheetEntryCommandHandler(timesheetRepository.Object, projectRepository.Object, userRepository.Object);
+        var sut = new CreateTimesheetEntryCommandHandler(timesheetRepository.Object, projectRepository.Object, userRepository.Object, cachingProvider.Object);
 
         // Act
         Func<Task> act = async () => await sut.Handle(command, CancellationToken.None);

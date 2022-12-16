@@ -16,7 +16,6 @@ public record CreateTimesheetEntryRequest
     [DefaultValue("2022-12-05T07:53:04.126Z")]
     public DateTime Date { get; init; }
 
-    [DefaultValue("638e0687ebcdd6848cbbf52f")]
-    public string UserId { get; init; }
+    public string? UserId { get; init; }
 
 }

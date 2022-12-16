@@ -19,8 +19,8 @@ builder.Services
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("GetTimesheet", policy =>
-                      policy.RequireClaim("permissions", "timesheet:create"));
+    options.AddPolicy("Worker", policy => policy.RequireClaim("permissions", "create:timesheet"));
+    options.AddPolicy("Reviewer", policy => policy.RequireClaim("permissions", "review:timesheet", "manage:project"));
 });
 
 builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbSettings"));
@@ -52,7 +52,6 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddEasyCaching(options =>
 {
-    //use memory cache that named default
     options.UseInMemory("memory");
 });
 
