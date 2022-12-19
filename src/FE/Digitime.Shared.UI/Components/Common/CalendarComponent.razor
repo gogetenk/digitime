@@ -59,10 +59,10 @@
                     <button type="button"
                         @onclick="() => OnDayClick(day)"
                         class="dayButton @(day is null ? "bg-gray-50 text-gray-400" : day.IsPublicHoliday ? "bg-yellow text-yellow-900" : "bg-white text-gray-400")
-                           py-1.5  hover:bg-gray-100 focus:z-10">
+                           py-1.5 hover:bg-gray-100 focus:z-10">
                         <time datetime="@day?.Date.ToShortDateString()"
                           class="@(day != null && day.IsWorked ? "font-bold text-black" : "" )
-                      @(day != null && day.Date == DateTime.Now.Date ? "bg-indigo-600 text-white" : "")
+                      @(day != null && day.Date == SelectedDate.Date ? "bg-indigo-600 text-white" : "")
                       mx-auto flex h-7 w-7 items-center justify-center rounded-full">
                             @day?.Date.Day
                         </time>
@@ -88,10 +88,10 @@
                     <button type="button"
                         @onclick="() => OnDayClick(day)"
                         class="dayButton @(day is null ? "bg-gray-50 text-gray-400" : day.IsPublicHoliday ? "bg-yellow text-yellow-900" : "bg-white text-gray-400")
-                           py-1.5  hover:bg-gray-100 focus:z-10">
+                           py-1.5 hover:bg-gray-100 focus:z-10">
                         <time datetime="@day?.Date.ToShortDateString()"
                           class="@(day != null && day.IsWorked ? "font-bold text-black" : "" )
-                                 @(day != null && day.Date == DateTime.Now.Date ? "bg-indigo-600 text-white" : "")
+                                 @(day != null && day.Date == SelectedDate.Date ? "bg-indigo-600 text-white" : "")
                                   mx-auto flex h-7 w-7 items-center justify-center rounded-full">
                                     @day?.Date.Day
                         </time>
@@ -100,8 +100,6 @@
             </div>
         </section>
     </div>
-
-
 </div>
 
 <div class="border-b border-gray-200 bg-white px-4 py-5 sm:px-6">
@@ -113,7 +111,7 @@
                     <path fill-rule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clip-rule="evenodd" />
                 </svg>
                 @*<h1 class="text-xl font-semibold text-indigo-900">@_currentDayTimesheetEntries?.FirstOrDefault()?.Date.ToString("MMMM dd")</h1>*@
-                <h1 class="text-xl font-semibold text-indigo-900">@DateTime.Now.ToString("MMMM dd")</h1>
+                <h1 class="text-xl font-semibold text-indigo-900">@FirstCharToUpperAsSpan(SelectedDate.Date.ToString("MMMM dd"))</h1>
             </div>
             <p class="mt-2 text-sm text-gray-700 flex text-base">
                 Your timesheet for this day.
@@ -161,3 +159,5 @@
         <WorkerEmptyStateComponent />
     }
 </div>
+
+
