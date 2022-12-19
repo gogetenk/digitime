@@ -1,23 +1,28 @@
 ﻿using System.Text.Json;
 using Digitime.Server.Application.Abstractions;
 using Digitime.Server.Infrastructure.Entities;
+using Microsoft.Extensions.Configuration;
 
-namespace Digitime.Server.Infrastructure.Http;
+namespace Digitime.Server.Infrastructure.Http.Clients;
 
-public class PublicHolidaysRepository : IObtainPublicHolidays
+public class PublicHolidaysClient : IObtainPublicHolidays
 {
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IConfiguration _configuration;
 
-    public PublicHolidaysRepository(IHttpClientFactory httpClientFactory)
+    public PublicHolidaysClient(IHttpClientFactory httpClientFactory, IConfiguration configuration)
     {
         _httpClientFactory = httpClientFactory;
+        _configuration = configuration;
     }
 
     public async Task<List<DateTime>> GetPublicHolidaysForSpecifiedMonthAndCountry(DateTime dateTime, string country)
     {
         var publicHolidays = new List<DateTime>();
-        var requestUri = $"/{dateTime.Year}/{country}";
-        var response = await _httpClientFactory.CreateClient().GetAsync(requestUri);
+        var requestUri = $"api/v3/PublicHolidays/{dateTime.Year}/{country}";
+        var client = _httpClientFactory.CreateClient();
+        client.BaseAddress = new Uri(_configuration["ExternalApis:PublicHolidaysApi:Url"]);
+        var response = await client.GetAsync(requestUri);
         if (response.IsSuccessStatusCode)
         {
             var responseContent = await response.Content.ReadAsStringAsync();
@@ -25,9 +30,7 @@ public class PublicHolidaysRepository : IObtainPublicHolidays
             if (publicHolidaysResponse != null)
             {
                 foreach (var publicHoliday in publicHolidaysResponse)
-                {
                     publicHolidays.Add(publicHoliday.Date);
-                }
             }
             return publicHolidays;
         }

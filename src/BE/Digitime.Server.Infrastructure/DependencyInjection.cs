@@ -13,7 +13,7 @@ public static class DependencyInjection
     {
         services
             .AddHttpClient()
-            .AddScoped<IObtainPublicHolidays, PublicHolidaysRepository>()
+            .AddScoped<IObtainPublicHolidays, PublicHolidaysClient>()
             .AddSingleton<IMongoDbSettings>(serviceProvider => serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value)
             .AddSingleton(typeof(IRepository<>), typeof(MongoRepository<>))
             .AddSingleton<ITimesheetRepository, TimesheetRepository>()
@@ -21,9 +21,8 @@ public static class DependencyInjection
             .AddSingleton<IProjectRepository, ProjectRepository>();
 
         services.AddScoped<TokenHandler>();
-        //services.AddHttpClient<IUserRepository, Auth0ManagementClient>()
-        //    .AddHttpMessageHandler<TokenHandler>();
-        
+        services.AddHttpClient();
+
         return services;
     }
 }
