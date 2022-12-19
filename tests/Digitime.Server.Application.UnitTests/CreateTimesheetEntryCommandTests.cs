@@ -36,7 +36,7 @@ public class CreateTimesheetEntryCommandTests
 
         var userRepository = new Mock<IUserRepository>();
         userRepository
-            .Setup(x => x.GetById(command.UserId))
+            .Setup(x => x.GetbyExternalIdAsync(command.UserId))
             .ReturnsAsync(user);
         var projectRepository = new Mock<IProjectRepository>();
         projectRepository
@@ -67,7 +67,7 @@ public class CreateTimesheetEntryCommandTests
         var command = fixture.Create<CreateTimesheetEntryCommand>();
         var userRepository = new Mock<IUserRepository>();
         userRepository
-            .Setup(x => x.GetById(command.UserId))
+            .Setup(x => x.GetbyExternalIdAsync(command.UserId))
             .ReturnsAsync(fixture.Create<User>());
         var projectRepository = new Mock<IProjectRepository>();
         var timesheetRepository = new Mock<ITimesheetRepository>();
