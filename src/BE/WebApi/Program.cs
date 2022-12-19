@@ -7,7 +7,6 @@ using Digitime.Server.OpenApiSecurity;
 using Digitime.Server.Settings;
 using FluentValidation.AspNetCore;
 using MediatR;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,7 +32,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProject", Version = "v1.0.0" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Digitime API", Version = "v1.0.0" });
 
     string securityDefinitionName = "oauth2" ?? "Bearer";
     OpenApiSecurityScheme securityScheme = new OpenApiBearerSecurityScheme();
@@ -55,6 +54,8 @@ builder.Services.AddEasyCaching(options =>
     options.UseInMemory("memory");
 });
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(
@@ -66,6 +67,7 @@ builder.Services.AddCors(options =>
 // Services
 builder.Services.AddApi();
 builder.Services.AddInfrastructure();
+
 
 var app = builder.Build();
 

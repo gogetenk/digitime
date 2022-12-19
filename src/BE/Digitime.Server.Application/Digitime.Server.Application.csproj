@@ -20,6 +20,5 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\Digitime.Shared.csproj" />
     <ProjectReference Include="..\Digitime.Server.Domain\Digitime.Server.Domain.csproj" />
-    <ProjectReference Include="..\Digitime.Server.Infrastructure\Digitime.Server.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

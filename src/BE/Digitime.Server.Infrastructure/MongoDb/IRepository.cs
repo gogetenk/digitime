@@ -1,18 +1,14 @@
 ﻿using System.Linq.Expressions;
-using Digitime.Server.Infrastructure.Entities;
 
 namespace Digitime.Server.Infrastructure.MongoDb;
+
 public interface IRepository<TDocument> where TDocument : EntityBase
 {
     IQueryable<TDocument> AsQueryable();
 
-    IEnumerable<TDocument> FilterBy(
-        Expression<Func<TDocument, bool>> filterExpression);
+    IEnumerable<TDocument> FilterBy(Expression<Func<TDocument, bool>> filterExpression);
 
-    IEnumerable<TProjected> FilterBy<TProjected>(
-        Expression<Func<TDocument, bool>> filterExpression,
-        Expression<Func<TDocument, TProjected>> projectionExpression);
-
+    IEnumerable<TProjected> FilterBy<TProjected>(Expression<Func<TDocument, bool>> filterExpression, Expression<Func<TDocument, TProjected>> projectionExpression);
 
     Task<TDocument> FindOneAsync(Expression<Func<TDocument, bool>> filterExpression);
 

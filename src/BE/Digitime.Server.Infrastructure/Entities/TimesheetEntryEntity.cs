@@ -1,5 +1,6 @@
 ﻿using Digitime.Server.Domain.Timesheets.Entities;
 using Digitime.Server.Domain.Timesheets.ValueObjects;
+using Digitime.Server.Infrastructure.MongoDb;
 
 namespace Digitime.Server.Infrastructure.Entities;
 public class TimesheetEntryEntity : EntityBase

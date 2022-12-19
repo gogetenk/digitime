@@ -27,9 +27,6 @@ public class Timesheet : AggregateRoot<string>
         _timesheetEntries = timesheetEntries ?? new();
     }
 
-    //public static Timesheet Create(string id, Worker worker, DateTime updateDate, DateTime createDate, List<TimesheetEntry> timesheetEntries)
-    //    => new (id, worker, updateDate, createDate, timesheetEntries);
-
     public void AddEntry(TimesheetEntry entry)
     {
         if (_timesheetEntries.Any(x => x.Date == entry.Date && x.Project.Id == entry.Project?.Id))

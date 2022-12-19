@@ -1,4 +1,5 @@
-﻿using Digitime.Server.Domain.Users;
+﻿using Digitime.Server.Domain.Projects;
+using Digitime.Server.Domain.Timesheets;
 using Digitime.Server.Infrastructure.Entities;
 using Digitime.Shared.Contracts.Timesheets;
 using Mapster;
@@ -9,15 +10,24 @@ public class MappingProfile : IRegister
 {
     public void Register(TypeAdapterConfig config)
     {
-        config.NewConfig<User, UserEntity>()
-            .Map(dest => dest.Id, src => src.Id)
-            .Map(dest => dest.Firstname, src => src.Firstname)
-            .Map(dest => dest.Lastname, src => src.Lastname)
+        config.NewConfig<Auth0.ManagementApi.Models.User, UserEntity>()
+            .Ignore(x => x.Id)
+            .Map(dest => dest.ExternalId, src => src.UserId)
+            .Map(dest => dest.Lastname, src => src.LastName)
+            .Map(dest => dest.Firstname, src => src.FirstName)
             .Map(dest => dest.Email, src => src.Email)
-            .Map(dest => dest.ProfilePicture, src => src.ProfilePicture)
-            .Map(dest => dest.ExternalId, src => src.ExternalId)
+            .Map(dest => dest.ProfilePicture, src => src.Picture)
             .MapToConstructor(true)
             .TwoWays();
+
+        config.NewConfig<UserEntity, Domain.Users.User>()
+           .Map(dest => dest.ExternalId, src => src.ExternalId)
+           .Map(dest => dest.Lastname, src => src.Lastname)
+           .Map(dest => dest.Firstname, src => src.Firstname)
+           .Map(dest => dest.Email, src => src.Email)
+           .Map(dest => dest.ProfilePicture, src => src.ProfilePicture)
+           .MapToConstructor(true)
+           .TwoWays();
 
         config.NewConfig<ProjectEntity, Domain.Projects.Project>()
             .Map(dest => dest.Id, src => src.Id)
@@ -57,5 +67,8 @@ public class MappingProfile : IRegister
 
         //config.NewConfig<ObjectId, string>()
         //    .Map(dest => ObjectId.Parse(dest), src => src.ToString());
+
+        config.CreateMapExpression(new Mapster.Models.TypeTuple(typeof(Timesheet), typeof(TimesheetEntity)), MapType.Projection);
+        config.CreateMapExpression(new Mapster.Models.TypeTuple(typeof(Project), typeof(ProjectEntity)), MapType.Projection);
     }
 }

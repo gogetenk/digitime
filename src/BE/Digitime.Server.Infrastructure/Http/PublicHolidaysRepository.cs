@@ -1,8 +1,8 @@
 ﻿using System.Text.Json;
-using Digitime.Server.Domain.Ports;
+using Digitime.Server.Application.Abstractions;
 using Digitime.Server.Infrastructure.Entities;
 
-namespace Digitime.Server.Infrastructure.Repositories;
+namespace Digitime.Server.Infrastructure.Http;
 
 public class PublicHolidaysRepository : IObtainPublicHolidays
 {
@@ -16,7 +16,7 @@ public class PublicHolidaysRepository : IObtainPublicHolidays
     public async Task<List<DateTime>> GetPublicHolidaysForSpecifiedMonthAndCountry(DateTime dateTime, string country)
     {
         var publicHolidays = new List<DateTime>();
-        var requestUri = $"https://date.nager.at/api/v3/PublicHolidays/{dateTime.Year}/{country}";
+        var requestUri = $"/{dateTime.Year}/{country}";
         var response = await _httpClientFactory.CreateClient().GetAsync(requestUri);
         if (response.IsSuccessStatusCode)
         {

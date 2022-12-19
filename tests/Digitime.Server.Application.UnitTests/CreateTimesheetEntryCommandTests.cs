@@ -1,6 +1,8 @@
+using Digitime.Server.Application.Abstractions;
 using Digitime.Server.Application.Calendar.Commands;
+using Digitime.Server.Domain.Projects;
 using Digitime.Server.Domain.Timesheets;
-using Digitime.Server.Infrastructure.Entities;
+using Digitime.Server.Domain.Users;
 using Digitime.Server.Infrastructure.MongoDb;
 using Digitime.Server.Mappings;
 using EasyCaching.Core;
@@ -29,23 +31,21 @@ public class CreateTimesheetEntryCommandTests
         var timesheetId = fixture.Create<string>();
         var command = fixture.Create<CreateTimesheetEntryCommand>();
         var timesheet = fixture.Create<Timesheet>();
-        var user = fixture.Create<UserEntity>();
-        var project = fixture.Create<ProjectEntity>();
-        var project2 = mapper.Map<Domain.Projects.Project>(project);
-        var timesheetEntity = timesheet.Adapt<TimesheetEntity>();
+        var user = fixture.Create<User>();
+        var project = fixture.Create<Project>();
 
-        var userRepository = new Mock<IRepository<UserEntity>>();
+        var userRepository = new Mock<IUserRepository>();
         userRepository
-            .Setup(x => x.FindByIdAsync(command.UserId))
+            .Setup(x => x.GetById(command.UserId))
             .ReturnsAsync(user);
-        var projectRepository = new Mock<IRepository<ProjectEntity>>();
+        var projectRepository = new Mock<IProjectRepository>();
         projectRepository
             .Setup(x => x.FindByIdAsync(command.ProjectId))
             .ReturnsAsync(project);
-        var timesheetRepository = new Mock<IRepository<TimesheetEntity>>();
+        var timesheetRepository = new Mock<ITimesheetRepository>();
         timesheetRepository
-            .Setup(x => x.FindByIdAsync(timesheetId))
-            .ReturnsAsync(timesheetEntity);
+            .Setup(x => x.GetbyIdAsync(timesheetId))
+            .ReturnsAsync(timesheet);
         var cachingProvider = new Mock<IEasyCachingProvider>();
 
         var sut = new CreateTimesheetEntryCommandHandler(timesheetRepository.Object, projectRepository.Object, userRepository.Object, cachingProvider.Object);
@@ -55,7 +55,7 @@ public class CreateTimesheetEntryCommandTests
 
         // Assert
         result.Should().NotBeNull();
-        timesheetRepository.Verify(x => x.ReplaceOneAsync(It.IsAny<TimesheetEntity>()), Times.Once);
+        timesheetRepository.Verify(x => x.UpdateAsync(It.IsAny<Timesheet>()), Times.Once);
         cachingProvider.Verify(x => x.RemoveAsync($"Calendar_{command.Date.Month}_{command.Date.Year}_{command.UserId}", CancellationToken.None), Times.Once);
     }
 
@@ -65,10 +65,12 @@ public class CreateTimesheetEntryCommandTests
         // Arrange
         var fixture = new Fixture();
         var command = fixture.Create<CreateTimesheetEntryCommand>();
-        var userRepository = new Mock<IRepository<UserEntity>>();
-        userRepository.Setup(x => x.FindByIdAsync(command.UserId)).ReturnsAsync(fixture.Create<UserEntity>());
-        var projectRepository = new Mock<IRepository<ProjectEntity>>();
-        var timesheetRepository = new Mock<IRepository<TimesheetEntity>>();
+        var userRepository = new Mock<IUserRepository>();
+        userRepository
+            .Setup(x => x.GetById(command.UserId))
+            .ReturnsAsync(fixture.Create<User>());
+        var projectRepository = new Mock<IProjectRepository>();
+        var timesheetRepository = new Mock<ITimesheetRepository>();
         var cachingProvider = new Mock<IEasyCachingProvider>();
 
         var sut = new CreateTimesheetEntryCommandHandler(timesheetRepository.Object, projectRepository.Object, userRepository.Object, cachingProvider.Object);
@@ -87,10 +89,12 @@ public class CreateTimesheetEntryCommandTests
         // Arrange
         var fixture = new Fixture();
         var command = fixture.Create<CreateTimesheetEntryCommand>();
-        var userRepository = new Mock<IRepository<UserEntity>>();
-        var projectRepository = new Mock<IRepository<ProjectEntity>>();
-        projectRepository.Setup(x => x.FindByIdAsync(command.ProjectId)).ReturnsAsync(fixture.Create<ProjectEntity>());
-        var timesheetRepository = new Mock<IRepository<TimesheetEntity>>();
+        var userRepository = new Mock<IUserRepository>();
+        var projectRepository = new Mock<IProjectRepository>();
+        projectRepository
+            .Setup(x => x.FindByIdAsync(command.ProjectId))
+            .ReturnsAsync(fixture.Create<Project>());
+        var timesheetRepository = new Mock<ITimesheetRepository>();
         var cachingProvider = new Mock<IEasyCachingProvider>();
 
         var sut = new CreateTimesheetEntryCommandHandler(timesheetRepository.Object, projectRepository.Object, userRepository.Object, cachingProvider.Object);

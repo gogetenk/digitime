@@ -4,10 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Digitime.Server.Application.Abstractions;
 using Digitime.Server.Domain.Calendars;
-using Digitime.Server.Domain.Ports;
-using Digitime.Server.Domain.Timesheets.Entities;
-using Digitime.Server.Infrastructure.Entities;
-using Digitime.Server.Infrastructure.MongoDb;
 using Digitime.Shared.Dto;
 using Mapster;
 using MediatR;
@@ -19,9 +15,9 @@ public record GetCalendarQuery(string Country, int Month, int Year, string? User
     public class GetCalendarQueryHandler : IRequestHandler<GetCalendarQuery, CalendarDto>
     {
         private readonly IObtainPublicHolidays _obtainPublicHolidays;
-        private readonly IRepository<TimesheetEntity> _timesheetRepository;
+        private readonly ITimesheetRepository _timesheetRepository;
 
-        public GetCalendarQueryHandler(IObtainPublicHolidays obtainPublicHolidays, IRepository<TimesheetEntity> timesheetRepository)
+        public GetCalendarQueryHandler(IObtainPublicHolidays obtainPublicHolidays, ITimesheetRepository timesheetRepository)
         {
             _obtainPublicHolidays = obtainPublicHolidays;
             _timesheetRepository = timesheetRepository;
@@ -35,7 +31,7 @@ public record GetCalendarQuery(string Country, int Month, int Year, string? User
             var calendar = new Calendar(null, requestedDate, publicHolidays);
 
             // Get all timesheets for the user and the month
-            var timesheets = (await _timesheetRepository.FilterByAsync(x => x.Worker.UserId == request.UserId /*&& x.CreateDate.Month == request.Month && x.CreateDate.Year == request.Year*/)).ToList();
+            var timesheets = await _timesheetRepository.GetbyUserAndMonthOfyear(request.UserId, request.Month, request.Year);
             if (timesheets is null || !timesheets.Any())
                 return calendar.Adapt<CalendarDto>();
 
@@ -48,7 +44,7 @@ public record GetCalendarQuery(string Country, int Month, int Year, string? User
                     if (calendarDay is null)
                         continue;
 
-                    calendarDay.TimesheetEntries.Add(timesheetEntry.Adapt<TimesheetEntry>());
+                    calendarDay.TimesheetEntries.Add(timesheetEntry);
                 }
             }
 

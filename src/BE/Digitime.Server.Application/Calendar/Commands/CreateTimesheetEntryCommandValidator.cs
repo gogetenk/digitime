@@ -10,9 +10,6 @@ public class CreateTimesheetEntryCommandValidator : AbstractValidator<CreateTime
     {
         RuleFor(x => x.TimesheetId)
             .Must(BeAnObjectId).WithMessage("TimesheetId must be a valid Id").When(x => x.TimesheetId is not null);
-        RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("TimesheetId is required")
-            .Must(BeAnObjectId).WithMessage("UserId must be a valid Id");
 
         RuleFor(x => x.ProjectId)
             .NotEmpty().WithMessage("Project Id is required")
