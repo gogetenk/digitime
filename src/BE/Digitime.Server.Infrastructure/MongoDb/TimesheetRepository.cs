@@ -43,6 +43,12 @@ public class TimesheetRepository : MongoRepository<TimesheetEntity>, ITimesheetR
         .Adapt<List<Timesheet>>();
     }
 
+    public async Task<List<Timesheet>> GetTimesheetsFromProjectIds(string[] projectIds)
+    {
+        var timesheets = await FilterByAsync(x => x.TimesheetEntries.Any(y => projectIds.Contains(y.Project.Id)));
+        return timesheets.Adapt<List<Timesheet>>();
+    }
+
     public Task UpdateAsync(Timesheet timesheet)
     {
         var entity = timesheet.Adapt<TimesheetEntity>();

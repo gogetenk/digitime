@@ -9,20 +9,9 @@
 
 
 @code {
-    private List<string> _indicators = new List<string>();
-
     protected async override Task OnInitializedAsync()
     {
-        try
-        {
-            _indicators = await _http.GetFromJsonAsync<List<string>>("api/dashboard/timesheets");
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
     }
-
 }
 
 <div class="mt-24">

@@ -1,14 +1,13 @@
 using Digitime.Server.Application.Abstractions;
-using Digitime.Server.Application.Calendar.Commands;
+using Digitime.Server.Application.Timesheets.Commands;
 using Digitime.Server.Domain.Projects;
 using Digitime.Server.Domain.Timesheets;
 using Digitime.Server.Domain.Users;
-using Digitime.Server.Infrastructure.MongoDb;
 using Digitime.Server.Mappings;
 using EasyCaching.Core;
 using Mapster;
 using MapsterMapper;
-using static Digitime.Server.Application.Calendar.Commands.CreateTimesheetEntryCommand;
+using static Digitime.Server.Application.Timesheets.Commands.CreateTimesheetEntryCommand;
 
 namespace Digitime.Server.Application.UnitTests;
 

@@ -11,4 +11,5 @@ public interface ITimesheetRepository
     Task<List<Timesheet>> GetbyUserAndMonthOfyear(string userId, int month, int year);
     Task UpdateAsync(Timesheet timesheet);
     Task DeleteAsync(string id);
+    Task<List<Timesheet>> GetTimesheetsFromProjectIds(string[] projectIds);
 }

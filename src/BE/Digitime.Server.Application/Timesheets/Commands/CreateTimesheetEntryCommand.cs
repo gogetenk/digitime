@@ -10,7 +10,7 @@ using EasyCaching.Core;
 using Mapster;
 using MediatR;
 
-namespace Digitime.Server.Application.Calendar.Commands;
+namespace Digitime.Server.Application.Timesheets.Commands;
 
 public record CreateTimesheetEntryCommand(string TimesheetId, string ProjectId, float Hours, DateTime Date, string UserId) : IRequest<CreateTimesheetEntryReponse>
 {

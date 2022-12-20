@@ -9,7 +9,7 @@
 @using System.Net.Http.Json
 @using Microsoft.Extensions.Logging;
 
-@inject SignOutSessionStateManager SignOutManager
+@inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject HttpClient _http
 @inject ILogger<DashboardComponent> _logger;
@@ -34,6 +34,10 @@
         {
             exception.Redirect();
         }
+        catch(Exception e)
+        {
+            throw e;
+        }
     }
 }
 
@@ -56,8 +60,8 @@
     <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
 
         <IndicatorsListComponent />
-
-        <CalendarComponent />
+@*
+        <CalendarComponent />*@
 
         @*      <WorkerEmptyStateComponent />
 

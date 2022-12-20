@@ -1,6 +1,6 @@
 using System.Reflection;
 using Digitime.Server;
-using Digitime.Server.Application.Calendar.Queries;
+using Digitime.Server.Application.Timesheets.Queries;
 using Digitime.Server.Infrastructure;
 using Digitime.Server.Middlewares;
 using Digitime.Server.OpenApiSecurity;
@@ -11,7 +11,7 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddMediatR(Assembly.GetExecutingAssembly(), typeof(Digitime.Server.Queries.GetCalendarQuery).Assembly);
+builder.Services.AddMediatR(Assembly.GetExecutingAssembly(), typeof(GetCalendarQuery).Assembly);
 builder.Services
     .AddAuthentication()
     .AddJwtBearer();

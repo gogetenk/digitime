@@ -8,7 +8,7 @@ using Digitime.Shared.Dto;
 using Mapster;
 using MediatR;
 
-namespace Digitime.Server.Queries;
+namespace Digitime.Server.Application.Timesheets.Queries;
 
 public record GetCalendarQuery(string Country, int Month, int Year, string? UserId) : IRequest<CalendarDto>, ICacheableRequest
 {
