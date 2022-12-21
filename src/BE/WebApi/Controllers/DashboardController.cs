@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Digitime.Server.Application.Timesheets.Queries;
+using Digitime.Shared.Contracts.Timesheets;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,7 @@ public class DashboardController : ControllerBase
 
     [Authorize(Policy = "Reviewer")]
     [HttpGet("timesheets")]
-    [ProducesResponseType(typeof(Shared.Dto.CalendarDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GetTimesheetForUserAndDateResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetTimesheetsToReview([FromQuery] GetTimesheetsToReviewQuery query)
     {
         query = query with { UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value };

@@ -20,7 +20,7 @@ public static class DependencyInjection
             .AddSingleton<IUserRepository, UserRepository>()
             .AddSingleton<IProjectRepository, ProjectRepository>();
 
-        services.AddScoped<TokenHandler>();
+        services.AddScoped<Auth0TokenHandler>();
         services.AddHttpClient();
 
         return services;

@@ -64,11 +64,5 @@ public class MappingProfile : IRegister
             .Map(dest => dest.Project, src => src.Project)
             .Map(dest => dest.Status, src => src.Status)
             .MapToConstructor(true);
-
-        //config.NewConfig<ObjectId, string>()
-        //    .Map(dest => ObjectId.Parse(dest), src => src.ToString());
-
-        config.CreateMapExpression(new Mapster.Models.TypeTuple(typeof(Timesheet), typeof(TimesheetEntity)), MapType.Projection);
-        config.CreateMapExpression(new Mapster.Models.TypeTuple(typeof(Project), typeof(ProjectEntity)), MapType.Projection);
     }
 }

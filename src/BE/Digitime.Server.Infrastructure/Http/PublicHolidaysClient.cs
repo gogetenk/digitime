@@ -4,7 +4,7 @@ using Digitime.Server.Infrastructure.Entities;
 using EasyCaching.Core;
 using Microsoft.Extensions.Configuration;
 
-namespace Digitime.Server.Infrastructure.Http.Clients;
+namespace Digitime.Server.Infrastructure.Http;
 
 public class PublicHolidaysClient : IObtainPublicHolidays
 {

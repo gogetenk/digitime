@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Http;
 
 namespace Digitime.Server.Infrastructure.Http.Clients;
 
-public class TokenHandler : DelegatingHandler
+public class Auth0TokenHandler : DelegatingHandler
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public TokenHandler(IHttpContextAccessor httpContextAccessor)
+    public Auth0TokenHandler(IHttpContextAccessor httpContextAccessor)
     {
         _httpContextAccessor = httpContextAccessor;
     }

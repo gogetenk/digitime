@@ -4,7 +4,7 @@ using Auth0.ManagementApi;
 using Digitime.Server.Infrastructure.Entities;
 using Mapster;
 
-namespace Digitime.Server.Infrastructure.Http.Clients;
+namespace Digitime.Server.Infrastructure.Http;
 
 public class Auth0ManagementClient
 {

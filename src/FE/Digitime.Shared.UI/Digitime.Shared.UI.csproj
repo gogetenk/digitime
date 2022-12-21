@@ -35,4 +35,8 @@
     <ProjectReference Include="..\..\Shared\Digitime.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Timesheets\" />
+  </ItemGroup>
+
 </Project>

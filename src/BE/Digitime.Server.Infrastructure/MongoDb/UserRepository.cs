@@ -1,7 +1,6 @@
 ﻿using Digitime.Server.Application.Abstractions;
 using Digitime.Server.Domain.Users;
 using Digitime.Server.Infrastructure.Entities;
-using Digitime.Server.Infrastructure.Http.Clients;
 using Digitime.Server.Infrastructure.MongoDb;
 using Mapster;
 using MongoDB.Driver;
