@@ -14,31 +14,24 @@ public class RolesClaimsPrincipalFactory : AccountClaimsPrincipalFactory<RemoteU
     public override async ValueTask<ClaimsPrincipal> CreateUserAsync(RemoteUserAccount account, RemoteAuthenticationUserOptions options)
     {
         var user = await base.CreateUserAsync(account, options);
-        if (user.Identity.IsAuthenticated)
-        {
-            var identity = (ClaimsIdentity)user.Identity;
-            var permissionsClaims = identity.FindAll("permissions");
-            if (permissionsClaims != null && permissionsClaims.Any())
-            {
-                foreach (var existingClaim in permissionsClaims)
-                {
-                    identity.RemoveClaim(existingClaim);
-                }
 
-                var permissionsElem = account.AdditionalProperties[identity.RoleClaimType];
-                if (permissionsElem is JsonElement permissions)
+        var claimsIdentity = (ClaimsIdentity)user.Identity;
+
+        if (account != null)
+        {
+            foreach (var kvp in account.AdditionalProperties)
+            {
+                var name = kvp.Key;
+                var value = kvp.Value;
+                if (value != null &&
+                    (value is JsonElement element && element.ValueKind == JsonValueKind.Array))
                 {
-                    if (permissions.ValueKind == JsonValueKind.Array)
-                    {
-                        foreach (var permission in permissions.EnumerateArray())
-                        {
-                            identity.AddClaim(new Claim("permissions", permission.GetString()));
-                        }
-                    }
-                    else
-                    {
-                        identity.AddClaim(new Claim("permissions", permissions.GetString()));
-                    }
+                    claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(kvp.Key));
+
+                    var claims = element.EnumerateArray()
+                        .Select(x => new Claim(kvp.Key, x.ToString()));
+
+                    claimsIdentity.AddClaims(claims);
                 }
             }
         }

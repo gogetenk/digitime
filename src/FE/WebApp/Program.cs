@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using Digitime.Client;
 using Digitime.Client.Authentication;
 using Microsoft.AspNetCore.Components.Web;
@@ -22,16 +21,7 @@ builder.Services
     .AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
     .CreateClient("DigitimeApi"));
 
-builder.Services.AddAuthorizationCore(options =>
-{
-    //options.AddPolicy("Worker", policy => policy.RequireRole("Worker"));
-    //options.AddPolicy("Reviewer", policy => policy.RequireRole("Reviewer"));
-    options.AddPolicy("Worker", policy => policy.RequireClaim(ClaimTypes.Role, "Worker"));
-    options.AddPolicy("Reviewer", policy => policy.RequireClaim(ClaimTypes.Role, "Reviewer"));
-    //options.AddPolicy("Worker", policy => policy.RequireClaim("permissions", "create:timesheet"));
-    //options.AddPolicy("Reviewer", policy => policy.RequireClaim("permissions", "review:timesheet", "manage:project"));
-});
-
+builder.Services.AddAuthorizationCore();
 builder.Services.AddOidcAuthentication(options =>
 {
     builder.Configuration.Bind("Auth0", options.ProviderOptions);
@@ -43,9 +33,7 @@ builder.Services.AddOidcAuthentication(options =>
 builder.Services.AddApiAuthorization()
                 .AddAccountClaimsPrincipalFactory<RolesClaimsPrincipalFactory>();
 
-
 var host = builder.Build();
-
 var logger = host.Services
     .GetRequiredService<ILoggerFactory>()
     .CreateLogger<Program>();
