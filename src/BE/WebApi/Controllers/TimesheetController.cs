@@ -25,7 +25,7 @@ public class TimesheetController : ControllerBase
     /// </summary>
     /// <param name="request"></param>
     /// <returns>The created timesheet entry</returns>
-    [Authorize(Policy = "Worker")]
+    [Authorize(Roles = "Worker, Reviewer")]
     [HttpPost("entry")]
     [ProducesResponseType(typeof(CreateTimesheetEntryReponse), StatusCodes.Status201Created)]
     [ProducesResponseType(400)]

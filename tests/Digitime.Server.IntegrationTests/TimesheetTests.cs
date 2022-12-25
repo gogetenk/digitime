@@ -50,34 +50,4 @@ public class TimesheetTests
         response.EnsureSuccessStatusCode();
         response.StatusCode.Should().Be(HttpStatusCode.Created);
     }
-
-    [Fact]
-    public async Task CreateTimesheetEntry_WhenUserIsReviewer_Expect401()
-    {
-        // Arrange
-        var client = _factory.WithWebHostBuilder(builder =>
-        {
-            builder.ConfigureTestServices(services =>
-            {
-                services
-                    .AddAuthentication(defaultScheme: "TestScheme")
-                    .AddScheme<AuthenticationSchemeOptions, ReviewerTestAuthHandler>(
-                        "TestScheme", options => { });
-            });
-        }).CreateClient();
-
-        var command = new CreateTimesheetEntryRequest
-        {
-            TimesheetId = "6392737298425fc69e63839a",
-            ProjectId = "6389b9592dd24486a037096a",
-            Date = DateTime.UtcNow,
-            Hours = 8
-        };
-
-        // Act
-        var response = await client.PostAsJsonAsync($"{_BaseEndpointUri}", command);
-
-        // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
-    }
 }

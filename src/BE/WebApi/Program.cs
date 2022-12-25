@@ -23,8 +23,9 @@ builder.Services.AddAuthorization(options =>
 builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbSettings"));
 
 builder.Services.AddControllersWithViews()
-    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<GetCalendarQueryValidator>())
     .AddNewtonsoftJson();
+builder.Services.AddFluentValidationAutoValidation()
+    .AddFluentValidationClientsideAdapters();
 
 builder.Services.AddRazorPages();
 builder.Services.AddEndpointsApiExplorer();

@@ -18,7 +18,7 @@ public class ReviewerTestAuthHandler : AuthenticationHandler<AuthenticationSchem
     {
         var claims = new[]
         {
-            new Claim("permissions", "manage:timesheet"),
+            new Claim(ClaimTypes.Role, "Reviewer"),
             new Claim(ClaimTypes.NameIdentifier, "638e0687ebcdd6848cbbf52f")
         };
         var identity = new ClaimsIdentity(claims, "Test");

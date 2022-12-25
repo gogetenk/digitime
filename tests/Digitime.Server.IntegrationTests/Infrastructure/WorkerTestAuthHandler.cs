@@ -18,7 +18,7 @@ public class WorkerTestAuthHandler : AuthenticationHandler<AuthenticationSchemeO
     {
         var claims = new[]
         {
-            new Claim("permissions", "create:timesheet"),
+            new Claim(ClaimTypes.Role, "Worker"),
             new Claim(ClaimTypes.NameIdentifier, "github|31359382")
         };
         var identity = new ClaimsIdentity(claims, "Test");
