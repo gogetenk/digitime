@@ -39,7 +39,7 @@
     </div>
     @if (Timesheets != null && Timesheets.Workers.Any())
     {
-         @foreach (var workerData in Timesheets.Workers)
+        @foreach (var workerData in Timesheets.Workers)
         {
             <WorkerTimesheetsSwimlane WorkerData="workerData" />
         }

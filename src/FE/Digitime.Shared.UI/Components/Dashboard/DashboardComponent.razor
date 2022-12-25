@@ -1,12 +1,12 @@
 ﻿@using Digitime.Shared.UI.Components.Common
+@using Microsoft.AspNetCore.Authorization;
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-@using Microsoft.AspNetCore.Authorization
 @using System.Security.Principal
 @using System.Security.Claims
 @using System.Net.Http.Json
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 @using Microsoft.Extensions.Logging;
 
 @inject NavigationManager Navigation
@@ -25,10 +25,16 @@
         _currentUser = authstate.User;
         //string userId = _currentUser.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
         var _profilePic = _currentUser?.FindFirst(x => x?.Type == "sub")?.Value;
+        var roles = _currentUser?.FindFirst(ClaimTypes.Role);
+        var x = _currentUser.IsInRole("Reviewer");
 
         try
         {
             var results = await _http.GetFromJsonAsync<List<string>>("api/dashboard");
+            foreach (var claim in authstate.User.Claims)
+            {
+                var t = claim.Value;
+            }
         }
         catch (AccessTokenNotAvailableException exception)
         {
@@ -60,14 +66,21 @@
     <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
 
         <IndicatorsListComponent />
-@*
-        <CalendarComponent />*@
 
-        @*      <WorkerEmptyStateComponent />
+        <AuthorizeView Policy="Worker">
+            <Authorized> 
+                <CalendarComponent />
+                <WorkerEmptyStateComponent />
+            </Authorized>
+        </AuthorizeView>
 
-        <ManagerEmptyStateComponent />*@
+        @*<ManagerEmptyStateComponent />*@
 
-        <SubmittedTimesheet />
+        <AuthorizeView Policy="Reviewer">
+            <Authorized>
+                <SubmittedTimesheet />
+            </Authorized>
+        </AuthorizeView>
 
         @*<WorkerTimesheet />*@
 

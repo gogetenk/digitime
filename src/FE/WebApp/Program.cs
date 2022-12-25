@@ -1,4 +1,6 @@
+using System.Security.Claims;
 using Digitime.Client;
+using Digitime.Client.Authentication;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -20,14 +22,27 @@ builder.Services
     .AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
     .CreateClient("DigitimeApi"));
 
-//builder.Services.AddApiAuthorization();
+builder.Services.AddAuthorizationCore(options =>
+{
+    //options.AddPolicy("Worker", policy => policy.RequireRole("Worker"));
+    //options.AddPolicy("Reviewer", policy => policy.RequireRole("Reviewer"));
+    options.AddPolicy("Worker", policy => policy.RequireClaim(ClaimTypes.Role, "Worker"));
+    options.AddPolicy("Reviewer", policy => policy.RequireClaim(ClaimTypes.Role, "Reviewer"));
+    //options.AddPolicy("Worker", policy => policy.RequireClaim("permissions", "create:timesheet"));
+    //options.AddPolicy("Reviewer", policy => policy.RequireClaim("permissions", "review:timesheet", "manage:project"));
+});
 
 builder.Services.AddOidcAuthentication(options =>
 {
     builder.Configuration.Bind("Auth0", options.ProviderOptions);
     options.ProviderOptions.ResponseType = "code";
     options.ProviderOptions.AdditionalProviderParameters.Add("audience", builder.Configuration["Auth0:Audience"]);
+    options.ProviderOptions.DefaultScopes.Add("openid profile");
 });
+
+builder.Services.AddApiAuthorization()
+                .AddAccountClaimsPrincipalFactory<RolesClaimsPrincipalFactory>();
+
 
 var host = builder.Build();
 

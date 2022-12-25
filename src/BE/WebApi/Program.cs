@@ -18,8 +18,6 @@ builder.Services
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("Worker", policy => policy.RequireClaim("permissions", "create:timesheet"));
-    options.AddPolicy("Reviewer", policy => policy.RequireClaim("permissions", "review:timesheet", "manage:project"));
 });
 
 builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbSettings"));

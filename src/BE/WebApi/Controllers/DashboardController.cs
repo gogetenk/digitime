@@ -19,7 +19,7 @@ public class DashboardController : ControllerBase
         _sender = mediator;
     }
 
-    [Authorize(Policy = "Worker")]
+    [Authorize(Roles = "Worker")]
     [HttpGet("calendar")]
     [ProducesResponseType(typeof(Shared.Dto.CalendarDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCalendar([FromQuery] GetCalendarQuery query)
@@ -28,7 +28,7 @@ public class DashboardController : ControllerBase
         return Ok(await _sender.Send(query));
     }
 
-    [Authorize(Policy = "Reviewer")]
+    [Authorize(Roles = "Reviewer")]
     [HttpGet("timesheets")]
     [ProducesResponseType(typeof(GetTimesheetForUserAndDateResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetTimesheetsToReview([FromQuery] GetTimesheetsToReviewQuery query)
