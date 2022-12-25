@@ -114,4 +114,6 @@ app.MapFallbackToFile("index.html");
 app.Run();
 
 public partial class Program // Needed for IntegrationTests
-{ }
+{
+    public IConfiguration Configuration { get; set; }
+}
