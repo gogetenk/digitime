@@ -47,7 +47,6 @@ public class TimesheetTests
         var response = await client.PostAsJsonAsync($"{_BaseEndpointUri}", command);
 
         // Assert
-        response.EnsureSuccessStatusCode();
         response.StatusCode.Should().Be(HttpStatusCode.Created);
     }
 }
