@@ -35,7 +35,7 @@ public record CreateTimesheetEntryCommand(string TimesheetId, string ProjectId, 
 
         public async Task<CreateTimesheetEntryReponse> Handle(CreateTimesheetEntryCommand request, CancellationToken cancellationToken)
         {
-            Timesheet timesheet = null;
+            Timesheet? timesheet = null;
 
             // Request existing timesheet if it exists
             if (request.TimesheetId is not null)

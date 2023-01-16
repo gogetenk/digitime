@@ -10,20 +10,16 @@ using MediatR;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly(), typeof(GetCalendarQuery).Assembly);
 builder.Services
     .AddAuthentication()
     .AddJwtBearer();
 
-builder.Services.AddAuthorization(options =>
-{
-});
-
+builder.Services.AddAuthorization();
 builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbSettings"));
-
 builder.Services.AddControllersWithViews()
     .AddNewtonsoftJson();
+
 builder.Services.AddFluentValidationAutoValidation()
     .AddFluentValidationClientsideAdapters();
 
@@ -46,15 +42,10 @@ builder.Services.AddSwaggerGen(c =>
     c.AddSecurityDefinition(securityDefinitionName, securityScheme);
     c.AddSecurityRequirement(securityRequirement);
 });
+//builder.Services.AddHttpClient("PublicHolidaysClient", client => CreateMockHttpClient());
 
-
-builder.Services.AddEasyCaching(options =>
-{
-    options.UseInMemory("memory");
-});
-
+builder.Services.AddEasyCaching(options => options.UseInMemory("memory"));
 builder.Services.AddHttpContextAccessor();
-
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(
@@ -66,8 +57,6 @@ builder.Services.AddCors(options =>
 // Services
 builder.Services.AddApi();
 builder.Services.AddInfrastructure();
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -115,5 +104,17 @@ app.Run();
 
 public partial class Program // Needed for IntegrationTests
 {
-    public IConfiguration Configuration { get; set; }
+    //public static HttpClient CreateMockHttpClient()
+    //{
+    //    var mockHttp = new MockHttpMessageHandler();
+    //    // Mocking calls to public holidays api
+    //    mockHttp.When($"*")
+    //            .Respond(HttpStatusCode.OK);
+
+    //    var client = new HttpClient(mockHttp);
+    //    client.BaseAddress = new Uri("http://toto");
+    //    client.MaxResponseContentBufferSize = 32;
+    //    client.Timeout = TimeSpan.FromSeconds(10);
+    //    return client;
+    //}
 }

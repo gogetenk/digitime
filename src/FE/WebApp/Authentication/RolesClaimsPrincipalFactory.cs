@@ -14,7 +14,6 @@ public class RolesClaimsPrincipalFactory : AccountClaimsPrincipalFactory<RemoteU
     public override async ValueTask<ClaimsPrincipal> CreateUserAsync(RemoteUserAccount account, RemoteAuthenticationUserOptions options)
     {
         var user = await base.CreateUserAsync(account, options);
-
         var claimsIdentity = (ClaimsIdentity)user.Identity;
 
         if (account != null)
@@ -27,7 +26,6 @@ public class RolesClaimsPrincipalFactory : AccountClaimsPrincipalFactory<RemoteU
                     (value is JsonElement element && element.ValueKind == JsonValueKind.Array))
                 {
                     claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(kvp.Key));
-
                     var claims = element.EnumerateArray()
                         .Select(x => new Claim(kvp.Key, x.ToString()));
 

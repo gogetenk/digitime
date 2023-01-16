@@ -27,7 +27,6 @@ public record GetCalendarQuery(string Country, int Month, int Year, string? User
         {
             var requestedDate = new DateTime(request.Year, request.Month, 1);
             var publicHolidays = await _obtainPublicHolidays.GetPublicHolidaysForSpecifiedMonthAndCountry(requestedDate, request.Country);
-
             var calendar = new Calendar(null, requestedDate, publicHolidays);
 
             // Get all timesheets for the user and the month

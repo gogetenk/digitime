@@ -18,44 +18,4 @@ public class DashboardController : ControllerBase
     {
         _sender = mediator;
     }
-
-    [Authorize(Roles = "Worker")]
-    [HttpGet("calendar")]
-    [ProducesResponseType(typeof(Shared.Dto.CalendarDto), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetCalendar([FromQuery] GetCalendarQuery query)
-    {
-        query = query with { UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value };
-        return Ok(await _sender.Send(query));
-    }
-
-    [Authorize(Roles = "Reviewer")]
-    [HttpGet("timesheets")]
-    [ProducesResponseType(typeof(GetTimesheetForUserAndDateResponse), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetTimesheetsToReview([FromQuery] GetTimesheetsToReviewQuery query)
-    {
-        query = query with { UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value };
-        return Ok(await _sender.Send(query));
-    }
-
-    [HttpGet]
-    public IEnumerable<string> Get()
-    {
-        return new List<string>()
-        {
-            "Toto",
-            "Titi",
-            "Tata"
-        };
-    }
-
-    [HttpGet("indicators")]
-    public async Task<IEnumerable<string>> GetIndicators()
-    {
-        return new List<string>()
-        {
-            "71,897",
-            "58.16%",
-            "24.57%"
-        };
-    }
 }

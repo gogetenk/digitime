@@ -28,7 +28,6 @@ public class ErrorHandlingMiddleware
     private static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         var code = HttpStatusCode.InternalServerError; // 500 if unexpected
-
         var problemDetails = new ProblemDetails
         {
             Title = "An error occurred while processing your request.",

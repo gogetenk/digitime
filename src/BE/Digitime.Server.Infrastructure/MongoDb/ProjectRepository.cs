@@ -1,9 +1,9 @@
 ﻿using System.Linq.Expressions;
 using Digitime.Server.Application.Abstractions;
-using Digitime.Server.Domain.Projects;
 using Digitime.Server.Infrastructure.Entities;
 using Mapster;
 using MongoDB.Driver;
+using Project = Digitime.Server.Domain.Projects.Project;
 
 namespace Digitime.Server.Infrastructure.MongoDb;
 
@@ -25,4 +25,10 @@ internal class ProjectRepository : MongoRepository<ProjectEntity>, IProjectRepos
     }
     public async Task<Project> FindByIdAsync(string id)
         => (await base.FindByIdAsync(id)).Adapt<Project>();
+
+    public async Task<List<Project>> GetProjectsByUserId(string userId)
+    {
+        var projects = await FilterByAsync(x => x.Members.Any(x => x.UserId == userId));
+        return projects.Adapt<List<Project>>();
+    }
 }

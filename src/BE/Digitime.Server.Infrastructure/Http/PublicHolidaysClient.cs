@@ -29,7 +29,7 @@ public class PublicHolidaysClient : IObtainPublicHolidays
 
         var publicHolidays = new List<DateTime>();
         var requestUri = $"api/v3/PublicHolidays/{dateTime.Year}/{country}";
-        var client = _httpClientFactory.CreateClient();
+        var client = _httpClientFactory.CreateClient("PublicHolidaysClient");
         client.BaseAddress = new Uri(_configuration["ExternalApis:PublicHolidaysApi:Url"]);
         var response = await client.GetAsync(requestUri);
         if (!response.IsSuccessStatusCode)
@@ -48,7 +48,6 @@ public class PublicHolidaysClient : IObtainPublicHolidays
 
         // Add this to the cache so we don't fetch everytime
         await _cachingProvider.SetAsync(cacheKey, publicHolidays, TimeSpan.FromDays(365)); // Basically just store this forever. Public holidays won't change.
-
         return publicHolidays;
     }
 }
