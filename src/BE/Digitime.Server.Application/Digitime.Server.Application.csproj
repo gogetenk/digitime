@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EasyCaching.InMemory" Version="1.7.0" />
+    <PackageReference Include="EasyCaching.InMemory" Version="1.8.0" />
     <PackageReference Include="Mapster" Version="7.3.0" />
     <PackageReference Include="MediatR" Version="11.1.0" />
     <PackageReference Include="FluentValidation" Version="11.4.0" />

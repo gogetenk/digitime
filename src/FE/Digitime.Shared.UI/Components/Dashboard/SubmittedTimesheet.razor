@@ -17,7 +17,7 @@
     {
         try
         {
-            Timesheets = await _http.GetFromJsonAsync<GetTimesheetForUserAndDateResponse>("api/Dashboard/timesheets");
+            Timesheets = await _http.GetFromJsonAsync<GetTimesheetForUserAndDateResponse>("api/timesheets");
         }
         catch (AccessTokenNotAvailableException exception)
         {

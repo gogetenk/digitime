@@ -14,13 +14,13 @@
     {
         try
         {
-            _timesheets = await _http.GetFromJsonAsync<List<string>>("api/dashboard/indicators");
-            if (_timesheets.Count != 3)
-                return;
+            //_timesheets = await _http.GetFromJsonAsync<List<string>>("api/dashboard/indicators");
+            //if (_timesheets.Count != 3)
+            //    return;
 
-            _workers = _timesheets[0];
-            _avgFillingRate = _timesheets[1];
-            _pendingTimesheets = _timesheets[2];
+            //_workers = _timesheets[0];
+            //_avgFillingRate = _timesheets[1];
+            //_pendingTimesheets = _timesheets[2];
         }
         catch (AccessTokenNotAvailableException exception)
         {

@@ -1,3 +1,4 @@
+using Blazored.LocalStorage;
 using Digitime.Client;
 using Digitime.Client.Authentication;
 using Microsoft.AspNetCore.Components.Web;
@@ -8,7 +9,7 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
-
+builder.Services.AddBlazoredLocalStorage();
 var backendBaseAddress = builder.Configuration.GetValue<string>("BackendBaseUri");
 builder.Services.AddHttpClient(
         "DigitimeApi",

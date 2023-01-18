@@ -46,7 +46,6 @@ public record GetCalendarQuery(string Country, int Month, int Year, string? User
                     calendarDay.TimesheetEntries.Add(timesheetEntry);
                 }
             }
-
             return calendar.Adapt<CalendarDto>();
         }
     }

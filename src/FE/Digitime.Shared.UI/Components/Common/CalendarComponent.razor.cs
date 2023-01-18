@@ -30,7 +30,7 @@ public partial class CalendarComponent : ComponentBase
 
     private async Task GetCurrentMonthCalendar()
     {
-        var response = await _httpClient.GetAsync($"api/dashboard/calendar?country=fr&month={DateTime.Now.Month}&year={DateTime.Now.Year}");
+        var response = await _httpClient.GetAsync($"api/timesheets/calendar?country=fr&month={DateTime.Now.Month}&year={DateTime.Now.Year}");
         if (response.IsSuccessStatusCode)
         {
             var responseContent = await response.Content.ReadAsStringAsync();
@@ -53,7 +53,7 @@ public partial class CalendarComponent : ComponentBase
 
     private async Task GetNextMonthCalendar()
     {
-        var response = await _httpClient.GetAsync($"api/dashboard/calendar?country=fr&month={DateTime.Now.AddMonths(1).Month}&year={DateTime.Now.AddMonths(1).Year}");
+        var response = await _httpClient.GetAsync($"api/timesheets/calendar?country=fr&month={DateTime.Now.AddMonths(1).Month}&year={DateTime.Now.AddMonths(1).Year}");
         if (response.IsSuccessStatusCode)
         {
             var responseContent = await response.Content.ReadAsStringAsync();
