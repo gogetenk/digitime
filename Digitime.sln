@@ -43,7 +43,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Digitime.Server.Domain.Unit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Digitime.Server.Application.UnitTests", "tests\Digitime.Server.Application.UnitTests\Digitime.Server.Application.UnitTests.csproj", "{95A2D5BF-D162-48F9-A2D1-60DF2363D6BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Digitime.Client.Infrastructure", "src\FE\Digitime.Client.Infrastructure\Digitime.Client.Infrastructure.csproj", "{A8EC330B-57A4-408A-A085-A7C2FD8A3825}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Digitime.Client.Infrastructure", "src\FE\Digitime.Client.Infrastructure\Digitime.Client.Infrastructure.csproj", "{A8EC330B-57A4-408A-A085-A7C2FD8A3825}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Digitime.Client.Mobile", "src\FE\Digitime.Client.Mobile\Digitime.Client.Mobile.csproj", "{E23DC02B-2284-45FF-B6DE-E2E278CE081B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -103,6 +105,12 @@ Global
 		{A8EC330B-57A4-408A-A085-A7C2FD8A3825}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8EC330B-57A4-408A-A085-A7C2FD8A3825}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8EC330B-57A4-408A-A085-A7C2FD8A3825}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E23DC02B-2284-45FF-B6DE-E2E278CE081B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E23DC02B-2284-45FF-B6DE-E2E278CE081B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E23DC02B-2284-45FF-B6DE-E2E278CE081B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{E23DC02B-2284-45FF-B6DE-E2E278CE081B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E23DC02B-2284-45FF-B6DE-E2E278CE081B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E23DC02B-2284-45FF-B6DE-E2E278CE081B}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -124,6 +132,7 @@ Global
 		{DF3E8E1D-2F7D-440B-8118-EC9BCFC5B028} = {9AEB5696-D5A4-4460-BBB8-33DE15B035AA}
 		{95A2D5BF-D162-48F9-A2D1-60DF2363D6BA} = {9AEB5696-D5A4-4460-BBB8-33DE15B035AA}
 		{A8EC330B-57A4-408A-A085-A7C2FD8A3825} = {73F22696-A487-471D-8179-4DEAAD99A11E}
+		{E23DC02B-2284-45FF-B6DE-E2E278CE081B} = {73F22696-A487-471D-8179-4DEAAD99A11E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF5E4B7D-EBCA-46AD-A846-9FBA2BDFFF4C}
