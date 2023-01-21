@@ -1,15 +1,14 @@
-﻿using System.Diagnostics;
+﻿using Digitime.Client.Infrastructure.Abstractions;
 using Digitime.Shared.Dto;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
-using Newtonsoft.Json;
 using CalendarDto = Digitime.Shared.Dto.CalendarDto;
 
 namespace Digitime.Shared.UI.Components.Common;
 
 public partial class CalendarComponent : ComponentBase
 {
-    [Inject] HttpClient _httpClient { get; set; }
+    [Inject] HttpClient HttpClient { get; set; }
+    [Inject] IDataStore DataStore { get; set; }
 
     public CalendarDto CurrentMonthCalendarDays = new();
     public CalendarDto NextMonthCalendarDays = new();
@@ -18,60 +17,11 @@ public partial class CalendarComponent : ComponentBase
 
     protected override async Task OnInitializedAsync()
     {
-        var sw = new Stopwatch();
-        sw.Start();
-        var currentMonthTask = GetCurrentMonthCalendar();
-        var nextMonthTask = GetNextMonthCalendar();
+        var currentMonthTask = DataStore.GetCalendar(DateTime.Now, "FR");
+        var nextMonthTask = DataStore.GetCalendar(DateTime.Now.AddMonths(1), "FR");
         await Task.WhenAll(currentMonthTask, nextMonthTask);
-        sw.Stop();
-
-        Console.WriteLine($"Calendar rendering took {sw.ElapsedMilliseconds} ms");
-    }
-
-    private async Task GetCurrentMonthCalendar()
-    {
-        var response = await _httpClient.GetAsync($"api/timesheets/calendar?country=fr&month={DateTime.Now.Month}&year={DateTime.Now.Year}");
-        if (response.IsSuccessStatusCode)
-        {
-            var responseContent = await response.Content.ReadAsStringAsync();
-            try
-            {
-                CurrentMonthCalendarDays = JsonConvert.DeserializeObject<CalendarDto>(responseContent);
-            }
-            catch (Exception exc)
-            {
-                Console.WriteLine(exc);
-            }
-        }
-        else
-        {
-            var error = await response.Content.ReadAsStringAsync();
-            var statuscode = response.StatusCode;
-            throw new Exception(error);
-        }
-    }
-
-    private async Task GetNextMonthCalendar()
-    {
-        var response = await _httpClient.GetAsync($"api/timesheets/calendar?country=fr&month={DateTime.Now.AddMonths(1).Month}&year={DateTime.Now.AddMonths(1).Year}");
-        if (response.IsSuccessStatusCode)
-        {
-            var responseContent = await response.Content.ReadAsStringAsync();
-            try
-            {
-                NextMonthCalendarDays = JsonConvert.DeserializeObject<CalendarDto>(responseContent);
-            }
-            catch (Exception exc)
-            {
-                Console.WriteLine(exc);
-            }
-        }
-        else
-        {
-            var error = await response.Content.ReadAsStringAsync();
-            var statuscode = response.StatusCode;
-            throw new Exception(error);
-        }
+        CurrentMonthCalendarDays = currentMonthTask.Result;
+        NextMonthCalendarDays = nextMonthTask.Result;
     }
 
     private void OnDayClick(CalendarDayDto calendarDay)

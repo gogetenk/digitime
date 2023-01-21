@@ -11,8 +11,9 @@ public class TimesheetTests : IntegrationTestBase
 {
     private const string _BaseEndpointUri = "/api/timesheets";
 
-    public TimesheetTests() : base()
+    public TimesheetTests() : base(role)
     {
+        var role = "Worker";
     }
 
     [Fact]

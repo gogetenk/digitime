@@ -1,6 +1,8 @@
 using Blazored.LocalStorage;
 using Digitime.Client;
 using Digitime.Client.Authentication;
+using Digitime.Client.Infrastructure;
+using Digitime.Client.Infrastructure.Abstractions;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -33,6 +35,8 @@ builder.Services.AddOidcAuthentication(options =>
 
 builder.Services.AddApiAuthorization()
                 .AddAccountClaimsPrincipalFactory<RolesClaimsPrincipalFactory>();
+
+builder.Services.AddScoped<IDataStore, DataStore>();
 
 var host = builder.Build();
 var logger = host.Services

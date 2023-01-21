@@ -33,6 +33,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\BE\Digitime.Server.ClientSdk\Digitime.Server.ClientSdk.csproj" />
     <ProjectReference Include="..\..\Shared\Digitime.Shared.csproj" />
+    <ProjectReference Include="..\Digitime.Client.Infrastructure\Digitime.Client.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -33,9 +33,8 @@ public class DataStore : IDataStore
                 return await _localStorage.GetItemAsync<CalendarDto>($"calendar_{date.Month}_{date.Year}");
             }
             var responseContent = await response.Content.ReadAsStringAsync();
-            var calendar = JsonConvert.DeserializeObject<CalendarDto>(responseContent);
-            await _localStorage.SetItemAsync($"calendar_{date.Month}_{date.Year}", calendar);
-            return calendar;
+            await _localStorage.SetItemAsStringAsync($"calendar_{date.Month}_{date.Year}", responseContent);
+            return JsonConvert.DeserializeObject<CalendarDto>(responseContent);
         }
         catch (Exception exc)
         {
