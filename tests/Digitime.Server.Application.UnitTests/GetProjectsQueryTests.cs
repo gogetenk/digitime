@@ -1,11 +1,11 @@
 ﻿using Auth0.ManagementApi.Models;
 using Digitime.Server.Application.Abstractions;
-using Digitime.Server.Application.Projects;
+using Digitime.Server.Application.Projects.Queries;
 using Digitime.Server.Domain.Projects;
 using Digitime.Server.Domain.Users;
 using Digitime.Shared.Contracts.Projects;
 using Mapster;
-using static Digitime.Server.Application.Projects.GetProjectsQuery;
+using static Digitime.Server.Application.Projects.Queries.GetProjectsQuery;
 using User = Digitime.Server.Domain.Users.User;
 
 namespace Digitime.Server.Application.UnitTests;

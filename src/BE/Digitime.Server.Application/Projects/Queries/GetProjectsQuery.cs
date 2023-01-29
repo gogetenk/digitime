@@ -7,7 +7,7 @@ using Digitime.Shared.Contracts.Projects;
 using Mapster;
 using MediatR;
 
-namespace Digitime.Server.Application.Projects;
+namespace Digitime.Server.Application.Projects.Queries;
 
 public record GetProjectsQuery(string UserId) : IRequest<GetUserProjectsResponse>, ICacheableRequest
 {

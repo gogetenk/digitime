@@ -31,4 +31,10 @@ internal class ProjectRepository : MongoRepository<ProjectEntity>, IProjectRepos
         var projects = await FilterByAsync(x => x.Members.Any(x => x.UserId == userId));
         return projects.Adapt<List<Project>>();
     }
+
+    public Task InsertOneAsync(Project project)
+    {
+        var projectEntity = project.Adapt<ProjectEntity>();
+        return base.InsertOneAsync(projectEntity);
+    }
 }

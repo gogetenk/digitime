@@ -3,5 +3,7 @@
 public enum MemberRoleEnum
 {
     Worker,
-    Reviewer
+    Reviewer,
+    ProjectAdmin,
+    WorkspaceAdmin
 }
