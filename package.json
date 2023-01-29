@@ -1,5 +1,7 @@
 {
     "name": "Digitime",
     "version": "0.7.0",
-    "dependencies": {}
+    "devDependencies": {
+        "@tailwindcss/forms": "^0.5.3"
+    }
 }

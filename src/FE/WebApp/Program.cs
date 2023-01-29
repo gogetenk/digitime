@@ -1,8 +1,8 @@
 using Blazored.LocalStorage;
 using Digitime.Client;
-using Digitime.Client.Authentication;
 using Digitime.Client.Infrastructure;
 using Digitime.Client.Infrastructure.Abstractions;
+using Digitime.Shared.Authentication;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
