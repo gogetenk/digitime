@@ -36,7 +36,7 @@ public class TimesheetRepository : MongoRepository<TimesheetEntity>, ITimesheetR
     {
         var beginDate = new DateTime(year, month, 1);
         var endDate = beginDate.AddMonths(1).AddDays(-1);
-        return (await FilterByAsync(x => 
+        return (await FilterByAsync(x =>
             x.Worker.UserId == userId &&
             x.CreateDate >= beginDate &&
             x.CreateDate <= endDate))
@@ -49,10 +49,11 @@ public class TimesheetRepository : MongoRepository<TimesheetEntity>, ITimesheetR
         return timesheets.Adapt<List<Timesheet>>();
     }
 
-    public Task UpdateAsync(Timesheet timesheet)
+    public async Task<Timesheet> UpdateAsync(Timesheet timesheet)
     {
         var entity = timesheet.Adapt<TimesheetEntity>();
         var filter = Builders<TimesheetEntity>.Filter.Eq(doc => doc.Id, entity.Id);
-        return Collection.FindOneAndReplaceAsync(filter, entity);
+        var updatedEntity = await Collection.FindOneAndReplaceAsync(filter, entity);
+        return updatedEntity.Adapt<Timesheet>();
     }
 }

@@ -9,5 +9,5 @@ public interface IProjectRepository
     Task<Project> FindByIdAsync(string id);
     Task<List<Project>> GetProjectsByReviewerId(string reviewerId);
     Task<List<Project>> GetProjectsByUserId(string userId);
-    Task InsertOneAsync(Project project);
+    Task<Project> InsertOneAsync(Project project);
 }

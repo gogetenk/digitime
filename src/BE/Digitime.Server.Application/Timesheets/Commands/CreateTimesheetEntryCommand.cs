@@ -55,7 +55,7 @@ public record CreateTimesheetEntryCommand(string TimesheetId, string ProjectId, 
             timesheet.AddEntry(entry);
 
             // update timesheet
-            await _timesheetRepository.UpdateAsync(timesheet);
+            var updatedTimesheet = await _timesheetRepository.UpdateAsync(timesheet);
 
             // invalid the cache for the user 
             await _cachingProvider.RemoveAsync($"Calendar_{request.Date.Month}_{request.Date.Year}_{request.UserId}");
@@ -70,11 +70,9 @@ public record CreateTimesheetEntryCommand(string TimesheetId, string ProjectId, 
             if (workerUser is null)
                 throw new InvalidOperationException($"User with id {request.UserId} not found, aborting timesheet entry creation.");
 
-            var worker = new Worker(workerUser.Id.ToString(), workerUser.Firstname, workerUser.Lastname, workerUser.Email, workerUser.ProfilePicture);
+            var worker = new Worker(request.UserId, workerUser.Firstname, workerUser.Lastname, workerUser.Email, workerUser.ProfilePicture);
             var timesheet = new Timesheet(null, worker, DateTime.Now, DateTime.Now, null);
-
-            await _timesheetRepository.CreateAsync(timesheet);
-            return timesheet;
+            return await _timesheetRepository.CreateAsync(timesheet);
         }
     }
 }

@@ -9,7 +9,7 @@ public interface ITimesheetRepository
     Task<Timesheet> CreateAsync(Timesheet timesheet);
     Task<Timesheet> GetbyIdAsync(string id);
     Task<List<Timesheet>> GetbyUserAndMonthOfyear(string userId, int month, int year);
-    Task UpdateAsync(Timesheet timesheet);
+    Task<Timesheet> UpdateAsync(Timesheet timesheet);
     Task DeleteAsync(string id);
     Task<List<Timesheet>> GetTimesheetsFromProjectIds(string[] projectIds);
 }

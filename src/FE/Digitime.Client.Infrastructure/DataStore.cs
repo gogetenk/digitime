@@ -1,7 +1,12 @@
-﻿using Blazored.LocalStorage;
+﻿using System.Diagnostics.Metrics;
+using System.Net.Http.Json;
+using Blazored.LocalStorage;
 using Digitime.Client.Infrastructure.Abstractions;
+using Digitime.Client.Infrastructure.ViewModels;
+using Digitime.Shared.Contracts.Projects;
 using Digitime.Shared.Dto;
 using Newtonsoft.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Digitime.Client.Infrastructure;
 
@@ -35,6 +40,68 @@ public class DataStore : IDataStore
             var responseContent = await response.Content.ReadAsStringAsync();
             await _localStorage.SetItemAsStringAsync($"calendar_{date.Month}_{date.Year}", responseContent);
             return JsonConvert.DeserializeObject<CalendarDto>(responseContent);
+        }
+        catch (Exception exc)
+        {
+            Console.WriteLine(exc);
+            return null;
+        }
+    }
+
+    public async Task<CreateProjectResponse> CreateProject(CreateProjectVm project)
+    {
+        try
+        {
+            var response = await _httpClient.PostAsJsonAsync($"api/projects", project);
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                var statuscode = response.StatusCode;
+            }
+            var responseContent = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<CreateProjectResponse>(responseContent);
+        }
+        catch (Exception exc)
+        {
+            Console.WriteLine(exc);
+            return null;
+        }
+    }
+
+    public async Task<ProjectDto> GetProjectById(string id)
+    {
+        try
+        {
+            var response = await _httpClient.GetAsync($"api/projects/{id}");
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                var statuscode = response.StatusCode;
+            }
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var resp = JsonConvert.DeserializeObject<ProjectDto>(responseContent);
+            return resp;
+        }
+        catch (Exception exc)
+        {
+            Console.WriteLine(exc);
+            return null;
+        }
+    }
+
+    public async Task<GetUserProjectsResponse> GetUserProjects()
+    {
+        try
+        {
+            var response = await _httpClient.GetAsync($"api/projects");
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                var statuscode = response.StatusCode;
+            }
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var resp = JsonConvert.DeserializeObject<GetUserProjectsResponse>(responseContent);
+            return resp;
         }
         catch (Exception exc)
         {

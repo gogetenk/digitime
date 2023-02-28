@@ -32,9 +32,11 @@ internal class ProjectRepository : MongoRepository<ProjectEntity>, IProjectRepos
         return projects.Adapt<List<Project>>();
     }
 
-    public Task InsertOneAsync(Project project)
+    public async Task<Project> InsertOneAsync(Project project)
     {
         var projectEntity = project.Adapt<ProjectEntity>();
-        return base.InsertOneAsync(projectEntity);
+        await base.InsertOneAsync(projectEntity);
+        var createdItem = await Collection.Find(x => x.Id == projectEntity.Id).FirstOrDefaultAsync();
+        return createdItem.Adapt<Project>();
     }
 }

@@ -40,13 +40,13 @@ public class MappingProfile : IRegister
             .MapToConstructor(true)
             .TwoWays();
 
-        config.NewConfig<Domain.Projects.Project, UserProject>()
+        config.NewConfig<Domain.Projects.Project, ProjectDto>()
            .Map(dest => dest.Id, src => src.Id)
            .Map(dest => dest.Title, src => src.Title)
            .Map(dest => dest.Code, src => src.Code)
            .Map(dest => dest.Description, src => src.Description)
            .Map(dest => dest.WorkspaceId, src => src.WorkspaceId)
-           .Map(dest => dest.MemberCount, src => src.Members.Count)
+           .Map(dest => dest.Members, src => src.Members)
            .MapToConstructor(true)
            .TwoWays();
 

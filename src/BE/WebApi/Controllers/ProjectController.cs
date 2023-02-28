@@ -20,7 +20,7 @@ public class ProjectController : ControllerBase
 
     // Post endpoint to create a project
     [HttpPost]
-    [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(CreateProjectResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateProject([FromBody] CreateProjectCommand request)
     {
@@ -42,6 +42,20 @@ public class ProjectController : ControllerBase
         var response = await _sender.Send(query);
         if (response.Projects is null || !response.Projects.Any())
             return NotFound(new { error = "No project has been found for the current user." });
+
+        return Ok(response);
+    }
+
+    // Get endpoint to get a project from its id
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(ProjectDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetProjectById([FromRoute] string id)
+    {
+        var query = new GetProjectByIdQuery(id);
+        var response = await _sender.Send(query);
+        if (response is null)
+            return NotFound(new { error = "No project has been found for this Id." });
 
         return Ok(response);
     }
