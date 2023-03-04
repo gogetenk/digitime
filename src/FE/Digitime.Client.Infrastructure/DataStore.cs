@@ -4,6 +4,7 @@ using Blazored.LocalStorage;
 using Digitime.Client.Infrastructure.Abstractions;
 using Digitime.Client.Infrastructure.ViewModels;
 using Digitime.Shared.Contracts.Projects;
+using Digitime.Shared.Contracts.Timesheets;
 using Digitime.Shared.Dto;
 using Newtonsoft.Json;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -101,6 +102,27 @@ public class DataStore : IDataStore
             }
             var responseContent = await response.Content.ReadAsStringAsync();
             var resp = JsonConvert.DeserializeObject<GetUserProjectsResponse>(responseContent);
+            return resp;
+        }
+        catch (Exception exc)
+        {
+            Console.WriteLine(exc);
+            return null;
+        }
+    }
+
+    public async Task<CreateTimesheetEntryReponse> CreateTimesheetEntry(CreateTimesheetEntryRequest request)
+    {
+        try
+        {
+            var response = await _httpClient.PostAsJsonAsync($"api/timesheets/entry", request);
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                var statuscode = response.StatusCode;
+            }
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var resp = JsonConvert.DeserializeObject<CreateTimesheetEntryReponse>(responseContent);
             return resp;
         }
         catch (Exception exc)

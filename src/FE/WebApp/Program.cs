@@ -1,4 +1,5 @@
 using Blazored.LocalStorage;
+using Blazored.Modal;
 using Digitime.Client;
 using Digitime.Client.Infrastructure;
 using Digitime.Client.Infrastructure.Abstractions;
@@ -37,6 +38,8 @@ builder.Services.AddApiAuthorization()
                 .AddAccountClaimsPrincipalFactory<RolesClaimsPrincipalFactory>();
 
 builder.Services.AddScoped<IDataStore, DataStore>();
+
+builder.Services.AddBlazoredModal();
 
 var host = builder.Build();
 var logger = host.Services

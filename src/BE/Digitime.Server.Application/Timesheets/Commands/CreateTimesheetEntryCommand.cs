@@ -51,7 +51,7 @@ public record CreateTimesheetEntryCommand(string TimesheetId, string ProjectId, 
                 throw new InvalidOperationException($"Project with id {request.ProjectId} not found, aborting timesheet entry creation.");
 
             // Add timesheet entry to timesheet
-            var entry = TimesheetEntry.Create(null, request.Date, request.Hours, project.Adapt<Project>(), TimesheetStatus.Draft);
+            var entry = TimesheetEntry.Create(null, request.Date.Date, request.Hours, project.Adapt<Project>(), TimesheetStatus.Draft);
             timesheet.AddEntry(entry);
 
             // update timesheet
