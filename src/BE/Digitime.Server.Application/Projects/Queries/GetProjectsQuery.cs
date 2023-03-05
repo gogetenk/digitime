@@ -4,10 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Digitime.Server.Application.Abstractions;
 using Digitime.Shared.Contracts.Projects;
-using EasyCaching.Core;
 using Mapster;
 using MediatR;
-using Microsoft.Extensions.Caching.Distributed;
 
 namespace Digitime.Server.Application.Projects.Queries;
 
@@ -18,11 +16,8 @@ public record GetProjectsQuery(string UserId) : IRequest<GetUserProjectsResponse
         private readonly IUserRepository _userRepository;
         private readonly IProjectRepository _projectRepository;
 
-        public GetProjectsQueryHandler(IUserRepository userRepository, IProjectRepository projectRepository, IDistributedCache cache, IEasyCachingProviderFactory cachingFactory)
+        public GetProjectsQueryHandler(IUserRepository userRepository, IProjectRepository projectRepository)
         {
-            var factory = cachingFactory.GetCachingProvider("memory");
-            factory.Set("toto", "titi", TimeSpan.FromMinutes(1));
-            var t = cache.GetAsync("toto");
             _userRepository = userRepository;
             _projectRepository = projectRepository;
         }

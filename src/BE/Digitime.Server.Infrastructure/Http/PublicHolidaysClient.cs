@@ -28,7 +28,7 @@ public class PublicHolidaysClient : IObtainPublicHolidays
             return cachedHolidays.Value;
 
         var publicHolidays = new List<DateTime>();
-        var requestUri = $"api/v3/PublicHolidays/{dateTime.Year}/{country}";
+        var requestUri = $"PublicHolidays/{dateTime.Year}/{country}";
         var client = _httpClientFactory.CreateClient("PublicHolidaysClient");
         client.BaseAddress = new Uri(_configuration["ExternalApis:PublicHolidaysApi:Url"]);
         var response = await client.GetAsync(requestUri);

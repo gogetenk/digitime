@@ -1,11 +1,9 @@
-﻿using Auth0.ManagementApi.Models;
-using Digitime.Server.Application.Abstractions;
+﻿using Digitime.Server.Application.Abstractions;
 using Digitime.Server.Application.Projects.Queries;
 using Digitime.Server.Domain.Projects;
-using Digitime.Server.Domain.Users;
 using Digitime.Shared.Contracts.Projects;
 using Mapster;
-using static Digitime.Server.Application.Projects.Queries.GetProjectByIdQuery;
+using static Digitime.Server.Application.Projects.Queries.GetProjectsQuery;
 using User = Digitime.Server.Domain.Users.User;
 
 namespace Digitime.Server.Application.UnitTests;
@@ -16,7 +14,7 @@ public class GetProjectsQueryTests
     public async Task Handle_NominalCase_ReturnsProjects()
     {
         // Arrange
-        var query = new Fixture().Create<GetProjectByIdQuery>();
+        var query = new Fixture().Create<GetProjectsQuery>();
         var user = new Fixture().Create<User>();
         var userRepoMock = new Mock<IUserRepository>();
         userRepoMock
@@ -34,14 +32,14 @@ public class GetProjectsQueryTests
 
         // Assert
         result.Should().NotBeNull();
-        result.Projects.Should().BeEquivalentTo(projectsToReturn.Adapt<List<UserProject>>());
+        result.Projects.Should().BeEquivalentTo(projectsToReturn.Adapt<List<ProjectDto>>());
     }
 
     [Fact]
     public async Task Handle_WhenNoProjectsReturned_ReturnsNothing()
     {
         // Arrange
-        var query = new Fixture().Create<GetProjectByIdQuery>();
+        var query = new Fixture().Create<GetProjectsQuery>();
         var user = new Fixture().Create<User>();
         var userRepoMock = new Mock<IUserRepository>();
         userRepoMock

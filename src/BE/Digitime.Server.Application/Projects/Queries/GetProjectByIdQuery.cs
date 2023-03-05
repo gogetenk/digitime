@@ -8,7 +8,7 @@ using MediatR;
 
 namespace Digitime.Server.Application.Projects.Queries;
 
-public record GetProjectByIdQuery(string projectId) : IRequest<ProjectDto>, ICacheableRequest
+public record GetProjectByIdQuery(string ProjectId) : IRequest<ProjectDto>, ICacheableRequest
 {
     public class GetProjectByIdQueryHandler : IRequestHandler<GetProjectByIdQuery, ProjectDto>
     {
@@ -21,7 +21,7 @@ public record GetProjectByIdQuery(string projectId) : IRequest<ProjectDto>, ICac
 
         public async Task<ProjectDto> Handle(GetProjectByIdQuery request, CancellationToken cancellationToken)
         {
-            var projects = await _projectRepository.FindByIdAsync(request.projectId);
+            var projects = await _projectRepository.FindByIdAsync(request.ProjectId);
             return projects.Adapt<ProjectDto>();
         }
     }
@@ -33,6 +33,6 @@ public record GetProjectByIdQuery(string projectId) : IRequest<ProjectDto>, ICac
 
     public string GetCacheKey()
     {
-        return $"Projects_{projectId}";
+        return $"Projects_{ProjectId}";
     }
 }

@@ -38,7 +38,6 @@ builder.Services.AddSwaggerGen(c =>
         securityScheme = new OpenApiOAuthSecurityScheme(builder.Configuration["Authentication:Schemes:Bearer:Authority"]);
         securityRequirement = new OpenApiOAuthSecurityRequirement();
     }
-
     c.AddSecurityDefinition(securityDefinitionName, securityScheme);
     c.AddSecurityRequirement(securityRequirement);
 });

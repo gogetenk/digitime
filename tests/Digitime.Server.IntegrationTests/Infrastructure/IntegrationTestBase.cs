@@ -21,12 +21,11 @@ public abstract class IntegrationTestBase : IClassFixture<WebApplicationFactory<
     private static MongoDbRunner _runner;
     private static MongoClient _mongoClient;
 
-    public IntegrationTestBase(string userRole)
+    public IntegrationTestBase()
     {
         Factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
         {
             builder.UseEnvironment("Staging");
-            //builder.ConfigureServices(services => services.AddHttpClient("PublicHolidaysClient", client => CreateMockHttpClient()));
             builder.ConfigureTestServices(services =>
             {
                 services
@@ -35,6 +34,7 @@ public abstract class IntegrationTestBase : IClassFixture<WebApplicationFactory<
                         "TestScheme", options => { });
 
                 services.PostConfigure<MongoDbSettings>((config) => config.ConnectionString = _runner.ConnectionString);
+                services.AddHttpClient("PublicHolidaysClient", client => CreateMockHttpClient());
             });
         });
     }
@@ -83,13 +83,14 @@ public abstract class IntegrationTestBase : IClassFixture<WebApplicationFactory<
     public HttpClient CreateMockHttpClient()
     {
         var config = Factory.Services.GetService<IConfiguration>();
+        var uri = $"{config["ExternalApis:PublicHolidaysApi:Url"]}/PublicHolidays/2022/FR";
         var mockHttp = new MockHttpMessageHandler();
         // Mocking calls to public holidays api
-        mockHttp.When($"{config["ExternalApis:PublicHolidaysApi:Url"]}/api/v3/PublicHolidays/2022/FR")
+        mockHttp.When(uri)
                 .Respond(HttpStatusCode.OK);
 
         var client = new HttpClient(mockHttp);
-        client.BaseAddress = new Uri("http://toto");
+        client.BaseAddress = new Uri(uri);
         client.MaxResponseContentBufferSize = 32;
         return client;
     }

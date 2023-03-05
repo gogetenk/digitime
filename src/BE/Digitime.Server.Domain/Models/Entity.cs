@@ -12,6 +12,9 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>> where TId : notnull
 
     public override bool Equals(object? obj)
     {
+        if (Id is null)
+            return false;
+
         if (obj is null)
         {
             return false;

@@ -45,6 +45,9 @@ public class CreateTimesheetEntryCommandTests
         timesheetRepository
             .Setup(x => x.GetbyIdAsync(timesheetId))
             .ReturnsAsync(timesheet);
+        timesheetRepository
+            .Setup(x => x.CreateAsync(It.IsAny<Timesheet>()))
+            .ReturnsAsync(timesheet);
         var cachingProvider = new Mock<IEasyCachingProvider>();
 
         var sut = new CreateTimesheetEntryCommandHandler(timesheetRepository.Object, projectRepository.Object, userRepository.Object, cachingProvider.Object);
