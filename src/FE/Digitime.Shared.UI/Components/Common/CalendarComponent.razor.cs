@@ -15,7 +15,7 @@ public partial class CalendarComponent : ComponentBase
     public CalendarDto CurrentMonthCalendarDays = new();
     public CalendarDto NextMonthCalendarDays = new();
     public List<TimesheetEntryDto> CurrentDayTimesheetEntries = new();
-    public List<ProjectDto> ProjectList;
+    public List<ProjectDto> ProjectList = new();
     public DateTime SelectedDate = DateTime.Now;
     public bool IsFormVisible;
 
