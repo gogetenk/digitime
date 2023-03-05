@@ -69,8 +69,8 @@ if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Digitime API v1");
         c.OAuthClientId(builder.Configuration["Authentication:Schemes:Bearer:ClientId"]);
         c.OAuthClientSecret(builder.Configuration["Authentication:Schemes:Bearer:ClientSecret"]);
-        c.OAuthAppName("Auth0 Digitime API Dev (Test Application)");
-        c.OAuthAdditionalQueryStringParams(new Dictionary<string, string> { { "audience", "https://dev.digitime.app" } });
+        c.OAuthAppName($"Auth0 Digitime API {app.Environment} (Test Application)");
+        c.OAuthAdditionalQueryStringParams(new Dictionary<string, string> { { "audience", builder.Configuration["Authentication:Schemes:Bearer:ValidAudience"] } });
         c.OAuthUsePkce();
     });
 }
