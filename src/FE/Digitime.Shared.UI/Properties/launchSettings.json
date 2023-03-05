@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Digitime.Shared.UI": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:4453;http://localhost:4455"
+    }
+  }
+}

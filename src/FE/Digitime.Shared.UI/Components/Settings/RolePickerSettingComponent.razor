@@ -1,0 +1,35 @@
+﻿@using Microsoft.AspNetCore.Components.Web
+
+<label class="@_currentFrameClasses relative border rounded-bl-md rounded-br-md p-4 flex cursor-pointer focus:outline-none" @onclick="OnRoleClickedSelected">
+    <input type="radio" name="@Title" value="@Title" class="mt-0.5 h-4 w-4 shrink-0 cursor-pointer text-indigo-600 border-gray-300 focus:ring-indigo-500">
+    <span class="ml-3 flex flex-col">
+        <span class="block text-sm font-medium @_currentTextClasses-900">@Title</span>
+        <span class="block text-sm @_currentTextClasses-700">@Caption</span>
+    </span>
+</label>
+
+@code {
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public string Caption { get; set; }
+
+    [Parameter]
+    public bool IsActive { get; set; }
+
+    private const string _ActiveRoleFrameClasses = "bg-indigo-50 border-indigo-200 z-10";
+    private const string _InactiveFrameRoleClasses = "border-gray-200";
+    private const string _ActiveTextClass = "text-indigo";
+    private const string _InactiveTextClass = "text-gray";
+
+    private string _currentFrameClasses = "";
+    private string _currentTextClasses = "";
+
+    private void OnRoleClickedSelected(MouseEventArgs args)
+    {
+        IsActive = !IsActive;
+        _currentFrameClasses = IsActive ? _ActiveRoleFrameClasses : _InactiveFrameRoleClasses;
+        _currentTextClasses = IsActive ? _ActiveTextClass : _InactiveTextClass;
+    }
+}

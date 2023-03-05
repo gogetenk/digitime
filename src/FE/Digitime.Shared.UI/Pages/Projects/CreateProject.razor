@@ -1,0 +1,104 @@
+﻿@using Digitime.Client.Infrastructure.Abstractions;
+@using Digitime.Client.Infrastructure.ViewModels;
+@using Microsoft.AspNetCore.Components.Forms;
+@using Microsoft.AspNetCore.Components.Web
+@page "/projects/new"
+@inject NavigationManager _navigationManager;
+@inject IDataStore _dataStore;
+
+<div class="bg-[#F0F4F8] pb-32">
+    <header class="py-16">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <h3 class="text-3xl font-bold tracking-tight text-black-800">Create Project</h3>
+            <h4 class="text-base tracking-tight text-gray-500">A project is what your coworkers will spend time on</h4>
+        </div>
+    </header>
+</div>
+
+<main class="-mt-32">
+    <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+        <div class="rounded-lg bg-white px-5 py-12 shadow sm:px-6">
+            <div class="flex">
+                <EditForm class="flex-auto lg:p-16 p-3" Model="@_vm" OnValidSubmit="@HandleSubmit">
+
+                    <div class="space-y-8">
+                        <div>
+                            <div class="max-w-lg">
+                                <label for="title" class="block text-sm font-medium text-gray-700">Name your project *</label>
+                                <div class="mt-1">
+                                    <InputText type="text" @bind-Value="_vm.Title" placeholder="My awesome project" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border h-10 px-3" />
+                                </div>
+                            </div>
+
+                            <div class="mt-6 max-w-lg">
+                                <div class="sm:col-span-4">
+                                    <label for="code" class="block text-sm font-medium text-gray-700">Choose a unique code *</label>
+                                    <div class="mt-1 flex rounded-md shadow-sm">
+                                        <span class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-500 sm:text-sm h-10">digitime.app/projects/</span>
+                                        <InputText type="text" @bind-Value="_vm.Code" autocomplete="code" placeholder="ex: digitime-api-dev" class="block w-full min-w-0 px-3 flex-1 rounded-none rounded-r-md border-gray-300 border focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                                    </div>
+                                    <button type="button" @onclick="OnGenerateCode" class="underline text-xs text-gray-500 hover:text-[#7069FA]">Generate one for me</button>
+                                </div>
+                            </div>
+
+                            <div class="sm:pt-5">
+                                <label for="description" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">About</label>
+                                <div class="mt-1 sm:col-span-2 sm:mt-0">
+                                    <InputTextArea @bind-Value="_vm.Description" placeholder="ex: Creating the front end of a timesheet app." rows="4" class="block border w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></InputTextArea>
+                                    <p class="mt-2 text-sm text-gray-500">Write a few sentences about your project.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <DataAnnotationsValidator />
+                    <ValidationSummary class="mt-4" />
+
+                    <div class="flex mt-12">
+                        <button type="button" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Cancel</button>
+                        <button type="submit" class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Create project</button>
+                    </div>
+                </EditForm>
+                <div class="flex-auto">
+                    <img class="max-w-md ml-auto" src="img/new-project.png" />
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@code
+{
+    private CreateProjectVm _vm = new();
+    string[] first = new string[] {"Brown", "Black", "White", "Orange", "Wild", "Tiger", "Snow-Leopard", "Koo",
+                                              "Kooapps", "Gray", "Zombie", "Gumdrop", "Candy", "Choco", "Darth", "Dark",
+                                              "Goldfish-on-a", "Evil", "German", "Beach", "City", "Haunted", "Spooky"};
+    string[] last = new string[] {"Dog", "Cat", "Dalmation", "Bird", "Koobird", "Goldfish", "Turtle", "Clyde",
+                                            "Selina", "Troy", "Oscar", "Lily", "Skateboard", "Swim-E-Fresh", "Pip", "Leo",
+                                            "Raph", "Donny", "Mikey", "Man", "Sloth", "Ferret", "Grandpa", "Voviboye"};
+
+    private async Task HandleSubmit()
+    {
+        try
+        {
+            var project = await _dataStore.CreateProject(_vm);
+            _navigationManager.NavigateTo($"/projects/{project.Id}");
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    private void OnGenerateCode()
+    {
+        Random rnd = new Random();
+        int x = -1;
+        int y = -1;
+
+        x = rnd.Next(0, first.Length);
+        y = rnd.Next(0, last.Length);
+
+        _vm.Code = first[x].ToLowerInvariant() + "-" + last[y].ToLowerInvariant();
+    }
+}
