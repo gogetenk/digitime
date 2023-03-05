@@ -1,0 +1,84 @@
+﻿@using Digitime.Client.Infrastructure.Abstractions;
+@using Digitime.Shared.UI.ViewModels;
+@using Microsoft.AspNetCore.Components.Web
+@using Digitime.Shared.Contracts.Projects;
+
+<div class="block bg-gray-50 rounded-md my-2 @_visibilityClass">
+    <div class="flex items-center px-4 py-4 sm:px-6">
+        <div class="lg:mr-4 p-1 mr-4">
+            <input type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6">
+        </div>
+        <div class="container flex px-0 mx-0">
+            <div class="flex grow flex-column">
+                <div>
+                    <select id="project-title" name="project-title" @bind="@_selectedProjectId" class="max-w-xs mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        @if (ProjectList != null && ProjectList.Any())
+                        {
+                            <option> </option>
+                            @foreach (var project in ProjectList)
+                            {
+                                <option value="@project.Id">@project?.Title</option>
+                            }
+                        }
+                    </select>
+
+                </div>
+                <div class="mt-2 sm:flex sm:justify-between">
+                    <div class="sm:flex">
+                        <button @onclick="OnSave" type="button" class="inline-flex items-center gap-x-1.5 rounded-md bg-black py-1.5 px-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                            <svg class="-ml-0.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+                            </svg>
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="flex mt-2 font-bold sm:mt-0">
+                <p>
+                    <input type="number" @bind="_workedHours" name="hours" max="24" min="0.5" step="0.5" class="w-20 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="hours">
+                    <span class="text-sm font-normal">h</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Inject] IDataStore DataStore { get; set; }
+
+    [Parameter]
+    public EventCallback<AddTimesheetEntryFormVM> OnAddedTimesheetEntry { get; set; }
+
+    [Parameter]
+    public List<ProjectDto> ProjectList { get; set; } = new();
+
+    private bool _isFormVisible;
+    [Parameter]
+    public bool IsFormVisible { 
+        get => _isFormVisible; 
+        set 
+        { 
+            _isFormVisible = value;
+            VisibilityChanged();
+        }
+    }
+
+    private string _selectedProjectId;
+    private int _workedHours = 8;
+    private string _visibilityClass = "hidden";
+
+    private async Task OnSave()
+    {
+        if (string.IsNullOrEmpty(_selectedProjectId))
+            return;
+
+        var selectedProject = ProjectList.FirstOrDefault(x => x.Id == _selectedProjectId);
+        await OnAddedTimesheetEntry.InvokeAsync(new AddTimesheetEntryFormVM(selectedProject, _workedHours));
+    }
+
+    private void VisibilityChanged()
+    {
+        _visibilityClass = _isFormVisible? _visibilityClass = "visible" : _visibilityClass = "hidden";
+    }
+}

@@ -69,3 +69,12 @@ a, .btn-link {
     line-height: 1.25rem !important;
     color: black !important;
 }
+
+.settingsActiveLink {
+    background-color: rgb(249 250 251) !important;
+    color: rgb(234 88 12) !important;
+}
+
+    .settingsActiveLink:hover {
+        background-color: white !important;
+    }
