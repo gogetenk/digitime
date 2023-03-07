@@ -46,8 +46,10 @@
     <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
 
         <IndicatorsListComponent />
+        <CalendarComponent />
+        @*<SubmittedTimesheet />*@
 
-        <AuthorizeView Roles="Worker">
+        @*<AuthorizeView Roles="Worker">
             <Authorized> 
                 <CalendarComponent />
             </Authorized>
@@ -57,7 +59,7 @@
             <Authorized>
                 <SubmittedTimesheet />
             </Authorized>
-        </AuthorizeView>
+        </AuthorizeView>*@
 
         @*<WorkerTimesheet />*@
 
