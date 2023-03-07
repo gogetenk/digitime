@@ -26,7 +26,7 @@ public class TimesheetController : ControllerBase
     /// </summary>
     /// <param name="query"></param>
     /// <returns></returns>
-    [Authorize(Roles = "Worker, Reviewer")]
+    [Authorize/*(Roles = "Worker, Reviewer")*/]
     [HttpGet("calendar")]
     [ProducesResponseType(typeof(Shared.Dto.CalendarDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCalendar([FromQuery] GetCalendarQuery query)
@@ -40,7 +40,7 @@ public class TimesheetController : ControllerBase
     /// </summary>
     /// <param name="query"></param>
     /// <returns></returns>
-    [Authorize(Roles = "Reviewer")]
+    [Authorize/*(Roles = "Reviewer")*/]
     [HttpGet("timesheets")]
     [ProducesResponseType(typeof(GetTimesheetForUserAndDateResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetTimesheetsToReview([FromQuery] GetTimesheetsToReviewQuery query)
@@ -54,7 +54,7 @@ public class TimesheetController : ControllerBase
     /// </summary>
     /// <param name="request"></param>
     /// <returns>The created timesheet entry</returns>
-    [Authorize(Roles = "Worker, Reviewer")]
+    [Authorize/*(Roles = "Worker, Reviewer")*/]
     [HttpPost("entry")]
     [ProducesResponseType(typeof(CreateTimesheetEntryReponse), StatusCodes.Status201Created)]
     [ProducesResponseType(400)]
