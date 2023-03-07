@@ -11,7 +11,7 @@ using MediatR;
 
 namespace Digitime.Server.Application.Projects.Commands;
 
-public record CreateProjectCommand(string? UserId, string Title, string Code, string Description, string WorkspaceId) : IRequest<CreateProjectResponse>
+public record CreateProjectCommand(string? UserId, string Title, string Code, string? Description, string WorkspaceId) : IRequest<CreateProjectResponse>
 {
     public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand, CreateProjectResponse>
     {

@@ -2,7 +2,7 @@
 @using Digitime.Shared.UI.Components.Common
 @using Digitime.Shared.UI.Components.Dashboard
 @using Microsoft.AspNetCore.Components.Web
-
+@using Microsoft.JSInterop;
 
 <div class="my-12">
 
@@ -59,7 +59,7 @@
                 @foreach (var day in CurrentMonthCalendarDays?.CalendarDays)
                 {
                     <button type="button"
-                        @onclick="() => OnDayClick(day)"
+                        @onclick="async () => await OnDayClick(day)"
                         class="dayButton @(day is null ? "bg-gray-50 text-gray-400" : day.IsPublicHoliday ? "bg-yellow text-yellow-900" : "bg-white text-gray-400")
                            py-1.5 hover:bg-gray-100 focus:z-10">
                         <time datetime="@day?.Date.ToShortDateString()"
@@ -73,10 +73,10 @@
             </div>
         </section>
 
-        <section class="hidden text-center md:block">
+        <section class="text-center md:block mt-12 md:mt-0">
             <div class="flex">
                 <h3 class="font-semibold grow text-left text-xl text-gray-900">@FirstCharToUpperAsSpan(SelectedDate.Date.ToString("dddd d"))</h3>
-                <button type="button" @onclick="AddWorktime" class="inline-flex py-1.5 px-3 items-center rounded-md border border-transparent text-sm font-medium text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-2">
+                <button type="button" @onclick="AddWorktime" id="bt-addworktime" class="inline-flex py-1.5 px-3 items-center rounded-md border border-transparent text-sm font-medium text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-2">
                     <!-- Heroicon name: mini/plus -->
                     <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
@@ -84,32 +84,7 @@
                     Add worktime
                 </button>
             </div>
-            @*<div class="flex justify-end">
-                <div class="ml-4 mt-2 flex-shrink-0">
-                    <button type="button" class="relative inline-flex items-center rounded-md border border-gray-300 px-2 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-300">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" />
-                        </svg>
-                    </button>
-                </div>
-                <div class="ml-4 mt-2 flex-shrink-0">
-                    <button type="button" class="relative inline-flex items-center rounded-md border border-gray-300 px-2 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-300">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                        </svg>
-                    </button>
-                </div>
-                <div class="ml-4 mt-2 flex-shrink-0">
-                    <button type="button" class="relative inline-flex items-center rounded-md border border-transparent bg-indigo-600 pl-2 pr-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                        </svg>
-                        Add time
-                    </button>
-                </div>
-            </div>*@
             <div class="mt-14 isolate lg:h-96 rounded-lg">
-                
 
                 @if ((CurrentDayTimesheetEntries != null && CurrentDayTimesheetEntries.Any()))
                 {
@@ -133,16 +108,21 @@
                         <WorkerEmptyStateComponent />
                     }
                 }
-                
-
             </div>
-            @*<button class="w-full text-4xl bg-gray-100">+ Add worktime</button>*@
-           
         </section>
     </div>
 
     <div class="mt-16">
-        <h2 class="max-w-6xl text-lg font-medium leading-6 text-gray-900">Projects</h2>
+        <div class="flex">
+            <h2 class="flex-none grow max-w-6xl text-lg font-medium leading-6 text-gray-900">Projects</h2>
+            <button type="button" @onclick="AddWorktime" class="inline-flex py-1.5 px-3 items-center rounded-md text-sm font-medium text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-2">
+                View all
+                <!-- Heroicon name: mini/chevron-right -->
+                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+                </svg>
+            </button>
+        </div>
         <div>
             <h2 class="text-sm font-normal text-gray-500">Projects you are involved in.</h2>
             <ul role="list" class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">

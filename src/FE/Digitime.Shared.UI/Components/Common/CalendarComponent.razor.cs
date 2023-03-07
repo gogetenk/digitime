@@ -4,6 +4,7 @@ using Digitime.Shared.Contracts.Timesheets;
 using Digitime.Shared.Dto;
 using Digitime.Shared.UI.ViewModels;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using CalendarDto = Digitime.Shared.Dto.CalendarDto;
 
 namespace Digitime.Shared.UI.Components.Common;
@@ -11,6 +12,7 @@ namespace Digitime.Shared.UI.Components.Common;
 public partial class CalendarComponent : ComponentBase
 {
     [Inject] IDataStore DataStore { get; set; }
+    [Inject] IJSRuntime Js { get; set; }
 
     public CalendarDto CurrentMonthCalendarDays = new();
     public CalendarDto NextMonthCalendarDays = new();
@@ -29,10 +31,10 @@ public partial class CalendarComponent : ComponentBase
         NextMonthCalendarDays = nextMonthTask.Result;
         ProjectList = projectsTask.Result.Projects;
 
-        SelectCurrentDay();
+        await SelectCurrentDay();
     }
 
-    private void SelectCurrentDay()
+    private async Task SelectCurrentDay()
     {
         if (CurrentMonthCalendarDays is null)
             return;
@@ -42,13 +44,13 @@ public partial class CalendarComponent : ComponentBase
             if (day is null) continue;
             if (day.Date.Date == SelectedDate.Date)
             {
-                OnDayClick(day);
+                await OnDayClick(day);
                 return;
             }
         }
     }
 
-    private void OnDayClick(CalendarDayDto calendarDay)
+    private async Task OnDayClick(CalendarDayDto calendarDay)
     {
         if (calendarDay is null)
             return;
@@ -56,6 +58,7 @@ public partial class CalendarComponent : ComponentBase
         SelectedDate = calendarDay.Date.ToLocalTime();
         CurrentDayTimesheetEntries = calendarDay.TimesheetEntries;
         IsFormVisible = false;
+        await Js.InvokeVoidAsync("focusElement", "bt-addworktime");
     }
 
     private async Task AddWorktime()

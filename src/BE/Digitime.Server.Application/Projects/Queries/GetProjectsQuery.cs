@@ -9,7 +9,7 @@ using MediatR;
 
 namespace Digitime.Server.Application.Projects.Queries;
 
-public record GetProjectsQuery(string UserId) : IRequest<GetUserProjectsResponse>, ICacheableRequest
+public record GetProjectsQuery(string UserId) : IRequest<GetUserProjectsResponse>
 {
     public class GetProjectsQueryHandler : IRequestHandler<GetProjectsQuery, GetUserProjectsResponse>
     {
@@ -31,15 +31,5 @@ public record GetProjectsQuery(string UserId) : IRequest<GetUserProjectsResponse
             var projects = await _projectRepository.GetProjectsByUserId(user.Id);
             return new GetUserProjectsResponse(projects.Adapt<List<ProjectDto>>());
         }
-    }
-
-    public DateTime? GetCacheExpiration()
-    {
-        return DateTime.UtcNow.AddHours(1);
-    }
-
-    public string GetCacheKey()
-    {
-        return $"Projects_{UserId}";
     }
 }

@@ -1,23 +1,24 @@
-﻿using System.Diagnostics.Metrics;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using Blazored.LocalStorage;
 using Digitime.Client.Infrastructure.Abstractions;
 using Digitime.Client.Infrastructure.ViewModels;
 using Digitime.Shared.Contracts.Projects;
 using Digitime.Shared.Contracts.Timesheets;
 using Digitime.Shared.Dto;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Digitime.Client.Infrastructure;
 
 public class DataStore : IDataStore
 {
+    private readonly ILogger<DataStore> _logger;
     private readonly HttpClient _httpClient;
     private readonly ILocalStorageService _localStorage;
 
-    public DataStore(HttpClient httpClient, ILocalStorageService localStorage)
+    public DataStore(ILogger<DataStore> logger, HttpClient httpClient, ILocalStorageService localStorage)
     {
+        _logger = logger;
         _httpClient = httpClient;
         _localStorage = localStorage;
     }
@@ -44,7 +45,7 @@ public class DataStore : IDataStore
         }
         catch (Exception exc)
         {
-            Console.WriteLine(exc);
+            _logger.LogError(exc.Message, exc);
             return null;
         }
     }
@@ -64,7 +65,7 @@ public class DataStore : IDataStore
         }
         catch (Exception exc)
         {
-            Console.WriteLine(exc);
+            _logger.LogError(exc.Message, exc);
             return null;
         }
     }
@@ -85,7 +86,7 @@ public class DataStore : IDataStore
         }
         catch (Exception exc)
         {
-            Console.WriteLine(exc);
+            _logger.LogError(exc.Message, exc);
             return null;
         }
     }
@@ -106,7 +107,7 @@ public class DataStore : IDataStore
         }
         catch (Exception exc)
         {
-            Console.WriteLine(exc);
+            _logger.LogError(exc.Message, exc);
             return null;
         }
     }
@@ -127,7 +128,7 @@ public class DataStore : IDataStore
         }
         catch (Exception exc)
         {
-            Console.WriteLine(exc);
+            _logger.LogError(exc.Message, exc);
             return null;
         }
     }
