@@ -40,9 +40,6 @@ public class ProjectController : ControllerBase
     {
         var query = new GetProjectsQuery(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
         var response = await _sender.Send(query);
-        if (response.Projects is null || !response.Projects.Any())
-            return NotFound(new { error = "No project has been found for the current user." });
-
         return Ok(response);
     }
 
