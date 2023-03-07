@@ -35,7 +35,6 @@ public class ProjectController : ControllerBase
     // Get endpoint to get all the projects associated to the current user
     [HttpGet]
     [ProducesResponseType(typeof(List<GetUserProjectsResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetUserProjects()
     {
         var query = new GetProjectsQuery(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);

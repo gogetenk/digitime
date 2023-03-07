@@ -112,46 +112,48 @@
         </section>
     </div>
 
-    <div class="mt-16">
-        <div class="flex">
-            <h2 class="flex-none grow max-w-6xl text-lg font-medium leading-6 text-gray-900">Projects</h2>
-            <button type="button" @onclick="AddWorktime" class="inline-flex py-1.5 px-3 items-center rounded-md text-sm font-medium text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-2">
-                View all
-                <!-- Heroicon name: mini/chevron-right -->
-                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
-                </svg>
-            </button>
-        </div>
-        <div>
-            <h2 class="text-sm font-normal text-gray-500">Projects you are involved in.</h2>
-            <ul role="list" class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
+    @if (ProjectList is not null && ProjectList!.Any())
+    {
+        <div class="mt-16">
+            <div class="flex">
+                <h2 class="flex-none grow max-w-6xl text-lg font-medium leading-6 text-gray-900">Projects</h2>
+                <button type="button" @onclick="AddWorktime" class="inline-flex py-1.5 px-3 items-center rounded-md text-sm font-medium text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-2">
+                    View all
+                    <!-- Heroicon name: mini/chevron-right -->
+                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+            <div>
+                <h2 class="text-sm font-normal text-gray-500">Projects you are involved in.</h2>
+                <ul role="list" class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
 
-                @foreach(var project in ProjectList)
-                {
-                    <li class="col-span-1 flex rounded-md shadow-sm">
-                        <div class="flex-shrink-0 flex items-center justify-center w-16 bg-gray-600 text-white text-sm font-medium rounded-l-md">@project.Title.Substring(0,2).ToUpper()</div>
-                        <div class="flex flex-1 items-center justify-between truncate rounded-r-md border-t border-r border-b border-gray-200 bg-white">
-                            <div class="flex-1 truncate px-4 py-2 text-sm">
-                                <a href="#" class="font-medium text-gray-900 hover:text-gray-600">@project.Title</a>
-                                <p class="text-gray-500">@project.Members.Count Members</p>
+                    @foreach (var project in ProjectList)
+                    {
+                        <li class="col-span-1 flex rounded-md shadow-sm">
+                            <div class="flex-shrink-0 flex items-center justify-center w-16 bg-gray-600 text-white text-sm font-medium rounded-l-md">@project.Title.Substring(0,2).ToUpper()</div>
+                            <div class="flex flex-1 items-center justify-between truncate rounded-r-md border-t border-r border-b border-gray-200 bg-white">
+                                <div class="flex-1 truncate px-4 py-2 text-sm">
+                                    <a href="#" class="font-medium text-gray-900 hover:text-gray-600">@project.Title</a>
+                                    <p class="text-gray-500">@project.Members.Count Members</p>
+                                </div>
+                                <div class="flex-shrink-0 pr-2">
+                                    <button type="button" class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white bg-transparent text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                        <span class="sr-only">Open options</span>
+                                        <!-- Heroicon name: mini/ellipsis-vertical -->
+                                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z" />
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="flex-shrink-0 pr-2">
-                                <button type="button" class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white bg-transparent text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                                    <span class="sr-only">Open options</span>
-                                    <!-- Heroicon name: mini/ellipsis-vertical -->
-                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                        <path d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </li>
-                }
-            </ul>
+                        </li>
+                    }
+                </ul>
+            </div>
         </div>
-    </div>
-
+    }
 </div>
 
 
