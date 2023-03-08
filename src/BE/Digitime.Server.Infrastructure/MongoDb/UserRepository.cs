@@ -4,17 +4,18 @@ using Digitime.Server.Infrastructure.Entities;
 using Digitime.Server.Infrastructure.MongoDb;
 using Mapster;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 
 namespace Digitime.Server.Infrastructure.Http;
 
-internal class UserRepository : MongoRepository<UserEntity>, IUserRepository
+public class UserRepository : MongoRepository<UserEntity>, IUserRepository
 {
     private static Auth0ManagementClient _auth0;
 
-    public UserRepository(IMongoDbSettings settings, IConfiguration config) : base(settings)
+    public UserRepository(IMongoDbSettings settings, IConfiguration config, ILogger<UserRepository> logger) : base(settings)
     {
-        _auth0 = new Auth0ManagementClient(config);
+        _auth0 = new Auth0ManagementClient(config, logger);
         var database = new MongoClient(settings.ConnectionString).GetDatabase(settings.DatabaseName);
         Collection = database.GetCollection<UserEntity>(settings.UsersCollectionName);
     }

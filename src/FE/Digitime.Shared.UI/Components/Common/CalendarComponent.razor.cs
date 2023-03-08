@@ -24,11 +24,9 @@ public partial class CalendarComponent : ComponentBase
     protected override async Task OnInitializedAsync()
     {
         var currentMonthTask = DataStore.GetCalendar(DateTime.Now, "FR");
-        var nextMonthTask = DataStore.GetCalendar(DateTime.Now.AddMonths(1), "FR");
         var projectsTask = DataStore.GetUserProjects();
-        await Task.WhenAll(currentMonthTask, nextMonthTask, projectsTask);
+        await Task.WhenAll(currentMonthTask, projectsTask);
         CurrentMonthCalendarDays = currentMonthTask.Result;
-        NextMonthCalendarDays = nextMonthTask.Result;
         ProjectList = projectsTask.Result.Projects;
 
         await SelectCurrentDay();
