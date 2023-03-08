@@ -3,6 +3,7 @@ using Digitime.Server.Domain.Users;
 using Digitime.Server.Infrastructure.Entities;
 using Digitime.Server.Infrastructure.MongoDb;
 using Mapster;
+using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 
 namespace Digitime.Server.Infrastructure.Http;
@@ -11,9 +12,9 @@ internal class UserRepository : MongoRepository<UserEntity>, IUserRepository
 {
     private static Auth0ManagementClient _auth0;
 
-    public UserRepository(IMongoDbSettings settings) : base(settings)
+    public UserRepository(IMongoDbSettings settings, IConfiguration config) : base(settings)
     {
-        _auth0 = new Auth0ManagementClient();
+        _auth0 = new Auth0ManagementClient(config);
         var database = new MongoClient(settings.ConnectionString).GetDatabase(settings.DatabaseName);
         Collection = database.GetCollection<UserEntity>(settings.UsersCollectionName);
     }
