@@ -8,7 +8,7 @@
 @page "/projects"
 @attribute [Authorize]
 
-@code{
+@code {
     public GetUserProjectsResponse ProjectList { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -17,11 +17,10 @@
     }
 }
 
-@if (ProjectList?.Projects is null || !ProjectList.Projects.Any())
-{
-    <ProjectsEmptyState />
-}
-else
+
+<ProjectsEmptyState />
+
+@if (ProjectList?.Projects is not null && ProjectList.Projects.Any())
 {
     <div class="mt-16">
         <div class="flex">

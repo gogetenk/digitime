@@ -1,38 +1,25 @@
-﻿@using Digitime.Shared.UI.Components.Common
+﻿@using Digitime.Client.Infrastructure.Abstractions;
+@using Digitime.Shared.Dto;
+@using Digitime.Shared.UI.Components.Common
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using System.Net.Http.Json
-@inject HttpClient _http
+@inject IDataStore DataStore;
 
 
 @code {
-    private List<string> _timesheets = new List<string>();
-    private string _workers;
-    private string _avgFillingRate;
-    private string _pendingTimesheets;
+    private List<DashboardIndicatorsDto> _indicators = new();
 
     protected async override Task OnInitializedAsync()
     {
-        try
-        {
-            //_timesheets = await _http.GetFromJsonAsync<List<string>>("api/dashboard/indicators");
-            //if (_timesheets.Count != 3)
-            //    return;
-
-            //_workers = _timesheets[0];
-            //_avgFillingRate = _timesheets[1];
-            //_pendingTimesheets = _timesheets[2];
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
+        _indicators = await DataStore.GetDashboardIndicators();
     }
 }
 
 <div>
     <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
-        <IndicatorComponent Value="@_workers" Title="Total workers" />
-        <IndicatorComponent Value="@_avgFillingRate" Title="Avg. Filling rate" />
-        <IndicatorComponent Value="@_pendingTimesheets" Title="Pending timesheets" />
+        @foreach(var indicator in _indicators)
+        {
+            <IndicatorComponent Value="@indicator.Value" Title="@indicator.Title" Variation="@indicator.Variation?.ToString()" />
+        }
     </dl>
 </div>

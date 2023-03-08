@@ -13,4 +13,5 @@ public interface IDataStore
     Task<ProjectDto> GetProjectById(string id);
     Task<GetUserProjectsResponse> GetUserProjects();
     Task<CreateTimesheetEntryReponse> CreateTimesheetEntry(CreateTimesheetEntryRequest request);
+    Task<List<DashboardIndicatorsDto>> GetDashboardIndicators();
 }

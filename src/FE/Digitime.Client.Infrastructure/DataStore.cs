@@ -132,4 +132,25 @@ public class DataStore : IDataStore
             return null;
         }
     }
+
+    public async Task<List<DashboardIndicatorsDto>> GetDashboardIndicators()
+    {
+        try
+        {
+            var response = await _httpClient.GetAsync($"api/indicators");
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                var statuscode = response.StatusCode;
+            }
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var resp = JsonConvert.DeserializeObject<List<DashboardIndicatorsDto>>(responseContent);
+            return resp;
+        }
+        catch (Exception exc)
+        {
+            _logger.LogError(exc.Message, exc);
+            return null;
+        }
+    }
 }

@@ -3,10 +3,12 @@ using Digitime.Server.Application.Projects.Commands;
 using Digitime.Server.Application.Projects.Queries;
 using Digitime.Shared.Contracts.Projects;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Digitime.Server.Controllers;
 
+[Authorize]
 [Route("api/projects")]
 [ApiController]
 public class ProjectController : ControllerBase
@@ -18,7 +20,11 @@ public class ProjectController : ControllerBase
         _sender = sender;
     }
 
-    // Post endpoint to create a project
+    /// <summary>
+    /// Post endpoint to create a project
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
     [HttpPost]
     [ProducesResponseType(typeof(CreateProjectResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
@@ -32,7 +38,10 @@ public class ProjectController : ControllerBase
         return CreatedAtAction(nameof(GetUserProjects), response);
     }
 
-    // Get endpoint to get all the projects associated to the current user
+    /// <summary>
+    /// Get endpoint to get all the projects associated to the current user
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     [ProducesResponseType(typeof(List<GetUserProjectsResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetUserProjects()
@@ -42,7 +51,11 @@ public class ProjectController : ControllerBase
         return Ok(response);
     }
 
-    // Get endpoint to get a project from its id
+    /// <summary>
+    /// Get endpoint to get a project from its id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(ProjectDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
