@@ -34,13 +34,13 @@ public record GetIndicatorsQuery(string UserId) : IRequest<List<DashboardIndicat
             if (user is null)
                 throw new ApplicationException("User not found.");
 
-            var projects = await _projectRepository.GetProjectsByUserId(request.UserId);
-            var currentMonthTimesheets = await _timesheetRepository.GetbyUserAndMonthOfyear(request.UserId, DateTime.UtcNow.Month, DateTime.UtcNow.Year);
-            var lastMonthTimesheets = await _timesheetRepository.GetbyUserAndMonthOfyear(request.UserId, DateTime.UtcNow.AddMonths(-1).Month, DateTime.UtcNow.AddMonths(-1).Year);
+            var projectsTask = _projectRepository.GetProjectsByUserId(request.UserId);
+            var currentMonthTimesheetsTask = _timesheetRepository.GetbyUserAndMonthOfyear(request.UserId, DateTime.UtcNow.Month, DateTime.UtcNow.Year);
+            var lastMonthTimesheetsTask = _timesheetRepository.GetbyUserAndMonthOfyear(request.UserId, DateTime.UtcNow.AddMonths(-1).Month, DateTime.UtcNow.AddMonths(-1).Year);
 
-            var totalProjects = CreateTotalProjectsIndicator(projects);
-            var pendingHours = CreatePendingHoursIndicator(currentMonthTimesheets);
-            var totalHours = CreateTotalHoursIndicator(currentMonthTimesheets, lastMonthTimesheets);
+            var totalProjects = CreateTotalProjectsIndicator(await projectsTask);
+            var pendingHours = CreatePendingHoursIndicator(await currentMonthTimesheetsTask);
+            var totalHours = CreateTotalHoursIndicator(await currentMonthTimesheetsTask, await lastMonthTimesheetsTask);
 
             var indicators = new List<Indicator>
             {
