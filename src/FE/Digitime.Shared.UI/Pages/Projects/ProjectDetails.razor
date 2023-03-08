@@ -8,26 +8,27 @@
 @code {
     [Parameter]
     public string Id { get; set; }
-    public CreateProjectResponse Project { get; set; }
+
+    private ProjectDto _project;
 
     protected override async Task OnInitializedAsync()
     {
-        var project = await _dataStore.GetProjectById(Id);
+        _project = await _dataStore.GetProjectById(Id);
     }
 }
 
 <div class="bg-[#F0F4F8] pb-32">
     <header class="py-16">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h3 class="text-3xl font-bold tracking-tight text-black-800">@*@Project?.Title*@NxPro 100%</h3>
-            <h4 class="text-base tracking-tight text-gray-500">@*@Project?.Code*@FF-78-DG40</h4>
+            <h3 class="text-3xl font-bold tracking-tight text-black-800">@_project?.Title</h3>
+            <h4 class="text-base tracking-tight text-gray-500">@_project?.Code</h4>
         </div>
     </header>
 </div>
 
 <main class="-mt-32">
     <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
-        <ProjectIndicatorsListComponent Project="@Project" />
+        <ProjectIndicatorsListComponent Project="@_project" />
         <div class="rounded-lg bg-white px-5 py-12 mt-8  sm:px-6">
             <div>
                 <div class="text-center">

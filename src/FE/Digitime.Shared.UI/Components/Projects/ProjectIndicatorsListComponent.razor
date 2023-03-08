@@ -7,7 +7,7 @@
 
 @code {
     [Parameter]
-    public CreateProjectResponse Project { get; set; }
+    public ProjectDto Project { get; set; }
     private int WorkerCount => Project is not null ? Project.Members.Where(x => x.MemberRole == Contracts.MemberRoleEnum.Worker).Count() : 0;
     private int ReviewerCount => Project is not null ? Project.Members.Where(x => x.MemberRole == Contracts.MemberRoleEnum.Reviewer).Count() : 0;
 
@@ -32,7 +32,7 @@
 
 <div>
     <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
-        <IndicatorComponent Value="14h30" Title="Total worked hours" />
+        <IndicatorComponent Value="0h" Title="Total worked hours" />
         <IndicatorComponent Value="@WorkerCount.ToString()" Title="Workers" />
         <IndicatorComponent Value="@ReviewerCount.ToString()" Title="Reviewers" />
     </dl>
