@@ -30,9 +30,10 @@ public record GetIndicatorsQuery(string UserId) : IRequest<List<DashboardIndicat
         }
         public async Task<List<DashboardIndicatorsDto>> Handle(GetIndicatorsQuery request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetbyExternalIdAsync(request.UserId);
-            if (user is null)
-                throw new ApplicationException("User not found.");
+            // TODO: remove this when we have a real user repository
+            //var user = await _userRepository.GetbyExternalIdAsync(request.UserId);
+            //if (user is null)
+            //    throw new ApplicationException("User not found.");
 
             var projectsTask = _projectRepository.GetProjectsByUserId(request.UserId);
             var currentMonthTimesheetsTask = _timesheetRepository.GetbyUserAndMonthOfyear(request.UserId, DateTime.UtcNow.Month, DateTime.UtcNow.Year);

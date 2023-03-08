@@ -11,11 +11,11 @@ namespace Digitime.Server.Infrastructure.Http;
 
 public class Auth0ManagementClient
 {
-    private ManagementApiClient _managementApiClient;
+    private static ManagementApiClient _managementApiClient;
     private readonly IConfiguration _config;
-    private readonly ILogger<UserRepository> _logger;
+    private readonly ILogger<Auth0ManagementClient> _logger;
 
-    public Auth0ManagementClient(IConfiguration config, ILogger<UserRepository> logger)
+    public Auth0ManagementClient(IConfiguration config, ILogger<Auth0ManagementClient> logger)
     {
         _config = config;
         _logger = logger;
@@ -34,7 +34,7 @@ public class Auth0ManagementClient
                 await Authenticate();
 
             _logger.LogDebug("Authentication to Auth0 Management API successful.");
-            var user = await _managementApiClient.Users.GetAsync(id);
+            var user = await _managementApiClient!.Users.GetAsync(id);
             _logger.LogDebug("Found the user on the Auth0 Management API.");
             if ((string.IsNullOrEmpty(user.FirstName) || string.IsNullOrEmpty(user.LastName)) && !string.IsNullOrEmpty(user.FullName))
             {

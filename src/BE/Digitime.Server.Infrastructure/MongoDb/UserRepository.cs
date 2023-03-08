@@ -3,21 +3,19 @@ using Digitime.Server.Domain.Users;
 using Digitime.Server.Infrastructure.Entities;
 using Digitime.Server.Infrastructure.MongoDb;
 using Mapster;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 
 namespace Digitime.Server.Infrastructure.Http;
 
 public class UserRepository : MongoRepository<UserEntity>, IUserRepository
 {
-    private static Auth0ManagementClient _auth0;
+    private readonly Auth0ManagementClient _auth0;
 
-    public UserRepository(IMongoDbSettings settings, IConfiguration config, ILogger<UserRepository> logger) : base(settings)
+    public UserRepository(IMongoDbSettings settings, Auth0ManagementClient auth0ManagementClient) : base(settings)
     {
-        _auth0 = new Auth0ManagementClient(config, logger);
         var database = new MongoClient(settings.ConnectionString).GetDatabase(settings.DatabaseName);
         Collection = database.GetCollection<UserEntity>(settings.UsersCollectionName);
+        _auth0 = auth0ManagementClient;
     }
 
     public Task DeleteAsync(string id)
@@ -37,7 +35,7 @@ public class UserRepository : MongoRepository<UserEntity>, IUserRepository
         // We save a backup in the DB for faster access later
         await base.InsertOneAsync(idProviderUser);
         dbEntity = await Collection.Find(x => x.ExternalId == idProviderUser.Id).SingleOrDefaultAsync();
-        
+
         return idProviderUser.Adapt<User>();
     }
 

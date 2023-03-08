@@ -18,7 +18,8 @@ public static class DependencyInjection
             .AddSingleton(typeof(IRepository<>), typeof(MongoRepository<>))
             .AddSingleton<ITimesheetRepository, TimesheetRepository>()
             .AddSingleton<IUserRepository, UserRepository>()
-            .AddSingleton<IProjectRepository, ProjectRepository>();
+            .AddSingleton<IProjectRepository, ProjectRepository>()
+            .AddSingleton<Auth0ManagementClient>();
 
         services.AddScoped<Auth0TokenHandler>();
         services.AddHttpClient();
