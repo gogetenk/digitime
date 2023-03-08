@@ -14,7 +14,7 @@ using MediatR;
 
 namespace Digitime.Server.Application.Indicators.Queries;
 
-public record GetIndicatorsQuery(string UserId) : IRequest<List<DashboardIndicatorsDto>>
+public record GetIndicatorsQuery(string UserId) : IRequest<List<DashboardIndicatorsDto>>, ICacheableRequest
 {
     public class GetIndicatorsQueryHandler : IRequestHandler<GetIndicatorsQuery, List<DashboardIndicatorsDto>>
     {
@@ -87,5 +87,15 @@ public record GetIndicatorsQuery(string UserId) : IRequest<List<DashboardIndicat
 
             return new Indicator("Validated Hours this month", totalHoursValue.ToString(), null, variation, null);
         }
+    }
+
+    public DateTime? GetCacheExpiration()
+    {
+        return DateTime.UtcNow.AddHours(1);
+    }
+
+    public string GetCacheKey()
+    {
+        return $"GetIndicatorsQuery_{UserId}";
     }
 }

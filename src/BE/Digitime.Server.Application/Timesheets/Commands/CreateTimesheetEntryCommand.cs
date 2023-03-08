@@ -57,8 +57,10 @@ public record CreateTimesheetEntryCommand(string TimesheetId, string ProjectId, 
             // update timesheet
             var updatedTimesheet = await _timesheetRepository.UpdateAsync(timesheet);
 
-            // invalid the cache for the user 
-            await _cachingProvider.RemoveAsync($"Calendar_{request.Date.Month}_{request.Date.Year}_{request.UserId}");
+            await Task.WhenAll(
+                _cachingProvider.RemoveAsync($"Calendar_{request.Date.Month}_{request.Date.Year}_{request.UserId}"), // invalid the calendar cache for the user 
+                _cachingProvider.RemoveAsync($"GetIndicatorsQuery_{request.UserId}") // Invalidate cache for dashboard indicators
+            );
 
             // Return newly created timesheet entry
             return entry.Adapt<CreateTimesheetEntryReponse>();

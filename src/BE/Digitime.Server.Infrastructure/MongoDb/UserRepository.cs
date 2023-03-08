@@ -55,7 +55,9 @@ internal class UserRepository : MongoRepository<UserEntity>, IUserRepository
 
         // If the user does not exist in the DB, try to get it from the IdProvider's API
         var idProviderUser = await _auth0.GetById(externalId);
-        
+        if (idProviderUser is null)
+            throw new ApplicationException("The user does not exist in the DB nor in the IdProvider's database.");
+
         // We save a backup in the DB for faster access later
         await base.InsertOneAsync(idProviderUser);
         dbEntity = await Collection.Find(x => x.ExternalId == externalId).SingleOrDefaultAsync();

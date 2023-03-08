@@ -6,6 +6,7 @@ using Digitime.Server.Application.Abstractions;
 using Digitime.Server.Domain.Projects;
 using Digitime.Shared.Contracts;
 using Digitime.Shared.Contracts.Projects;
+using EasyCaching.Core;
 using Mapster;
 using MediatR;
 
@@ -17,11 +18,13 @@ public record CreateProjectCommand(string? UserId, string Title, string Code, st
     {
         private readonly IUserRepository _userRepository;
         private readonly IProjectRepository _projectRepository;
+        private readonly IEasyCachingProvider _cachingProvider;
 
-        public CreateProjectCommandHandler(IUserRepository userRepository, IProjectRepository projectRepository)
+        public CreateProjectCommandHandler(IUserRepository userRepository, IProjectRepository projectRepository, IEasyCachingProvider cachingProvider)
         {
             _userRepository = userRepository;
             _projectRepository = projectRepository;
+            _cachingProvider = cachingProvider;
         }
 
         public async Task<CreateProjectResponse> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
@@ -34,6 +37,8 @@ public record CreateProjectCommand(string? UserId, string Title, string Code, st
             var project = new Project(null, request.Title, request.Code, request.Description, request.WorkspaceId);
             project.AddMember(member);
             var result = await _projectRepository.InsertOneAsync(project);
+
+            await _cachingProvider.RemoveAsync($"GetIndicatorsQuery_{request.UserId}"); // Invalidate cache for dashboard indicators
             return new CreateProjectResponse(result.Id, result.Title, result.Code, result.Description, result.WorkspaceId, result.Members.Adapt<List<ProjectMemberDto>>());
         }
     }
