@@ -2,6 +2,7 @@
 using Digitime.Server.Application.Projects.Commands;
 using Digitime.Server.Application.Projects.Queries;
 using Digitime.Shared.Contracts.Projects;
+using Digitime.Shared.Dto;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -67,5 +68,41 @@ public class ProjectController : ControllerBase
             return NotFound(new { error = "No project has been found for this Id." });
 
         return Ok(response);
+    }
+
+    /// <summary>
+    /// Sends an invitation to a user to join a workspace and a project.
+    /// </summary>
+    /// <param name="command">The command containing the invitation details.</param>
+    /// <returns>A status indicating the result of the invitation process.</returns>
+    /// <response code="200">Invitation sent successfully.</response>
+    /// <response code="400">Invalid request data.</response>
+    /// <response code="403">User does not have the required permissions.</response>
+    [HttpPost("invite")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(403)]
+    public async Task<IActionResult> Invite([FromBody] InviteMemberDto request)
+    {
+        var command = new SendInvitationCommand(request.ProjectId, User.FindFirst(ClaimTypes.NameIdentifier)!.Value, request.InviteeEmail);
+        await _sender.Send(command);
+        return Ok();
+    }
+
+    /// <summary>
+    /// Registers a new user through an invitation link.
+    /// </summary>
+    /// <param name="command">The command containing the registration details.</param>
+    /// <returns>A status indicating the result of the registration process.</returns>
+    /// <response code="200">User registered successfully.</response>
+    /// <response code="400">Invalid request data.</response>
+    [AllowAnonymous]
+    [HttpPost("register")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    public async Task<IActionResult> RegisterWithInvitation([FromBody] RegisterWithInvitationCommand command)
+    {
+        await _sender.Send(command);
+        return Ok();
     }
 }

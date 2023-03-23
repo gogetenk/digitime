@@ -153,4 +153,26 @@ public class DataStore : IDataStore
             return null;
         }
     }
+
+    public async Task RegisterWithInvitation(string invitationToken, string id)
+    {
+        try
+        {
+            var response = await _httpClient.PostAsJsonAsync($"api/projects/register", new
+            {
+                invitationToken = invitationToken,
+                id = id
+            });
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                var statuscode = response.StatusCode;
+            }
+        }
+        catch (Exception exc)
+        {
+            _logger.LogError(exc.Message, exc);
+        }
+    }
 }

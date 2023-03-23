@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Digitime.Server.Application.Abstractions;
+using Digitime.Server.Domain.Projects.ValueObjects;
 using Digitime.Server.Infrastructure.Entities;
 using Mapster;
 using MongoDB.Driver;
@@ -38,5 +39,19 @@ internal class ProjectRepository : MongoRepository<ProjectEntity>, IProjectRepos
         await base.InsertOneAsync(projectEntity);
         var createdItem = await Collection.Find(x => x.Id == projectEntity.Id).FirstOrDefaultAsync();
         return createdItem.Adapt<Project>();
+    }
+
+    public async Task<Project> UpdateAsync(Project project)
+    {
+        var projectEntity = project.Adapt<ProjectEntity>();
+        await base.ReplaceOneAsync(projectEntity);
+        var updatedItem = await Collection.Find(x => x.Id == projectEntity.Id).FirstOrDefaultAsync();
+        return updatedItem.Adapt<Project>();
+    }
+
+    public async Task<ProjectMember> FindMemberByEmailAsync(string email)
+    {
+        var member = await Collection.Find(x => x.Members.Any(y => y.Email == email)).FirstOrDefaultAsync();
+        return member.Adapt<ProjectMember>();
     }
 }

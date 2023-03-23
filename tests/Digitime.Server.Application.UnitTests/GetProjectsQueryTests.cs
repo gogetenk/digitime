@@ -32,7 +32,7 @@ public class GetProjectsQueryTests
 
         // Assert
         result.Should().NotBeNull();
-        result.Projects.Should().BeEquivalentTo(projectsToReturn.Adapt<List<ProjectDto>>());
+        result.Projects.Should().BeEquivalentTo(projectsToReturn.Adapt<List<WorkspaceDto>>());
     }
 
     [Fact]

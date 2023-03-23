@@ -28,13 +28,19 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.27.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\BE\Digitime.Server.ClientSdk\Digitime.Server.ClientSdk.csproj" />
     <ProjectReference Include="..\..\Shared\Digitime.Shared.csproj" />
     <ProjectReference Include="..\Digitime.Client.Infrastructure\Digitime.Client.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Auth\" />
   </ItemGroup>
 
 </Project>

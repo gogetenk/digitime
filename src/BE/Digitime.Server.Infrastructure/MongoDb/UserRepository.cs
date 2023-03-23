@@ -32,6 +32,9 @@ public class UserRepository : MongoRepository<UserEntity>, IUserRepository
 
         // If the user does not exist in the DB, try to get it from the IdProvider's API
         var idProviderUser = await _auth0.GetByEmail(email);
+        if (idProviderUser is null)
+            return null;
+
         // We save a backup in the DB for faster access later
         await base.InsertOneAsync(idProviderUser);
         dbEntity = await Collection.Find(x => x.ExternalId == idProviderUser.Id).SingleOrDefaultAsync();
@@ -41,7 +44,6 @@ public class UserRepository : MongoRepository<UserEntity>, IUserRepository
 
     public async Task<User> GetbyIdAsync(string id)
     {
-        // First, try to get the user from the DB if he exists
         var dbEntity = await Collection.Find(x => x.ExternalId == id).SingleOrDefaultAsync();
         return dbEntity.Adapt<User>();
     }
@@ -70,5 +72,10 @@ public class UserRepository : MongoRepository<UserEntity>, IUserRepository
         var entity = user.Adapt<UserEntity>();
         var filter = Builders<UserEntity>.Filter.Eq(doc => doc.Id, entity.Id);
         return Collection.FindOneAndReplaceAsync(filter, entity);
+    }
+
+    public Task Insert(User user)
+    {
+        throw new NotImplementedException();
     }
 }

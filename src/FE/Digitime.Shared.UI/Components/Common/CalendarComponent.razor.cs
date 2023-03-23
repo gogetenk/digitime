@@ -13,6 +13,7 @@ public partial class CalendarComponent : ComponentBase
 {
     [Inject] IDataStore DataStore { get; set; }
     [Inject] IJSRuntime Js { get; set; }
+    [Inject] NavigationManager Navigation { get; set; }
 
     public CalendarDto CurrentMonthCalendarDays = new();
     public CalendarDto NextMonthCalendarDays = new();
@@ -62,6 +63,11 @@ public partial class CalendarComponent : ComponentBase
     private async Task AddWorktime()
     {
         IsFormVisible = true;
+    }
+
+    private async Task ViewAllProjects()
+    {
+        Navigation.NavigateTo("/projects");
     }
 
     private async Task OnAddedWorkTime(AddTimesheetEntryFormVM vm)

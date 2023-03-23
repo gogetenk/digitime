@@ -15,9 +15,8 @@ public class Workspace : AggregateRoot<string>
     public string Description { get; private set; }
     public Subscription Subscription { get; private set; }
     public IReadOnlyList<WorkspaceMember> Members => _members.AsReadOnly();
-    public IReadOnlyList<Project> Projects => _projects.AsReadOnly();
 
-    private Workspace(string id, string name, string description, Subscription subscription) : base(id)
+    public Workspace(string id, string name, string description, Subscription subscription) : base(id)
     {
         Name = name;
         Description = description;
@@ -40,13 +39,5 @@ public class Workspace : AggregateRoot<string>
             throw new InvalidOperationException($"Member with user id {member.UserId} already exists");
 
         _members.Add(member);
-    }
-
-    public void AddProject(Project project)
-    {
-        if (_projects.Any(x => x.Id == project.Id))
-            throw new InvalidOperationException($"Project with id {project.Id} already exists");
-
-        _projects.Add(project);
     }
 }

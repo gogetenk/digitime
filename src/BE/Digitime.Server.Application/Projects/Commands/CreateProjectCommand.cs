@@ -34,7 +34,7 @@ public record CreateProjectCommand(string? UserId, string Title, string Code, st
                 throw new ApplicationException("User not found.");
 
             var member = new Domain.Projects.ValueObjects.ProjectMember(user.Id, user.Firstname + " " + user.Lastname, user.Email, user.ProfilePicture, Domain.Projects.ValueObjects.MemberRoleEnum.ProjectAdmin);
-            var project = new Project(null, request.Title, request.Code, request.Description, request.WorkspaceId);
+            var project = new Project(null, request.Title, request.Code, request.Description, request.WorkspaceId, null);
             project.AddMember(member);
             var result = await _projectRepository.InsertOneAsync(project);
 

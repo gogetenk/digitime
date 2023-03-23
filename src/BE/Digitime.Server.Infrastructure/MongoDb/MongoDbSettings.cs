@@ -9,4 +9,5 @@ public class MongoDbSettings : IMongoDbSettings
     public string ProjectsCollectionName { get; set; }
     public string TimesheetsCollectionName { get; set; }
     public string UsersCollectionName { get; set; }
+    public string WorkspacesCollectionName { get; set; }
 }

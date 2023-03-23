@@ -1,0 +1,44 @@
+﻿@attribute [Authorize]
+@page "/invitation"
+@using Digitime.Client.Infrastructure.Abstractions;
+@using Microsoft.AspNetCore.Authorization;
+@using Microsoft.AspNetCore.Components.Authorization;
+@using Microsoft.AspNetCore.WebUtilities;
+@using System.IdentityModel.Tokens.Jwt;
+@using System.Security.Claims;
+
+@inject NavigationManager Navigation
+@inject IDataStore DataStore
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<h1>Invitation page</h1>
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        var authstate = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var currentUser = authstate.User;
+        var userId = currentUser?.FindFirst(x => x?.Type == "sub")?.Value;
+
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        var query = QueryHelpers.ParseQuery(uri.Query);
+        query.TryGetValue("state", out var stateValue);
+        query.TryGetValue("token", out var jwt);
+
+
+        var invitationToken = stateValue.ToString();
+
+        var handler = new JwtSecurityTokenHandler();
+        var token = handler.ReadJwtToken(jwt);
+
+        var claims = new List<Claim>(token.Claims);
+        claims.Add(new Claim(ClaimTypes.Name, token.Subject));
+
+
+
+        // Traitez le token d'invitation ici en appelant RegisterWithInvitationCommand
+        await DataStore.RegisterWithInvitation(invitationToken, userId);
+        Navigation.NavigateTo("/index"); //TODO: faire un onboarding new user ?
+                                         // Rediriger l'utilisateur vers la page du projet
+                                         //Navigation.NavigateTo("/projects");
+    }
+}

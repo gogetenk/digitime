@@ -15,7 +15,10 @@ public class ProjectEntity : EntityBase
 public enum MemberRoleEntityEnum
 {
     Worker,
-    Reviewer
+    Reviewer,
+    ProjectAdmin,
+    WorkspaceAdmin,
+    Pending
 }
 
 public record ProjectMemberEntity(string UserId, string Fullname, string Email, string ProfilePicture, MemberRoleEntityEnum MemberRole);

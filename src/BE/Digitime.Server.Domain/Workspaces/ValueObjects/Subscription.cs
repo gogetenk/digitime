@@ -9,8 +9,7 @@ public class Subscription
 
     public string PricingTierId { get; private set; }
     public DateTime? ExpirationDate { get; private set; }
-    public bool isTrial { get; private set; }
+    public bool IsTrial { get; private set; }
     public bool IsExpired => ExpirationDate.HasValue && ExpirationDate.Value < DateTime.UtcNow;
     public IReadOnlyList<Invoice> Invoices => _invoices.AsReadOnly();
-
 }

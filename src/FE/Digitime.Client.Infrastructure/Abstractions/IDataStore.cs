@@ -14,4 +14,5 @@ public interface IDataStore
     Task<GetUserProjectsResponse> GetUserProjects();
     Task<CreateTimesheetEntryReponse> CreateTimesheetEntry(CreateTimesheetEntryRequest request);
     Task<List<DashboardIndicatorsDto>> GetDashboardIndicators();
+    Task RegisterWithInvitation(string invitationToken, string id);
 }

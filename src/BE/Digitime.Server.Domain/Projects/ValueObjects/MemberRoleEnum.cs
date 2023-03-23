@@ -5,5 +5,6 @@ public enum MemberRoleEnum
     Worker,
     Reviewer,
     ProjectAdmin,
-    WorkspaceAdmin
+    WorkspaceAdmin,
+    Pending
 }

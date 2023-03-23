@@ -13,15 +13,16 @@ public class Project : AggregateRoot<string>
     public string Title { get; private set; }
     public string Code { get; private set; }
     public string Description { get; private set; }
-    public string WorkspaceId { get; private set; }
+    public string WorkspaceId { get; set; }
     public IReadOnlyList<ProjectMember> Members => _members.AsReadOnly();
 
-    public Project(string id, string title, string code, string description, string workspaceId) : base(id)
+    public Project(string id, string title, string code, string description, string workspaceId, List<ProjectMember> members) : base(id)
     {
         Title = title;
         Code = code;
         Description = description;
         WorkspaceId = workspaceId;
+        _members = members ?? new();
     }
 
     public void AddMember(ProjectMember member)
@@ -43,5 +44,14 @@ public class Project : AggregateRoot<string>
     public void UpdateDescription(string newDescription)
     {
         Description = newDescription;
+    }
+
+    public void EnableIncompleteMember(ProjectMember incompleteMember)
+    {
+        if (incompleteMember == null)
+            throw new InvalidOperationException("Member does not exist");
+
+        // TODO
+        //incompleteMember.Fullname
     }
 }

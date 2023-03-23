@@ -3,5 +3,6 @@ public enum WorkspaceMemberEnum
 {
     Owner,
     Admin,
-    Member
+    Member,
+    Pending
 }

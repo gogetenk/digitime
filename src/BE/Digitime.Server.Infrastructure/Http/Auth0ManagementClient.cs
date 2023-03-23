@@ -23,10 +23,43 @@ public class Auth0ManagementClient
 
     public async Task<UserEntity> GetByEmail(string email)
     {
-        throw new NotImplementedException();
+        try
+        {
+            if (_managementApiClient == null)
+                await Authenticate();
+
+            _logger.LogDebug("Authentication to Auth0 Management API successful.");
+            var users = await _managementApiClient.Users.GetUsersByEmailAsync(email);
+            _logger.LogDebug("Fetched users from the Auth0 Management API.");
+
+            if (users.Count() == 0)
+            {
+                _logger.LogWarning($"No user found with email {email}.");
+                return null;
+            }
+
+            if (users.Count() > 1)
+            {
+                _logger.LogWarning($"Multiple users found with email {email}. Returning the first one.");
+            }
+
+            var user = users.First();
+            if ((string.IsNullOrEmpty(user.FirstName) || string.IsNullOrEmpty(user.LastName)) && !string.IsNullOrEmpty(user.FullName))
+            {
+                user.FirstName = user.FullName.Split(' ')?[0];
+                user.LastName = user.FullName.Split(' ')?[1];
+            }
+
+            return user.Adapt<UserEntity>();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error getting user by email from Auth0.");
+            return null;
+        }
     }
 
-    public async Task<UserEntity> GetById(string id)
+public async Task<UserEntity> GetById(string id)
     {
         try
         {
