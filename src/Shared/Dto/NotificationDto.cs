@@ -37,6 +37,7 @@ public class NotificationDto
         Failed
     }
 }
+
 public record NotificationStylingDto
 {
     public string Logo { get; init; }

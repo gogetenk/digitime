@@ -22,7 +22,18 @@ public class Notification
     public Notification() { }
 
     // create method to initialize
-    public static Notification Create(NotificationTypeEnum type, string title, string message, string userId, NotificationStyling? style, NotificationAction? action, DateTime created, DateTime? scheduledDate, NotificationStatusEnum status, List<NotificationChannelEnum> channels, Dictionary<string, string> metaData = null)
+    public static Notification Create(
+        NotificationTypeEnum type, 
+        string title, 
+        string message, 
+        string userId, 
+        NotificationStyling? style, 
+        NotificationAction? action, 
+        DateTime created, 
+        DateTime? scheduledDate, 
+        NotificationStatusEnum status, 
+        List<NotificationChannelEnum> channels, 
+        Dictionary<string, string> metaData = null)
     {
         return new Notification
         {

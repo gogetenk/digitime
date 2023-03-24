@@ -12,23 +12,22 @@ using static Digitime.Server.Domain.Notifications.Notification;
 
 namespace Digitime.Server.Application.Notifications.Events;
 
-public record ProjectInvitedEvent(User Invitee, User Inviter, Project Project) : INotification
+public record ProjectInvitationEvent(User Invitee, User Inviter, Project Project) : INotification
 {
-    public class ProjectInvitedEventHandler : INotificationHandler<ProjectInvitedEvent>
+    public class ProjectInvitedEventHandler : INotificationHandler<ProjectInvitationEvent>
     {
-        private readonly INotificationRepository _notificationRepository;
-        private readonly INotificationService _notificationService;
+        private readonly INotificationFactory _notificationService;
 
-        public ProjectInvitedEventHandler(INotificationRepository notificationRepository, INotificationService notificationService)
+        public ProjectInvitedEventHandler(INotificationFactory notificationService)
         {
-            _notificationRepository = notificationRepository;
             _notificationService = notificationService;
         }
 
-        public async Task Handle(ProjectInvitedEvent notification, CancellationToken cancellationToken)
+        public async Task Handle(ProjectInvitationEvent notification, CancellationToken cancellationToken)
         {
             var title = "Invitation to join a project";
             var message = $"You have been invited to join the project '{notification.Project.Title}' by {notification.Inviter.Firstname}.";
+            //var channels = notification.Project.Settings.NotificationPreferences["ProjectInvitationChannels"]; // TODO: gérer ça avec les user preds plutôt
 
             var notificationEntity = Notification.Create
             (
@@ -39,7 +38,7 @@ public record ProjectInvitedEvent(User Invitee, User Inviter, Project Project) :
                 null,
                 new NotificationAction
                 {
-                    Title = "See",
+                    Title = "View",
                     Url = $"/projects/{notification.Project.Id}",
                     BackgroundColor = "",
                     TextColor = ""
@@ -56,8 +55,7 @@ public record ProjectInvitedEvent(User Invitee, User Inviter, Project Project) :
             );
 
             await Task.WhenAll(
-                _notificationRepository.CreateAsync(notificationEntity),
-                _notificationService.SendAsync(notificationEntity));
+                _notificationService.CreateAndSendAsync(notificationEntity));
         }
     }
 }

@@ -111,7 +111,7 @@ public record SendInvitationCommand(string ProjectId, string InviterUserId, stri
             string content = $"You have been invited to join a new workspace and project on Digitime. Please click the following link to accept the invitation and join the workspace and project: <a href=\"{GenerateInvitationUrl(invitee.Id, project.WorkspaceId, project.Id)}\">Click here</a>";
 
             await _emailRepository.SendEmailAsync(invitee.Email, subject, content);
-            await _publisher.Publish(new ProjectInvitedEvent(invitee, inviter, project));
+            await _publisher.Publish(new ProjectInvitationEvent(invitee, inviter, project));
             //var notification = Notification.Create(
             //    NotificationTypeEnum.Info,
             //    subject,
@@ -135,7 +135,7 @@ public record SendInvitationCommand(string ProjectId, string InviterUserId, stri
             string content = $"You have been invited to join a new project on Digitime. Please click the following link to accept the invitation and join the project: <a href=\"{GenerateInvitationUrl(invitee.Id, project.WorkspaceId, project.Id)}\">Click here</a>";
 
             await _emailRepository.SendEmailAsync(invitee.Email, subject, content);
-            await _publisher.Publish(new ProjectInvitedEvent(invitee, inviter, project));
+            await _publisher.Publish(new ProjectInvitationEvent(invitee, inviter, project));
         }
 
         private string GenerateInvitationToken(User user, string workspaceId, string projectId)

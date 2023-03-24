@@ -3,7 +3,7 @@ using Digitime.Server.Domain.Notifications;
 
 namespace Digitime.Server.Application.Abstractions;
 
-public interface INotificationService
+public interface INotificationFactory
 {
-    Task SendAsync(Notification notification);
+    Task CreateAndSendAsync(Notification notification);
 }
