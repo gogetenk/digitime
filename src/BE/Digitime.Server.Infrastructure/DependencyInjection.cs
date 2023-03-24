@@ -21,6 +21,8 @@ public static class DependencyInjection
             .AddSingleton<IEmailRepository, EmailRepository>()
             .AddSingleton<IProjectRepository, ProjectRepository>()
             .AddSingleton<IWorkspaceRepository, WorkspaceRepository>()
+            .AddSingleton<IPushRepository, FakePushRepository>()
+            .AddSingleton<INotificationRepository, NotificationRepository>()
             .AddSingleton<Auth0ManagementClient>();
 
         services.AddScoped<Auth0TokenHandler>();

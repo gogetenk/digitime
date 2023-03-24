@@ -44,7 +44,7 @@ public class UserRepository : MongoRepository<UserEntity>, IUserRepository
 
     public async Task<User> GetbyIdAsync(string id)
     {
-        var dbEntity = await Collection.Find(x => x.ExternalId == id).SingleOrDefaultAsync();
+        var dbEntity = await Collection.Find(x => x.Id == id).SingleOrDefaultAsync();
         return dbEntity.Adapt<User>();
     }
 

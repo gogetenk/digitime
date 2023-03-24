@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Digitime.Server.Application.Abstractions;
-using Digitime.Server.Domain.Projects;
+using Digitime.Server.Application.Notifications.Events;
 using Digitime.Server.Domain.Projects.ValueObjects;
 using Digitime.Server.Domain.Users;
 using Digitime.Server.Domain.Workspaces;
@@ -26,14 +26,22 @@ public record SendInvitationCommand(string ProjectId, string InviterUserId, stri
         private readonly IProjectRepository _projectRepository;
         private readonly IConfiguration _configuration;
         private readonly IWorkspaceRepository _workspaceRepository;
+        private readonly IPublisher _publisher;
 
-        public SendInvitationCommandHandler(IEmailRepository emailRepository, IUserRepository userRepository, IProjectRepository projectRepository, IConfiguration configuration, IWorkspaceRepository workspaceRepository)
+        public SendInvitationCommandHandler(
+            IEmailRepository emailRepository,
+            IUserRepository userRepository,
+            IProjectRepository projectRepository,
+            IConfiguration configuration,
+            IWorkspaceRepository workspaceRepository,
+            IPublisher publisher)
         {
             _emailRepository = emailRepository;
             _userRepository = userRepository;
             _projectRepository = projectRepository;
             _configuration = configuration;
             _workspaceRepository = workspaceRepository;
+            _publisher = publisher;
         }
 
         public async Task<Unit> Handle(SendInvitationCommand request, CancellationToken cancellationToken)
@@ -103,6 +111,18 @@ public record SendInvitationCommand(string ProjectId, string InviterUserId, stri
             string content = $"You have been invited to join a new workspace and project on Digitime. Please click the following link to accept the invitation and join the workspace and project: <a href=\"{GenerateInvitationUrl(invitee.Id, project.WorkspaceId, project.Id)}\">Click here</a>";
 
             await _emailRepository.SendEmailAsync(invitee.Email, subject, content);
+            await _publisher.Publish(new ProjectInvitedEvent(invitee, inviter, project));
+            //var notification = Notification.Create(
+            //    NotificationTypeEnum.Info,
+            //    subject,
+            //    invitee.Id,
+            //    null,
+            //    null,
+            //    NotificationAction.Create("See", $"/projects/{project.Id}", "", ""),
+            //    DateTime.UtcNow,
+            //    null,
+            //    NotificationStatusEnum.Unread,
+            //    new List<NotificationChannelEnum>() { NotificationChannelEnum.InApp });
         }
 
         private async Task HandleRegisteredInviteeInWorkspaceAsync(User invitee, Project project, User inviter)
@@ -115,6 +135,7 @@ public record SendInvitationCommand(string ProjectId, string InviterUserId, stri
             string content = $"You have been invited to join a new project on Digitime. Please click the following link to accept the invitation and join the project: <a href=\"{GenerateInvitationUrl(invitee.Id, project.WorkspaceId, project.Id)}\">Click here</a>";
 
             await _emailRepository.SendEmailAsync(invitee.Email, subject, content);
+            await _publisher.Publish(new ProjectInvitedEvent(invitee, inviter, project));
         }
 
         private string GenerateInvitationToken(User user, string workspaceId, string projectId)

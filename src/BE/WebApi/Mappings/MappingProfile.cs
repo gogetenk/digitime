@@ -46,6 +46,22 @@ public class MappingProfile : IRegister
            .MapToConstructor(true)
            .TwoWays();
 
+        config.NewConfig<NotificationEntity, Domain.Notifications.Notification>()
+            .Map(dest => dest.Id, src => src.Id)
+            .Map(dest => dest.Type, src => src.Type)
+            .Map(dest => dest.Title, src => src.Title)
+            .Map(dest => dest.Message, src => src.Message)
+            .Map(dest => dest.UserId, src => src.UserId)
+            .Map(dest => dest.Style, src => src.Style)
+            .Map(dest => dest.Action, src => src.Action)
+            .Map(dest => dest.Created, src => src.Created)
+            .Map(dest => dest.ScheduledDate, src => src.ScheduledDate)
+            .Map(dest => dest.Status, src => src.Status)
+            .Map(dest => dest.Channels, src => src.Channels)
+            .Map(dest => dest.MetaData, src => src.MetaData)
+            .MapToConstructor(true)
+            .TwoWays();
+
         config.NewConfig<Domain.Projects.Project, ProjectDto>()
            .Map(dest => dest.Id, src => src.Id)
            .Map(dest => dest.Title, src => src.Title)

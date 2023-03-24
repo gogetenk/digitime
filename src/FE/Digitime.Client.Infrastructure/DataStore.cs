@@ -175,4 +175,25 @@ public class DataStore : IDataStore
             _logger.LogError(exc.Message, exc);
         }
     }
+
+    public async Task<List<NotificationDto>> GetNotificationsAsync()
+    {
+        try
+        {
+            var response = await _httpClient.GetAsync($"api/notifications");
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                var statuscode = response.StatusCode;
+            }
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var resp = JsonConvert.DeserializeObject<List<NotificationDto>>(responseContent);
+            return resp;
+        }
+        catch (Exception exc)
+        {
+            _logger.LogError(exc.Message, exc);
+            return null;
+        }
+    }
 }

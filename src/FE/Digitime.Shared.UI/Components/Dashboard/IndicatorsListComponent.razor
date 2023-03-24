@@ -17,9 +17,19 @@
 
 <div>
     <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
-        @foreach(var indicator in _indicators)
+        @if (_indicators != null)
         {
-            <IndicatorComponent Value="@indicator.Value" Title="@indicator.Title" Variation="@indicator.Variation?.ToString()" />
+            @foreach (var indicator in _indicators)
+            {
+                <IndicatorComponent Value="@indicator.Value" Title="@indicator.Title" Variation="@indicator.Variation?.ToString()" />
+            }
         }
+        else
+        {
+            <IndicatorComponent Value="" Title="" Variation="" />
+            <IndicatorComponent Value="" Title="" Variation="" />
+            <IndicatorComponent Value="" Title="" Variation="" />
+        }
+
     </dl>
 </div>

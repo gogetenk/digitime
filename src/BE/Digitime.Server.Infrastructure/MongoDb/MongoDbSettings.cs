@@ -10,4 +10,5 @@ public class MongoDbSettings : IMongoDbSettings
     public string TimesheetsCollectionName { get; set; }
     public string UsersCollectionName { get; set; }
     public string WorkspacesCollectionName { get; set; }
+    public string NotificationsCollectionName { get; set; }
 }

@@ -8,4 +8,5 @@ public interface IMongoDbSettings
     string WorkspacesCollectionName { get; set; }
     string TimesheetsCollectionName { get; set; }
     string UsersCollectionName { get; set; }
+    string NotificationsCollectionName { get; set; }
 }

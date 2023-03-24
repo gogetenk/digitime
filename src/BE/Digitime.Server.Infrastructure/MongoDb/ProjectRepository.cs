@@ -8,7 +8,7 @@ using Project = Digitime.Server.Domain.Projects.Project;
 
 namespace Digitime.Server.Infrastructure.MongoDb;
 
-internal class ProjectRepository : MongoRepository<ProjectEntity>, IProjectRepository
+public class ProjectRepository : MongoRepository<ProjectEntity>, IProjectRepository
 {
     public ProjectRepository(IMongoDbSettings settings) : base(settings)
     {
@@ -24,6 +24,7 @@ internal class ProjectRepository : MongoRepository<ProjectEntity>, IProjectRepos
         var projects = await FilterByAsync(x => x.Members.Any(x => x.UserId == reviewerId && x.MemberRole == MemberRoleEntityEnum.Reviewer));
         return projects.Adapt<List<Project>>();
     }
+
     public async Task<Project> FindByIdAsync(string id)
         => (await base.FindByIdAsync(id)).Adapt<Project>();
 
