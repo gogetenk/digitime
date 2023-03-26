@@ -44,7 +44,7 @@ public record SendInvitationCommand(string ProjectId, string InviterUserId, stri
             _publisher = publisher;
         }
 
-        public async Task<Unit> Handle(SendInvitationCommand request, CancellationToken cancellationToken)
+        public async Task Handle(SendInvitationCommand request, CancellationToken cancellationToken)
         {
             var inviterTask = _userRepository.GetbyExternalIdAsync(request.InviterUserId);
             var projectTask = _projectRepository.FindByIdAsync(request.ProjectId);
@@ -78,8 +78,6 @@ public record SendInvitationCommand(string ProjectId, string InviterUserId, stri
                 await HandleRegisteredInviteeNotInWorkspaceAsync(invitee, project, workspace, inviter);
             else // Invitee is a registered user and a member of the workspace
                 await HandleRegisteredInviteeInWorkspaceAsync(invitee, project, inviter);
-
-            return Unit.Value;
         }
 
         private async Task HandleUnregisteredInviteeAsync(SendInvitationCommand request, User inviter, Workspace workspace, Project project)

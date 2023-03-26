@@ -11,15 +11,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Auth0.AuthenticationApi" Version="7.17.4" />
-    <PackageReference Include="Auth0.ManagementApi" Version="7.17.4" />
+    <PackageReference Include="Auth0.AuthenticationApi" Version="7.19.0" />
+    <PackageReference Include="Auth0.ManagementApi" Version="7.19.0" />
     <PackageReference Include="Mapster" Version="7.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
-    <PackageReference Include="MongoDB.Bson" Version="2.18.0" />
-    <PackageReference Include="MongoDB.Driver" Version="2.18.0" />
+    <PackageReference Include="MongoDB.Bson" Version="2.19.0" />
+    <PackageReference Include="MongoDB.Driver" Version="2.19.0" />
     <PackageReference Include="SendGrid" Version="9.28.1" />
   </ItemGroup>
 

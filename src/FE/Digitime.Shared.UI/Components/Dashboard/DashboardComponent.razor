@@ -26,8 +26,6 @@
     {
         var authstate = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         _currentUser = authstate.User;
-        var _profilePic = _currentUser?.FindFirst(x => x?.Type == "sub")?.Value;
-
         _notifications = await _dataStore.GetNotificationsAsync();
     }
 }

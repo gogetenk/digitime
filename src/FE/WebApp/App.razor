@@ -1,6 +1,10 @@
 ﻿@using Digitime.Shared.UI.Components.Common
 @using Digitime.Shared.UI.Pages.Login;
 @using Digitime.Shared.UI.Components;
+@using Sentry;
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(App).Assembly"
@@ -21,3 +25,31 @@
         </NotFound>
     </Router>
 </CascadingAuthenticationState>
+
+
+@code {
+    private bool _isFirstRender = true;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_isFirstRender)
+        {
+            _isFirstRender = false;
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity.IsAuthenticated)
+            {
+                SentrySdk.ConfigureScope(scope =>
+                {
+                    scope.User = new User
+                    {
+                            Id = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value,
+                            Email = user?.FindFirst(ClaimTypes.Email)?.Value,
+                            Username = user?.FindFirst(ClaimTypes.Name)?.Value,
+                    };
+                });
+            }
+        }
+    }
+}

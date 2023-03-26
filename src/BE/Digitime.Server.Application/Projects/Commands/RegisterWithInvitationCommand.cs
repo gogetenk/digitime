@@ -25,7 +25,7 @@ public record RegisterWithInvitationCommand(string InvitationToken, string Id) :
             _configuration = configuration;
         }
 
-        public async Task<Unit> Handle(RegisterWithInvitationCommand request, CancellationToken cancellationToken)
+        public async Task Handle(RegisterWithInvitationCommand request, CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetbyExternalIdAsync(request.Id);
 
@@ -45,8 +45,6 @@ public record RegisterWithInvitationCommand(string InvitationToken, string Id) :
             //await _workspaceRepository.UpdateMemberAsync(workspaceId, request.UserId, invitedUserEmail); // TODO
 
             //await _projectRepository.UpdateMemberAsync(projectId, request.UserId, incompleteUser);
-
-            return Unit.Value;
         }
 
         private (string workspaceId, string projectId, string invitedUserEmail) DecodeInvitationToken(string invitationToken)

@@ -10,7 +10,8 @@ using MediatR;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddMediatR(Assembly.GetExecutingAssembly(), typeof(GetCalendarQuery).Assembly);
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly(), typeof(GetCalendarQuery).Assembly));
+
 builder.Services
     .AddAuthentication()
     .AddJwtBearer();
@@ -53,10 +54,22 @@ builder.Services.AddCors(options =>
                     .AllowAnyHeader());
 });
 
+
 // Services
 builder.Services.AddApi();
 builder.Services.AddInfrastructure();
 builder.Services.AddApplication();
+
+builder.WebHost.UseSentry(o =>
+{
+    o.Dsn = "https://13ac4b7a36c54dcd9783ba87b131534c@o4504886273835008.ingest.sentry.io/4504906196123648";
+    // When configuring for the first time, to see what the SDK is doing:
+    o.Debug = true;
+    // Set TracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+    // We recommend adjusting this value in production.
+    o.TracesSampleRate = 1.0;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -82,6 +95,7 @@ else
     app.UseHsts();
 }
 
+app.UseSentryTracing();
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
 app.UseBlazorFrameworkFiles();
