@@ -1,3 +1,5 @@
-﻿namespace Digitime.Shared.Dto;
+﻿using Digitime.Shared.Contracts;
 
-public record InviteMemberDto(string ProjectId, string InviteeEmail);
+namespace Digitime.Shared.Dto;
+
+public record InviteMemberDto(string ProjectId, string InviteeEmail, MemberRoleEnum Role);

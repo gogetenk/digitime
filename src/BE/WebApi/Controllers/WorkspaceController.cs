@@ -31,7 +31,7 @@ public class WorkspaceController : ControllerBase
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create([FromBody] CreateWorkspaceCommand request)
     {
-        var query = new CreateWorkspaceCommand(User.FindFirst(ClaimTypes.NameIdentifier)!.Value, request.Name, request.Description);
+        var query = new CreateWorkspaceCommand(request.Name, request.Description, null, User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
         var response = await _sender.Send(query);
         if (response is null)
             return BadRequest(new { error = "Workspace creation failed." });
@@ -60,12 +60,12 @@ public class WorkspaceController : ControllerBase
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(WorkspaceDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetProjectById([FromRoute] string id)
+    public async Task<IActionResult> GetWorkspaceById([FromRoute] string id)
     {
         var query = new GetWorkspaceByIdQuery(id);
         var response = await _sender.Send(query);
         if (response is null)
-            return NotFound(new { error = "No project has been found for this Id." });
+            return NotFound(new { error = "No workspace has been found for this Id." });
 
         return Ok(response);
     }

@@ -1,0 +1,41 @@
+﻿@page "/projects/{id}/members/add"
+@using Digitime.Client.Infrastructure.Abstractions;
+@using Digitime.Client.Infrastructure.ViewModels;
+@using Digitime.Shared.Contracts.Projects;
+@using Digitime.Shared.UI.Components.Projects
+@using Newtonsoft.Json;
+@inject IDataStore _dataStore;
+
+
+<div class="bg-[#F0F4F8] pb-24">
+    <header class="py-16">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <h3 class="text-3xl font-bold tracking-tight text-black-800">Add a member</h3>
+            <h4 class="text-base tracking-tight text-gray-500">And assign a role</h4>
+        </div>
+    </header>
+</div>
+
+<main class="-mt-32">
+    <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+        <div class="rounded-lg shadow-sm bg-white px-5 py-12 mt-8  sm:px-6">
+            @*<section id="timesheets">
+            <div class="flex justify-between">
+            <h3 class="text-lg font-medium text-gray-900">Pending timesheets</h3>
+            <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">View all</a>
+            </div>
+
+            </section>*@
+
+            <section class="members mx-32">
+                <ProjectMembersEmptyState ProjectId="@Id" />
+            </section>
+        </div>
+    </div>
+</main>
+
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+}

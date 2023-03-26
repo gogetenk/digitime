@@ -1,9 +1,11 @@
 using Blazored.LocalStorage;
 using Blazored.Modal;
 using Digitime.Client;
-using Digitime.Client.Infrastructure;
 using Digitime.Client.Infrastructure.Abstractions;
 using Digitime.Shared.Authentication;
+using Digitime.Shared.UI.Components;
+using Digitime.Shared.UI.Data;
+using Digitime.Shared.UI.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -25,6 +27,8 @@ builder.Services
     .AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
     .CreateClient("DigitimeApi"));
 
+builder.Services.AddScoped<ErrorNotification>();
+
 builder.Services.AddAuthorizationCore();
 builder.Services.AddOidcAuthentication(options =>
 {
@@ -38,6 +42,7 @@ builder.Services.AddApiAuthorization()
                 .AddAccountClaimsPrincipalFactory<RolesClaimsPrincipalFactory>();
 
 builder.Services.AddScoped<IDataStore, DataStore>();
+builder.Services.AddSingleton<ErrorNotificationService>();
 
 builder.Services.AddBlazoredModal();
 

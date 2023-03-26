@@ -1,0 +1,129 @@
+﻿@using Microsoft.AspNetCore.Components.Routing
+@using System.Net;
+@inject NavigationManager NavigationManager
+
+@if (IsShown)
+{
+    <div class="fixed bottom-4 right-4 max-w-sm w-full">
+        <div class="@NotificationClasses" role="alert">
+            <div class="flex">
+                <div class="py-1">
+                    @if (ErrorType == ErrorTypeEnum.Success)
+                    {
+                        <svg class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    }
+                    else if (ErrorType == ErrorTypeEnum.Error)
+                    {
+                        <svg class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6a6 6 0 016-6z" />
+                        </svg>
+                    }
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-medium">@ErrorTitle</h3>
+                    <div class="mt-2 text-sm text-gray-500">
+                        <p>@ErrorMessage</p>
+                    </div>
+                </div>
+                <div class="ml-auto pl-3">
+                    <div class="-mx-1.5 -my-1.5">
+                        <button type="button" class="inline-flex rounded-md p-1.5 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50" click="HideNotification">
+                            <span class="sr-only">Close</span>
+                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M14.348 5.652a1 1 0 00-1.414 0L10 8.586 6.066 4.652a1 1 0 00-1.414 1.414L8.586 10l-3.934 3.934a1 1 0 001.414 1.414L10 11.414l3.934 3.934a1 1 0 001.414-1.414L11.414 10l3.934-3.934a1 1 0 000-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string ErrorTitle { get; set; }
+
+    [Parameter]
+    public string ErrorMessage { get; set; }
+
+    [Parameter]
+    public ErrorTypeEnum ErrorType { get; set; }
+
+    [Parameter]
+    public bool IsShown { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> ShowNotificationChanged { get; set; }
+
+    private string NotificationClasses => $"bg-{GetBackgroundColor(ErrorType)}-100 border-{GetBackgroundColor(ErrorType)}-400 text-{GetBackgroundColor(ErrorType)}-700";
+    private System.Timers.Timer _timer;
+
+    protected override void OnInitialized()
+    {
+        NavigationManager.LocationChanged += HideNotificationOnLocationChange;
+        base.OnInitialized();
+    }
+
+    private async void HideNotificationOnLocationChange(object sender, LocationChangedEventArgs e)
+    {
+        await HideNotification();
+    }
+
+    public async Task ShowNotification()
+    {
+        IsShown = true;
+
+        if (ErrorType == ErrorTypeEnum.Success)
+        {
+            _timer = new System.Timers.Timer(5000);
+            _timer.Elapsed += async (sender, e) => await HideNotification();
+            _timer.AutoReset = false;
+            _timer.Start();
+        }
+
+        await ShowNotificationChanged.InvokeAsync(true);
+        StateHasChanged();
+    }
+
+    public async Task HideNotification()
+    {
+        IsShown = false;
+        _timer.Stop();
+        await ShowNotificationChanged.InvokeAsync(false);
+        StateHasChanged();
+    }
+
+    private string GetBackgroundColor(ErrorTypeEnum errorType)
+    {
+        return errorType switch
+        {
+            ErrorTypeEnum.Success => "green",
+            _ => "red",
+        };
+    }
+    public enum ErrorTypeEnum
+    {
+        Success,
+        Error,
+    }
+
+    public void ShowTechnicalError()
+    {
+        ErrorTitle = "Technical error";
+        ErrorMessage = "An unexpected error occurred. Please try again later.";
+        ErrorType = ErrorTypeEnum.Error;
+        ShowNotification();
+    }
+
+    public void ShowError(HttpStatusCode statusCode, string message)
+    {
+        ErrorTitle = "Error " + (int)statusCode;
+        ErrorMessage = message;
+        ErrorType = ErrorTypeEnum.Error;
+        ShowNotification();
+    }
+}
+

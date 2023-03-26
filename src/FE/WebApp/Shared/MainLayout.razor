@@ -1,10 +1,38 @@
 ﻿@using Digitime.Shared.UI.Components.Common
+@using Digitime.Shared.UI.Components;
+@using Digitime.Shared.UI.Components.Errors;
+@using Digitime.Shared.UI.Services;
 @inherits LayoutComponentBase
+@inject ErrorNotificationService ErrorNotificationService
 
 <div class="min-h-full">
-    <div class="bg-[#7069FA] h-1" />
+    <div class="bg-[#7069FA] h-0.5" />
     <main>
         <HeaderComponent />
-        @Body
+        <CustomErrorBoundary>
+            @Body
+        </CustomErrorBoundary>
     </main>
+    <ErrorOverlay @ref="errorOverlay" />
 </div>
+
+@code {
+    private ErrorBoundary errorBoundary;
+    private ErrorOverlay errorOverlay;
+
+    protected override void OnInitialized()
+    {
+        ErrorNotificationService.OnError += ShowErrorOverlay;
+        base.OnInitialized();
+    }
+
+    private void ShowErrorOverlay(Exception exception)
+    {
+        errorOverlay.ShowError(exception);
+    }
+
+    public void Dispose()
+    {
+        ErrorNotificationService.OnError -= ShowErrorOverlay;
+    }
+}

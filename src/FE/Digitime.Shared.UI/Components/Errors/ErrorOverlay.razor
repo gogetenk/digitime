@@ -1,0 +1,70 @@
+﻿@using Microsoft.JSInterop;
+@inherits ComponentBase
+@using Microsoft.AspNetCore.Components.Web
+@using Newtonsoft.Json;
+@inject IJSRuntime JSRuntime
+
+<div class="@(_isHidden ? "hidden" : "") pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-start sm:p-6">
+    <div class="flex w-full flex-col items-center space-y-4 sm:items-end">
+        <div class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 transform ease-out duration-300 transition @(_isHidden ? "translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2" : "translate-y-0 opacity-100 sm:translate-x-0")">
+            <div class="p-4">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3 w-0 flex-1 pt-0.5">
+                        <p class="text-sm font-medium text-gray-900">@ErrorType</p>
+                        <p class="mt-1 text-sm text-gray-500">@ErrorMessage</p>
+                    </div>
+                    <div class="ml-4 flex flex-shrink-0">
+                        <button @onclick="async () => await DismissError()" type="button" class="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                            <span class="sr-only">Close</span>
+                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string ErrorType { get; set; }
+    private string ErrorMessage { get; set; }
+    private bool _isHidden = true;
+
+    public async Task ShowError(Exception exception)
+    {
+        //ErrorType = exception.GetType().ToString();
+        //ErrorMessage = exception.Message;
+        var baseException = exception.GetBaseException();
+        ErrorType = "An error occured.";
+
+        try
+        {
+            // Désérialisation du message JSON en un objet ProblemDetails
+            var problemDetails = JsonConvert.DeserializeObject<ProblemDetails>(baseException.Message);
+
+            // Récupération du message d'erreur pour l'utilisateur
+            ErrorMessage = problemDetails?.Detail ?? problemDetails?.Title ?? "Unknown error";
+        }
+        catch
+        {
+            // En cas d'erreur de désérialisation, on affiche le message d'erreur original
+            ErrorMessage = baseException.Message;
+        }
+
+        _isHidden = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task DismissError()
+    {
+        _isHidden = true;
+        await InvokeAsync(StateHasChanged);
+    }
+}

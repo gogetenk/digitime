@@ -1,4 +1,5 @@
-﻿@using Microsoft.AspNetCore.Components.Web
+﻿@using Digitime.Shared.Dto;
+@using Microsoft.AspNetCore.Components.Web
 @using static Digitime.Shared.Dto.NotificationDto;
 @*<div class="pb-2 sm:pb-5 transition @_currentVisibilityClass">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -66,7 +67,7 @@
         </div>
     </div>
 </div>*@
-@if (NotificationType == NotificationTypeEnum.Error)
+@if (Notification.Type == NotificationTypeEnum.Error)
 {
     <div class="rounded-md bg-red-50 mt-2 p-4">
         <div class="flex">
@@ -76,10 +77,10 @@
                 </svg>
             </div>
             <div class="ml-3 flex-1 md:flex md:justify-between">
-                <p class="text-sm text-red-700">@Text</p>
+                <p class="text-sm text-red-700">@Notification.Message</p>
                 <p class="text-sm md:mt-0 md:ml-6">
-                    <a href="@ButtonLink" class="whitespace-nowrap font-medium text-green-700 hover:text-green-600">
-                        @ButtonText
+                    <a href="@Notification.Action.Url" class="whitespace-nowrap font-medium text-green-700 hover:text-green-600">
+                        @Notification.Action.Title
                         <span aria-hidden="true"> &rarr;</span>
                     </a>
                 </p>
@@ -87,7 +88,7 @@
         </div>
     </div>
 }
-else if (NotificationType == NotificationTypeEnum.Warning)
+else if (Notification.Type == NotificationTypeEnum.Warning)
 {
     <div class="rounded-md bg-yellow-50 mt-2 p-4">
         <div class="flex">
@@ -97,13 +98,16 @@ else if (NotificationType == NotificationTypeEnum.Warning)
                 </svg>
             </div>
             <div class="ml-3 flex-1 md:flex md:justify-between">
-                <p class="text-sm text-yellow-700">@Text</p>
-                <p class="text-sm md:mt-0 md:ml-6">
-                    <a href="@ButtonLink" class="whitespace-nowrap font-medium text-yellow-700 hover:text-yellow-600">
-                        @ButtonText
-                        <span aria-hidden="true"> &rarr;</span>
-                    </a>
-                </p>
+                <p class="text-sm text-yellow-700">@Notification.Message</p>
+                @if(Notification.Action is not null)
+                {
+                    <p class="text-sm md:mt-0 md:ml-6">
+                        <a href="@Notification.Action.Url" class="whitespace-nowrap font-medium text-yellow-700 hover:text-yellow-600">
+                            @Notification.Action.Title
+                            <span aria-hidden="true"> &rarr;</span>
+                        </a>
+                    </p>
+                }
             </div>
         </div>
     </div>
@@ -158,26 +162,7 @@ else if (NotificationType == NotificationTypeEnum.Warning)
 
 @code {
     [Parameter]
-    public string Text { get; set; }
-
-    [Parameter]
-    public string Title { get; set; }
-
-    [Parameter]
-    public string Icon { get; set; }
-
-    [Parameter]
-    public string ButtonText { get; set; }
-
-    [Parameter]
-    public string ButtonLink { get; set; }
-
-    [Parameter]
-    public string ColorClass { get; set; }
-
-    [Parameter]
-    public NotificationTypeEnum NotificationType { get; set; }
-
+    public NotificationDto Notification { get; set; }
 
     private string _currentVisibilityClass = "";
     private bool _isVisible = true;

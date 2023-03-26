@@ -1,0 +1,19 @@
+﻿@using Digitime.Shared.UI.Services;
+@using Microsoft.AspNetCore.Components.Web;
+@inherits ErrorBoundary;
+@inject ErrorNotificationService ErrorNotificationService;
+
+<CascadingValue Value="@exceptionCaught" Name="ErrorBoundaryException">
+    @ChildContent
+</CascadingValue>
+
+@code {
+    private Exception exceptionCaught;
+
+    protected override Task OnErrorAsync(Exception exception)
+    {
+        ErrorNotificationService.ShowError(exception);
+        exceptionCaught = exception;
+        return base.OnErrorAsync(exception);
+    }
+}

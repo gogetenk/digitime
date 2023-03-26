@@ -4,23 +4,63 @@ using Digitime.Client.Infrastructure.Abstractions;
 using Digitime.Client.Infrastructure.ViewModels;
 using Digitime.Shared.Contracts.Projects;
 using Digitime.Shared.Contracts.Timesheets;
+using Digitime.Shared.Contracts.Workspaces;
 using Digitime.Shared.Dto;
+using Digitime.Shared.UI.Components;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace Digitime.Client.Infrastructure;
+namespace Digitime.Shared.UI.Data;
 
 public class DataStore : IDataStore
 {
+    public ErrorNotification ErrorNotificationComponent { get; set; }
+
     private readonly ILogger<DataStore> _logger;
     private readonly HttpClient _httpClient;
     private readonly ILocalStorageService _localStorage;
+    private readonly ErrorNotification _errorNotification;
 
-    public DataStore(ILogger<DataStore> logger, HttpClient httpClient, ILocalStorageService localStorage)
+    public DataStore(ILogger<DataStore> logger, HttpClient httpClient, ILocalStorageService localStorage, ErrorNotification errorNotification)
     {
         _logger = logger;
         _httpClient = httpClient;
         _localStorage = localStorage;
+        _errorNotification = errorNotification;
+    }
+
+    public async Task<T> ExecuteHttpRequestAsync<T>(Func<Task<HttpResponseMessage>> httpRequest)
+    {
+        try
+        {
+            var response = await httpRequest();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                var statusCode = response.StatusCode;
+
+                if ((int)statusCode >= 400 && (int)statusCode < 500)
+                {
+                    _errorNotification.ShowError(statusCode, error);
+                }
+                else if ((int)statusCode >= 500)
+                {
+                    _errorNotification.ShowTechnicalError();
+                }
+
+                return default(T);
+            }
+
+            return await response.Content.ReadFromJsonAsync<T>();
+        }
+        catch (Exception exc)
+        {
+            _logger.LogError(exc.Message, exc);
+            //ErrorNotificationComponent?.ShowTechnicalError();
+
+            return default(T);
+        }
     }
 
     public Task SynchronizeData()
@@ -195,5 +235,44 @@ public class DataStore : IDataStore
             _logger.LogError(exc.Message, exc);
             return null;
         }
+    }
+
+    public async Task<WorkspaceDto> GetWorkspaceById(string id)
+    {
+        try
+        {
+            var response = await _httpClient.GetAsync($"api/workspaces/{id}");
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                var statuscode = response.StatusCode;
+            }
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var resp = JsonConvert.DeserializeObject<WorkspaceDto>(responseContent);
+            return resp;
+        }
+        catch (Exception exc)
+        {
+            _logger.LogError(exc.Message, exc);
+            return null;
+        }
+    }
+
+    public async Task InviteProjectMember(InviteMemberDto inviteMember)
+    {
+        //await ExecuteHttpRequestAsync(async () =>
+        //{
+        //    return await _httpClient.PostAsJsonAsync($"api/projects/invite", inviteMember);
+        //});
+
+        var response = await _httpClient.PostAsJsonAsync($"api/projects/invite", inviteMember);
+        if (!response.IsSuccessStatusCode)
+        {
+            var error = await response.Content.ReadAsStringAsync();
+            var statuscode = response.StatusCode;
+            //ErrorNotificationComponent.ShowError(statuscode, error);
+            throw new ApplicationException(error);
+        }
+
     }
 }

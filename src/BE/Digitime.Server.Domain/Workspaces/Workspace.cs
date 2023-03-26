@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Digitime.Server.Domain.Models;
+using Digitime.Server.Domain.Projects.ValueObjects;
 using Digitime.Server.Domain.Workspaces.ValueObjects;
 
 namespace Digitime.Server.Domain.Workspaces;
@@ -9,22 +10,23 @@ namespace Digitime.Server.Domain.Workspaces;
 public class Workspace : AggregateRoot<string>
 {
     private readonly List<WorkspaceMember> _members = new();
-    private readonly List<Project> _projects = new();
+    //private readonly List<Project> _projects = new();
 
     public string Name { get; private set; }
     public string Description { get; private set; }
     public Subscription Subscription { get; private set; }
     public IReadOnlyList<WorkspaceMember> Members => _members.AsReadOnly();
 
-    public Workspace(string id, string name, string description, Subscription subscription) : base(id)
+    public Workspace(string id, string name, string description, Subscription subscription, List<WorkspaceMember> members) : base(id)
     {
         Name = name;
         Description = description;
         Subscription = subscription;
+        _members = members ?? new();
     }
 
-    public static Workspace Create(string id, string name, string description, Subscription subscription)
-        => new(id, name, description, subscription);
+    public static Workspace Create(string id, string name, string description, Subscription subscription, List<WorkspaceMember> members)
+        => new(id, name, description, subscription, members);
 
     public void Update(string name, string description, Subscription subscription)
     {

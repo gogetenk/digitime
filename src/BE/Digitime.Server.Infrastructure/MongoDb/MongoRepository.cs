@@ -40,7 +40,8 @@ public class MongoRepository<TDocument> : IRepository<TDocument> where TDocument
     public async virtual Task<TDocument> FindByIdAsync(string id)
     {
         var objectId = ObjectId.Parse(id);
-        return await Collection.Find(x => x.Id == id).SingleOrDefaultAsync();
+        var result = await Collection.Find(x => x.Id == id).SingleOrDefaultAsync();
+        return result;
     }
 
     public virtual async Task InsertOneAsync(TDocument document)
