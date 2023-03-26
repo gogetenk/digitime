@@ -28,7 +28,7 @@
                     </div>
                     <div class="mt-2 sm:flex sm:justify-between">
                         <div class="sm:flex">
-                            <button @onclick="OnSave" type="button" class="inline-flex items-center gap-x-1.5 rounded-md bg-black py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                            <button @onclick="OnSave" disabled="@_IsBusy" type="button" class="inline-flex items-center gap-x-1.5 rounded-md bg-black py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                                 Save
                             </button>
                         </div>
@@ -77,14 +77,24 @@
     private string _selectedProjectId;
     private int _workedHours = 8;
     private string _visibilityClass = "hidden";
+    private bool _IsBusy;
 
     private async Task OnSave()
     {
-        if (string.IsNullOrEmpty(_selectedProjectId))
-            return;
+        try
+        {
+            _IsBusy = true;
 
-        var selectedProject = ProjectList.FirstOrDefault(x => x.Id == _selectedProjectId);
-        await OnAddedTimesheetEntry.InvokeAsync(new AddTimesheetEntryFormVM(selectedProject, _workedHours));
+            if (string.IsNullOrEmpty(_selectedProjectId))
+                return;
+
+            var selectedProject = ProjectList.FirstOrDefault(x => x.Id == _selectedProjectId);
+            await OnAddedTimesheetEntry.InvokeAsync(new AddTimesheetEntryFormVM(selectedProject, _workedHours));
+        }
+        finally
+        {
+            _IsBusy = false;
+        }
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

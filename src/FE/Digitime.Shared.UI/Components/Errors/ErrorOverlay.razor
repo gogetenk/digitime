@@ -15,8 +15,8 @@
                         </svg>
                     </div>
                     <div class="ml-3 w-0 flex-1 pt-0.5">
-                        <p class="text-sm font-medium text-gray-900">@ErrorType</p>
-                        <p class="mt-1 text-sm text-gray-500">@ErrorMessage</p>
+                        <p class="text-sm font-medium text-gray-900">@_errorType</p>
+                        <p class="mt-1 text-sm text-gray-500">@_errorMessage</p>
                     </div>
                     <div class="ml-4 flex flex-shrink-0">
                         <button @onclick="async () => await DismissError()" type="button" class="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
@@ -33,8 +33,8 @@
 </div>
 
 @code {
-    private string ErrorType { get; set; }
-    private string ErrorMessage { get; set; }
+    private string _errorType { get; set; }
+    private string _errorMessage { get; set; }
     private bool _isHidden = true;
 
     public async Task ShowError(Exception exception)
@@ -42,7 +42,7 @@
         //ErrorType = exception.GetType().ToString();
         //ErrorMessage = exception.Message;
         var baseException = exception.GetBaseException();
-        ErrorType = "An error occured.";
+        _errorType = "An error occured.";
 
         try
         {
@@ -50,12 +50,12 @@
             var problemDetails = JsonConvert.DeserializeObject<ProblemDetails>(baseException.Message);
 
             // Récupération du message d'erreur pour l'utilisateur
-            ErrorMessage = problemDetails?.Detail ?? problemDetails?.Title ?? "Unknown error";
+            _errorMessage = problemDetails?.Detail ?? problemDetails?.Title ?? "Unknown error";
         }
         catch
         {
             // En cas d'erreur de désérialisation, on affiche le message d'erreur original
-            ErrorMessage = baseException.Message;
+            _errorMessage = baseException.Message;
         }
 
         _isHidden = false;
