@@ -4,7 +4,9 @@ using Digitime.Server.Domain.Projects;
 using Digitime.Server.Domain.Projects.ValueObjects;
 using Digitime.Server.Domain.Users;
 using Digitime.Server.Domain.Workspaces;
+using MediatR;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using static Digitime.Server.Application.Projects.Commands.SendInvitationCommand;
 
 namespace Digitime.Server.Application.UnitTests;
@@ -17,6 +19,8 @@ public class SendInvitationCommandHandlerTests
     private readonly Mock<IProjectRepository> _mockProjectRepository;
     private readonly Mock<IWorkspaceRepository> _mockWorkspaceRepository;
     private readonly Mock<IConfiguration> _mockConfiguration;
+    private readonly Mock<IPublisher> _mockPublisher;
+    private readonly Mock<ILogger<SendInvitationCommand>> _mockLogger;
 
     public SendInvitationCommandHandlerTests()
     {
@@ -27,6 +31,8 @@ public class SendInvitationCommandHandlerTests
         _mockProjectRepository = new Mock<IProjectRepository>();
         _mockWorkspaceRepository = new Mock<IWorkspaceRepository>();
         _mockConfiguration = new Mock<IConfiguration>();
+        _mockPublisher = new Mock<IPublisher>();
+        _mockLogger = new Mock<ILogger<SendInvitationCommand>>();
 
         _mockConfiguration.SetupGet(x => x["JwtSettings:Secret"]).Returns("BqRPie0968kjiS2PK0BOORxEqb37FXn8lCNf64PZfyI=");
         _mockConfiguration.SetupGet(x => x["JwtSettings:Issuer"]).Returns("myissuer");
@@ -51,7 +57,7 @@ public class SendInvitationCommandHandlerTests
         _mockUserRepository.Setup(x => x.GetByEmail(command.InviteeEmail)).ReturnsAsync((User)null);
         _mockWorkspaceRepository.Setup(x => x.GetbyIdAsync(project.WorkspaceId)).ReturnsAsync(workspace);
 
-        var handler = new SendInvitationCommandHandler(_mockEmailRepository.Object, _mockUserRepository.Object, _mockProjectRepository.Object, _mockConfiguration.Object, _mockWorkspaceRepository.Object);
+        var handler = new SendInvitationCommandHandler(_mockEmailRepository.Object, _mockUserRepository.Object, _mockProjectRepository.Object, _mockConfiguration.Object, _mockWorkspaceRepository.Object, _mockPublisher.Object, _mockLogger.Object);
 
         // Act
         await handler.Handle(command, CancellationToken.None);
@@ -81,7 +87,7 @@ public class SendInvitationCommandHandlerTests
         _mockUserRepository.Setup(x => x.GetByEmail(command.InviteeEmail)).ReturnsAsync(invitee);
         _mockWorkspaceRepository.Setup(x => x.GetbyIdAsync(project.WorkspaceId)).ReturnsAsync(workspace);
 
-        var handler = new SendInvitationCommandHandler(_mockEmailRepository.Object, _mockUserRepository.Object, _mockProjectRepository.Object, _mockConfiguration.Object, _mockWorkspaceRepository.Object);
+        var handler = new SendInvitationCommandHandler(_mockEmailRepository.Object, _mockUserRepository.Object, _mockProjectRepository.Object, _mockConfiguration.Object, _mockWorkspaceRepository.Object, _mockPublisher.Object, _mockLogger.Object);
 
         // Act
         await handler.Handle(command, CancellationToken.None);
@@ -112,7 +118,7 @@ public class SendInvitationCommandHandlerTests
         _mockUserRepository.Setup(x => x.GetByEmail(command.InviteeEmail)).ReturnsAsync(invitee);
         _mockWorkspaceRepository.Setup(x => x.GetbyIdAsync(project.WorkspaceId)).ReturnsAsync(workspace);
 
-        var handler = new SendInvitationCommandHandler(_mockEmailRepository.Object, _mockUserRepository.Object, _mockProjectRepository.Object, _mockConfiguration.Object, _mockWorkspaceRepository.Object);
+        var handler = new SendInvitationCommandHandler(_mockEmailRepository.Object, _mockUserRepository.Object, _mockProjectRepository.Object, _mockConfiguration.Object, _mockWorkspaceRepository.Object, _mockPublisher.Object, _mockLogger.Object);
 
         // Act
         await handler.Handle(command, CancellationToken.None);
@@ -136,7 +142,7 @@ public class SendInvitationCommandHandlerTests
         _mockUserRepository.Setup(x => x.GetbyExternalIdAsync(inviter.Id)).ReturnsAsync(inviter);
         _mockProjectRepository.Setup(x => x.FindByIdAsync(command.ProjectId)).ReturnsAsync((Project)null);
 
-        var handler = new SendInvitationCommandHandler(_mockEmailRepository.Object, _mockUserRepository.Object, _mockProjectRepository.Object, _mockConfiguration.Object, _mockWorkspaceRepository.Object);
+        var handler = new SendInvitationCommandHandler(_mockEmailRepository.Object, _mockUserRepository.Object, _mockProjectRepository.Object, _mockConfiguration.Object, _mockWorkspaceRepository.Object, _mockPublisher.Object, _mockLogger.Object);
 
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(() => handler.Handle(command, CancellationToken.None));
@@ -150,7 +156,7 @@ public class SendInvitationCommandHandlerTests
 
         _mockUserRepository.Setup(x => x.GetbyExternalIdAsync(command.InviterUserId)).ReturnsAsync((User)null);
 
-        var handler = new SendInvitationCommandHandler(_mockEmailRepository.Object, _mockUserRepository.Object, _mockProjectRepository.Object, _mockConfiguration.Object, _mockWorkspaceRepository.Object);
+        var handler = new SendInvitationCommandHandler(_mockEmailRepository.Object, _mockUserRepository.Object, _mockProjectRepository.Object, _mockConfiguration.Object, _mockWorkspaceRepository.Object, _mockPublisher.Object, _mockLogger.Object);
 
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(() => handler.Handle(command, CancellationToken.None));
@@ -167,7 +173,7 @@ public class SendInvitationCommandHandlerTests
         _mockUserRepository.Setup(x => x.GetbyExternalIdAsync(inviter.Id)).ReturnsAsync(inviter);
         _mockProjectRepository.Setup(x => x.FindByIdAsync(project.Id)).ReturnsAsync(project);
 
-        var handler = new SendInvitationCommandHandler(_mockEmailRepository.Object, _mockUserRepository.Object, _mockProjectRepository.Object, _mockConfiguration.Object, _mockWorkspaceRepository.Object);
+        var handler = new SendInvitationCommandHandler(_mockEmailRepository.Object, _mockUserRepository.Object, _mockProjectRepository.Object, _mockConfiguration.Object, _mockWorkspaceRepository.Object, _mockPublisher.Object, _mockLogger.Object);
 
         // Act & Assert
         await Assert.ThrowsAsync<UnauthorizedAccessException>(() => handler.Handle(command, CancellationToken.None));
@@ -189,7 +195,7 @@ public class SendInvitationCommandHandlerTests
         _mockUserRepository.Setup(x => x.GetByEmail(command.InviteeEmail)).ReturnsAsync((User)null);
         _mockWorkspaceRepository.Setup(x => x.GetbyIdAsync(project.WorkspaceId)).ReturnsAsync(workspace);
 
-        var handler = new SendInvitationCommandHandler(_mockEmailRepository.Object, _mockUserRepository.Object, _mockProjectRepository.Object, _mockConfiguration.Object, _mockWorkspaceRepository.Object);
+        var handler = new SendInvitationCommandHandler(_mockEmailRepository.Object, _mockUserRepository.Object, _mockProjectRepository.Object, _mockConfiguration.Object, _mockWorkspaceRepository.Object, _mockPublisher.Object, _mockLogger.Object);
 
         // Act
         await handler.Handle(command, CancellationToken.None);
@@ -218,7 +224,7 @@ public class SendInvitationCommandHandlerTests
         _mockUserRepository.Setup(x => x.GetByEmail(command.InviteeEmail)).ReturnsAsync(invitee);
         _mockWorkspaceRepository.Setup(x => x.GetbyIdAsync(project.WorkspaceId)).ReturnsAsync(workspace);
 
-        var handler = new SendInvitationCommandHandler(_mockEmailRepository.Object, _mockUserRepository.Object, _mockProjectRepository.Object, _mockConfiguration.Object, _mockWorkspaceRepository.Object);
+        var handler = new SendInvitationCommandHandler(_mockEmailRepository.Object, _mockUserRepository.Object, _mockProjectRepository.Object, _mockConfiguration.Object, _mockWorkspaceRepository.Object, _mockPublisher.Object, _mockLogger.Object);
 
         // Act
         await handler.Handle(command, CancellationToken.None);
@@ -249,7 +255,7 @@ public class SendInvitationCommandHandlerTests
         _mockUserRepository.Setup(x => x.GetByEmail(command.InviteeEmail)).ReturnsAsync(invitee);
         _mockWorkspaceRepository.Setup(x => x.GetbyIdAsync(project.WorkspaceId)).ReturnsAsync(workspace);
 
-        var handler = new SendInvitationCommandHandler(_mockEmailRepository.Object, _mockUserRepository.Object, _mockProjectRepository.Object, _mockConfiguration.Object, _mockWorkspaceRepository.Object);
+        var handler = new SendInvitationCommandHandler(_mockEmailRepository.Object, _mockUserRepository.Object, _mockProjectRepository.Object, _mockConfiguration.Object, _mockWorkspaceRepository.Object, _mockPublisher.Object, _mockLogger.Object);
 
         // Act
         await handler.Handle(command, CancellationToken.None);
