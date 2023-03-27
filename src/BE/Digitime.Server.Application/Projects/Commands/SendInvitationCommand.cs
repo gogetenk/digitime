@@ -13,6 +13,7 @@ using Digitime.Server.Domain.Workspaces;
 using Digitime.Server.Domain.Workspaces.ValueObjects;
 using MediatR;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Project = Digitime.Server.Domain.Projects.Project;
 
@@ -27,6 +28,7 @@ public record SendInvitationCommand(string ProjectId, string InviterUserId, stri
         private readonly IConfiguration _configuration;
         private readonly IWorkspaceRepository _workspaceRepository;
         private readonly IPublisher _publisher;
+        private readonly ILogger<SendInvitationCommand> _logger;
 
         public SendInvitationCommandHandler(
             IEmailRepository emailRepository,
@@ -34,7 +36,8 @@ public record SendInvitationCommand(string ProjectId, string InviterUserId, stri
             IProjectRepository projectRepository,
             IConfiguration configuration,
             IWorkspaceRepository workspaceRepository,
-            IPublisher publisher)
+            IPublisher publisher,
+            ILogger<SendInvitationCommand> logger)
         {
             _emailRepository = emailRepository;
             _userRepository = userRepository;
@@ -42,6 +45,7 @@ public record SendInvitationCommand(string ProjectId, string InviterUserId, stri
             _configuration = configuration;
             _workspaceRepository = workspaceRepository;
             _publisher = publisher;
+            _logger = logger;
         }
 
         public async Task Handle(SendInvitationCommand request, CancellationToken cancellationToken)
@@ -69,7 +73,7 @@ public record SendInvitationCommand(string ProjectId, string InviterUserId, stri
 
             var invitee = await _userRepository.GetByEmail(request.InviteeEmail);
             var workspace = await _workspaceRepository.GetbyIdAsync(project.WorkspaceId);
-            if (workspace == null)
+            if (workspace is null)
                 throw new Exception("Workspace not found.");
 
             if (invitee is null) // Invitee is not registered on Digitime
@@ -82,6 +86,7 @@ public record SendInvitationCommand(string ProjectId, string InviterUserId, stri
 
         private async Task HandleUnregisteredInviteeAsync(SendInvitationCommand request, User inviter, Workspace workspace, Project project)
         {
+            _logger.LogInformation("Handling invite for an unregistered user.");
             var invitationToken = GenerateInvitationToken(inviter, project.WorkspaceId, project.Id);
             var member = new ProjectMember(null, null, request.InviteeEmail, null, MemberRoleEnum.Pending);
             var workspaceMember = new WorkspaceMember(null, null, request.InviteeEmail, null, WorkspaceMemberEnum.Pending);
@@ -89,6 +94,7 @@ public record SendInvitationCommand(string ProjectId, string InviterUserId, stri
             workspace.AddMember(workspaceMember);
             await _workspaceRepository.UpdateAsync(workspace);
             await _projectRepository.UpdateAsync(project);
+            _logger.LogDebug("Updated workspace and project. Now sending email.");
 
             string subject = $"{inviter.Firstname} {inviter.Lastname} invited you to join {project.Title} on Digitime!";
             string content = $"You have been invited by {inviter.Firstname} {inviter.Lastname} to join {project.Title} on Digitime. Please click the following link to register and join the project: <a href=\"{GenerateInvitationUrlForUnknownMember(invitationToken)}\">Click here</a>";
@@ -98,6 +104,7 @@ public record SendInvitationCommand(string ProjectId, string InviterUserId, stri
 
         private async Task HandleRegisteredInviteeNotInWorkspaceAsync(User invitee, Project project, Workspace workspace, User inviter)
         {
+            _logger.LogInformation("Handling invite for a registered user not in the workspace.");
             var projectMember = new ProjectMember(invitee.Id, $"{invitee.Firstname} {invitee.Lastname}", invitee.Email, invitee.ProfilePicture, MemberRoleEnum.Pending);
             var workspaceMember = new WorkspaceMember(invitee.Id, $"{invitee.Firstname} {invitee.Lastname}", invitee.Email, invitee.ProfilePicture, WorkspaceMemberEnum.Pending);
             project.AddMember(projectMember);
@@ -125,6 +132,7 @@ public record SendInvitationCommand(string ProjectId, string InviterUserId, stri
 
         private async Task HandleRegisteredInviteeInWorkspaceAsync(User invitee, Project project, User inviter)
         {
+            _logger.LogInformation("Handling invite for a registered user in the workspace.");
             var member = new ProjectMember(invitee.Id, $"{invitee.Firstname} {invitee.Lastname}", invitee.Email, invitee.ProfilePicture, MemberRoleEnum.Pending);
             project.AddMember(member);
             await _projectRepository.UpdateAsync(project);
@@ -166,7 +174,6 @@ public record SendInvitationCommand(string ProjectId, string InviterUserId, stri
 
         private string GenerateInvitationUrlForUnknownMember(string invitationToken)
         {
-            // Implement your URL generation logic here.
             return @$"{_configuration["Authentication:Schemes:Bearer:Authority"]}/authorize?response_type=code&client_id={_configuration["ExternalApis:Auth0ManagementApi:ClientId"]}&redirect_uri={_configuration["BackendUrl"]}/invitation&state={invitationToken}";
         }
     }

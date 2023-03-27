@@ -14,9 +14,8 @@ using Sentry;
 // Capture blazor bootstrapping errors
 using var sdk = SentrySdk.Init(o =>
 {
+    o.AutoSessionTracking = true;
     o.Dsn = "https://13ac4b7a36c54dcd9783ba87b131534c@o4504886273835008.ingest.sentry.io/4504906196123648";
-    // When configuring for the first time, to see what the SDK is doing:
-    o.Debug = true;
     // Set TracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
     // We recommend adjusting this value in production.
     o.TracesSampleRate = 1.0;
