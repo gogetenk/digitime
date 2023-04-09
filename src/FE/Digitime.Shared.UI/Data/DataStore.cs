@@ -15,8 +15,6 @@ namespace Digitime.Shared.UI.Data;
 
 public class DataStore : IDataStore
 {
-    public ErrorNotification ErrorNotificationComponent { get; set; }
-
     private readonly HttpClient _httpClient;
     private readonly ILocalStorageService _localStorage;
 

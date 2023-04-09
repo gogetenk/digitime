@@ -9,7 +9,6 @@ namespace Digitime.Client.Infrastructure.Abstractions;
 
 public interface IDataStore
 {
-    ErrorNotification ErrorNotificationComponent { get; set; }
     Task SynchronizeData();
     Task<CalendarDto> GetCalendar(DateTime date, string country);
     Task<CreateProjectResponse> CreateProject(CreateProjectVm project);
