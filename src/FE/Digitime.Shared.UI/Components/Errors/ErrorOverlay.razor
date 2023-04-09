@@ -33,8 +33,8 @@
 </div>
 
 @code {
-    private string _errorType { get; set; }
-    private string _errorMessage { get; set; }
+    private string _errorType;
+    private string _errorMessage;
     private bool _isHidden = true;
 
     public async Task ShowError(Exception exception)
@@ -42,7 +42,6 @@
         //ErrorType = exception.GetType().ToString();
         //ErrorMessage = exception.Message;
         var baseException = exception.GetBaseException();
-        _errorType = "An error occured.";
 
         try
         {
@@ -51,11 +50,13 @@
 
             // Récupération du message d'erreur pour l'utilisateur
             _errorMessage = problemDetails?.Detail ?? problemDetails?.Title ?? "Unknown error";
+            _errorType = problemDetails?.Title ?? problemDetails?.Detail ?? "An error occured.";
         }
         catch
         {
             // En cas d'erreur de désérialisation, on affiche le message d'erreur original
             _errorMessage = baseException.Message;
+            _errorType = "An error occured.";
         }
 
         _isHidden = false;

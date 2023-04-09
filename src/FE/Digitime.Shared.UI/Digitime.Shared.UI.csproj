@@ -42,6 +42,7 @@
 
   <ItemGroup>
     <Folder Include="Auth\" />
+    <Folder Include="Pages\Workspaces\" />
   </ItemGroup>
 
 </Project>

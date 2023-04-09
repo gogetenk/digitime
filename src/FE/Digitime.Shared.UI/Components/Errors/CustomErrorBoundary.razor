@@ -1,7 +1,10 @@
 ﻿@using Digitime.Shared.UI.Services;
 @using Microsoft.AspNetCore.Components.Web;
+@using Microsoft.Extensions.Logging;
+@using Newtonsoft.Json;
 @inherits ErrorBoundary;
 @inject ErrorNotificationService ErrorNotificationService;
+@inject ILogger<CustomErrorBoundary> Logger;
 
 <CascadingValue Value="@exceptionCaught" Name="ErrorBoundaryException">
     @ChildContent
@@ -12,8 +15,25 @@
 
     protected override Task OnErrorAsync(Exception exception)
     {
-        ErrorNotificationService.ShowError(exception);
-        exceptionCaught = exception;
-        return base.OnErrorAsync(exception);
+        string errorMessage = "";
+
+        try
+        {
+            // Désérialisation du message JSON en un objet ProblemDetails
+            var problemDetails = JsonConvert.DeserializeObject<ProblemDetails>(exception.Message);
+            // Récupération du message d'erreur pour l'utilisateur
+            errorMessage = problemDetails?.Detail ?? problemDetails?.Title ?? "Unknown error";
+        }
+        catch
+        {
+            // En cas d'erreur de désérialisation, on affiche le message d'erreur original
+            errorMessage = exception.Message;
+        }
+        finally
+        {
+            ErrorNotificationService.ShowError(exception);
+            exceptionCaught = exception;
+        }
+        return base.OnErrorAsync(exception); // Logs the error
     }
 }
