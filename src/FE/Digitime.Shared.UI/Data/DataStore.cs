@@ -71,72 +71,50 @@ public class DataStore : IDataStore
 
     public async Task<CreateProjectResponse> CreateProject(CreateProjectVm project)
     {
-        return await ExecuteHttpRequestAsync<CreateProjectResponse>(async () =>
-            await _httpClient.PostAsJsonAsync($"api/projects", project)
-        );
+        return await ExecuteHttpRequestAsync<CreateProjectResponse>(async () => await _httpClient.PostAsJsonAsync($"api/projects", project));
     }
 
     public async Task<ProjectDto> GetProjectById(string id)
     {
-        return await ExecuteHttpRequestAsync<ProjectDto>(async () =>
-            await _httpClient.GetAsync($"api/projects/{id}")
-        );
+        return await ExecuteHttpRequestAsync<ProjectDto>(async () => await _httpClient.GetAsync($"api/projects/{id}"));
     }
 
     public async Task<GetUserProjectsResponse> GetUserProjects()
     {
-        return await ExecuteHttpRequestAsync<GetUserProjectsResponse>(async () =>
-            await _httpClient.GetAsync($"api/projects")
-        );
+        return await ExecuteHttpRequestAsync<GetUserProjectsResponse>(async () => await _httpClient.GetAsync($"api/projects"));
     }
 
     public async Task<CreateTimesheetEntryReponse> CreateTimesheetEntry(CreateTimesheetEntryRequest request)
     {
-        return await ExecuteHttpRequestAsync<CreateTimesheetEntryReponse>(async () =>
-             await _httpClient.PostAsJsonAsync($"api/timesheets/entry", request)
-        );
+        return await ExecuteHttpRequestAsync<CreateTimesheetEntryReponse>(async () => await _httpClient.PostAsJsonAsync($"api/timesheets/entry", request));
     }
 
     public async Task<List<DashboardIndicatorsDto>> GetDashboardIndicators()
     {
-        return await ExecuteHttpRequestAsync<List<DashboardIndicatorsDto>>(async () =>
-            await _httpClient.GetAsync($"api/indicators")
-        );
+        return await ExecuteHttpRequestAsync<List<DashboardIndicatorsDto>>(async () => await _httpClient.GetAsync($"api/indicators"));
     }
 
     public async Task RegisterWithInvitation(string invitationToken, string id)
     {
-        await ExecuteHttpRequestAsync(async () =>
+        await ExecuteHttpRequestAsync(async () => await _httpClient.PostAsJsonAsync($"api/projects/register", new
         {
-            return await _httpClient.PostAsJsonAsync($"api/projects/register", new
-            {
-                invitationToken,
-                id
-            });
-        });
+            invitationToken,
+            id
+        }));
     }
 
     public async Task<List<NotificationDto>> GetNotificationsAsync()
     {
-        return await ExecuteHttpRequestAsync<List<NotificationDto>>(async () =>
-        {
-            return await _httpClient.GetAsync($"api/notifications");
-        });
+        return await ExecuteHttpRequestAsync<List<NotificationDto>>(async () => await _httpClient.GetAsync($"api/notifications"));
     }
 
     public async Task<WorkspaceDto> GetWorkspaceById(string id)
     {
-        return await ExecuteHttpRequestAsync<WorkspaceDto>(async () =>
-        {
-            return await _httpClient.GetAsync($"api/workspaces/{id}");
-        });
+        return await ExecuteHttpRequestAsync<WorkspaceDto>(async () => await _httpClient.GetAsync($"api/workspaces/{id}"));
     }
 
     public async Task InviteProjectMember(InviteMemberDto inviteMember)
     {
-        await ExecuteHttpRequestAsync(async () =>
-        {
-            return await _httpClient.PostAsJsonAsync($"api/projects/invite", inviteMember);
-        });
+        await ExecuteHttpRequestAsync(async () => await _httpClient.PostAsJsonAsync($"api/projects/invite", inviteMember));
     }
 }
