@@ -25,6 +25,8 @@ using var sdk = SentrySdk.Init(o =>
 
 try
 {
+    var sw = Stopwatch.StartNew();
+    
     var builder = WebAssemblyHostBuilder.CreateDefault(args);
     builder.RootComponents.Add<App>("#app");
     builder.RootComponents.Add<HeadOutlet>("head::after");
@@ -66,7 +68,7 @@ try
         .GetRequiredService<ILoggerFactory>()
         .CreateLogger<Program>();
 
-    logger.LogInformation("App initialized.");
+    logger.LogInformation($"App initialized in {sw.ElapsedMilliseconds}ms.");
     logger.LogInformation($"Backend URI is set to {backendBaseAddress} and environment set to {builder.HostEnvironment.Environment}.");
 
     await host.RunAsync();
